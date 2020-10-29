@@ -5,8 +5,7 @@ public class DeserialisationCatalogue {
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-  // désérialiser le catalogue
-	
-	
+		// désérialiser le catalogue
+
 	}
 }
