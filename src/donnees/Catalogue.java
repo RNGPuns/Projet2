@@ -12,7 +12,7 @@ import application.InterfaceGraphique;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
-public final class Catalogue extends Application implements Serializable {
+public final class Catalogue implements Serializable {
 
 	// Complétez pour programmer la classe comme singleton
 	// Le constructeur permet de remplir les listes suivantes à partir des fichiers
@@ -117,14 +117,5 @@ public final class Catalogue extends Application implements Serializable {
 		return instance;
 	}
 	
-	@Override
-	public void start(Stage primaryStage) throws Exception {
-		// TODO Auto-generated method stub
-		
-	}
 	
-	public static void main(String[] args) {
-		Application.launch(InterfaceGraphique.class, args); //Démarrage de l'application
-	}
-
 }
