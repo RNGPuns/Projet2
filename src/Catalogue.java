@@ -17,7 +17,7 @@ public final class Catalogue extends Application implements Serializable {
 	// textes Livres.txt et periodiques.txt et DVD.txt
 
 	private static final long serialVersionUID = 1L;
-	private static Catalogue instance = new Catalogue("Periodiques.txt", "Livres.txt", "DVD.txt");
+	private static Catalogue instance;
 	private ArrayList<Document> lstDocuments = new ArrayList<>();
 	private ArrayList<Livre> lstLivres = new ArrayList<>();
 	private ArrayList<Periodique> lstPeriodiques = new ArrayList<>();
@@ -25,8 +25,8 @@ public final class Catalogue extends Application implements Serializable {
 	DateTimeFormatter df = DateTimeFormatter.ofPattern("dd-MM-yyyy");
 	
 	
-	
-	public Catalogue (String strNomFichier1, String strNomFichier2, String strNomFichier3) {
+	//Private pour singleton
+	private Catalogue (String strNomFichier1, String strNomFichier2, String strNomFichier3) {
 		File serLivres = new File("livres.ser");
 		File serDVD = new File("DVD.ser");
 		File serPeriodique = new File("periodiques.ser");
@@ -35,7 +35,6 @@ public final class Catalogue extends Application implements Serializable {
 				serLivres.createNewFile();
 				serDVD.createNewFile();
 				serPeriodique.createNewFile();
-				System.out.println("Hello World");
 				
 				//Temporaire
 				serLivres.delete(); 
@@ -104,6 +103,16 @@ public final class Catalogue extends Application implements Serializable {
 			
 		}
 		
+	}
+	
+	//Singleton
+	public static Catalogue getInstance() {
+		
+		if (instance == null) {
+			instance = new Catalogue("Periodiques.txt", "Livres.txt", "DVD.txt");
+		}
+		
+		return instance;
 	}
 	
 	@Override
