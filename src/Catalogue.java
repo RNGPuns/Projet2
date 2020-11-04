@@ -39,6 +39,9 @@ public final class Catalogue extends Application implements Serializable {
 				serPeriodique.createNewFile();
 				System.out.println("Hello World");
 				//Temporaire
+				
+				
+				
 				serLivres.delete(); 
 				serDVD.delete();
 				serPeriodique.delete();
