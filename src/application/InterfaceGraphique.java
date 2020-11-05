@@ -29,6 +29,9 @@ public class InterfaceGraphique extends Application {
 		TabPane root = new TabPane();
 		VBox vbox = new VBox(root);
 		Catalogue catalogue = Catalogue.getInstance();
+		
+		
+		
 
 		Tab tabCatalogue = new Tab("Catalogue");
 		tabCatalogue.setGraphic(new ImageView("icon-collection.png"));
