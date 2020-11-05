@@ -32,6 +32,8 @@ public class InterfaceGraphique extends Application {
 		
 		
 		
+		
+		
 
 		Tab tabCatalogue = new Tab("Catalogue");
 		tabCatalogue.setGraphic(new ImageView("icon-collection.png"));
