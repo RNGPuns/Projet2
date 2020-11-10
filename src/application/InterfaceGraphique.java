@@ -45,9 +45,15 @@ public class InterfaceGraphique extends Application {
 	public void start(Stage arg0) throws Exception {
 		//Identification
 		Accordion rootIdentification = new Accordion();
+		
 		VBox vboxOptionsAdherents = new VBox();
 		vboxOptionsAdherents.setSpacing(10);
 		vboxOptionsAdherents.setPadding(new Insets(20, 0, 0, 0));
+		
+		GridPane panneauConnexion = new GridPane();
+		panneauConnexion.setHgap(15);
+		panneauConnexion.setVgap(5);
+		
 		Scene sceneIdentification = new Scene(rootIdentification,300,300);
 		arg0.setTitle("Identification");
 		
@@ -56,10 +62,33 @@ public class InterfaceGraphique extends Application {
 		GridPane panneauInfosAdherent = new GridPane();
 		panneauInfosAdherent.setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, new CornerRadii(2), new BorderWidths(1))));
 		panneauInfosAdherent.setPadding(new Insets(5, -5, 5, -5));
-		panneauInfosAdherent.setHgap(24);
+		panneauInfosAdherent.setHgap(24); //**Ne pas modifier svp**
 		panneauInfosAdherent.setVgap(5);
-		TitledPane paneConnexion = new TitledPane("Connexion", new Label("Label Temporaire"));
+		TitledPane paneConnexion = new TitledPane("Connexion", panneauConnexion);
 		
+		//Layout Connexion
+		//Rangée #1
+		Label infoNoEmploye = new Label("Numéro d'employé :");
+		TextField txtfldNoEmploye = new TextField();
+		
+		panneauConnexion.add(infoNoEmploye, 1, 0);
+		panneauConnexion.add(txtfldNoEmploye, 2, 0);
+		
+		//Rangée #2
+		Label infoMotDePasse = new Label("Mot de passe :");
+		TextField txtfldMotDePasse = new TextField();
+		
+		panneauConnexion.add(infoMotDePasse, 1, 2);
+		panneauConnexion.add(txtfldMotDePasse, 2, 2);
+		
+		//Rangée #3
+		HBox hboxConnexion = new HBox();
+		Button btnConnexion = new Button("Connexion");
+		hboxConnexion.getChildren().add(btnConnexion);
+		hboxConnexion.setAlignment(Pos.CENTER);
+		panneauConnexion.add(hboxConnexion, 1, 4,2,2);
+		
+		//Layout Options Adhérent
 		//Rangée #1
 		Label infoIdentifier = new Label("Identification par :");
 		ToggleGroup togglegroup = new ToggleGroup();
