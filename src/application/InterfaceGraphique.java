@@ -9,13 +9,30 @@ import donnees.Document;
 import donnees.Livre;
 import donnees.Periodique;
 import javafx.application.Application;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Accordion;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.RadioButton;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
+import javafx.scene.control.TitledPane;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.Border;
+import javafx.scene.layout.BorderStroke;
+import javafx.scene.layout.BorderStrokeStyle;
+import javafx.scene.layout.BorderWidths;
+import javafx.scene.layout.CornerRadii;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 public class InterfaceGraphique extends Application {
@@ -26,8 +43,70 @@ public class InterfaceGraphique extends Application {
 
 	@Override
 	public void start(Stage arg0) throws Exception {
-		TabPane root = new TabPane();
-		VBox vbox = new VBox(root);
+		//Identification
+		Accordion rootIdentification = new Accordion();
+		VBox vboxOptionsAdherents = new VBox();
+		vboxOptionsAdherents.setSpacing(10);
+		vboxOptionsAdherents.setPadding(new Insets(20, 0, 0, 0));
+		Scene sceneIdentification = new Scene(rootIdentification,300,300);
+		arg0.setTitle("Identification");
+		
+		TitledPane paneOptionsAdherents = new TitledPane("Options Adhérent", vboxOptionsAdherents);
+		
+		GridPane panneauInfosAdherent = new GridPane();
+		panneauInfosAdherent.setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, new CornerRadii(2), new BorderWidths(1))));
+		panneauInfosAdherent.setPadding(new Insets(5, -5, 5, -5));
+		panneauInfosAdherent.setHgap(24);
+		panneauInfosAdherent.setVgap(5);
+		TitledPane paneConnexion = new TitledPane("Connexion", new Label("Label Temporaire"));
+		
+		//Rangée #1
+		Label infoIdentifier = new Label("Identification par :");
+		ToggleGroup togglegroup = new ToggleGroup();
+		RadioButton rbNomPrenom = new RadioButton("Nom et Prénom");
+		RadioButton rbNoTelephone = new RadioButton("Numéro de téléphone");
+		togglegroup.getToggles().addAll(rbNomPrenom,rbNoTelephone);
+		
+		panneauInfosAdherent.add(infoIdentifier, 1, 0);
+		panneauInfosAdherent.add(rbNomPrenom, 2, 0);
+		panneauInfosAdherent.add(rbNoTelephone, 2, 1);
+		
+		//Rangée #2
+		Label infoNom = new Label("Nom :");
+		TextField txtfldNom = new TextField();
+		
+		panneauInfosAdherent.add(infoNom, 1, 4);
+		panneauInfosAdherent.add(txtfldNom, 2, 4);
+		
+		//Rangée #3
+		Label infoPrenom = new Label("Prénom :");
+		TextField txtfldPrenom = new TextField();
+		
+		panneauInfosAdherent.add(infoPrenom, 1, 8);
+		panneauInfosAdherent.add(txtfldPrenom, 2, 8);
+		
+		//Rangée #4
+		HBox hboxDossier = new HBox();
+		Button btnConsulterDossier = new Button("Consulter mon dossier");
+		hboxDossier.getChildren().add(btnConsulterDossier);
+		hboxDossier.setAlignment(Pos.CENTER);
+		panneauInfosAdherent.add(hboxDossier, 1, 10,2,2);
+		
+		HBox test = new HBox();
+		Button btnConsulterCatalogue = new Button("Consulter le catalogue");
+		test.getChildren().add(btnConsulterCatalogue);
+		test.setAlignment(Pos.CENTER);
+		//btnConsulterCatalogue.setVisible(false);
+		vboxOptionsAdherents.getChildren().addAll(panneauInfosAdherent,test);
+		
+        rootIdentification.getPanes().addAll(paneOptionsAdherents,paneConnexion);
+		
+
+		//Catalogue
+		TabPane rootCatalogue = new TabPane();
+		VBox vboxCatalogue = new VBox(rootCatalogue);
+		Scene sceneCatalogue = new Scene(vboxCatalogue);
+		
 		Catalogue catalogue = Catalogue.getInstance();
 		
 		Tab tabCatalogue = new Tab("Catalogue");
@@ -102,15 +181,17 @@ public class InterfaceGraphique extends Application {
         
         tablePeriodique.getColumns().addAll(ColonneNoDocPeriodique,ColonneTitrePeriodique,ColonneDateParutionPeriodique,ColonnePeriodiqueDispo,ColonneNoVolume,ColonneNoPeriodique);
         
-        root.getTabs().addAll(tabCatalogue);
-        root.getTabs().add(tabLivres);
-        root.getTabs().add(tabDVD);
-        root.getTabs().add(tabPeriodique);
+        rootCatalogue.getTabs().addAll(tabCatalogue);
+        rootCatalogue.getTabs().add(tabLivres);
+        rootCatalogue.getTabs().add(tabDVD);
+        rootCatalogue.getTabs().add(tabPeriodique);
         
-		Scene scene = new Scene(vbox);
+        
+		//Scene scene = new Scene(vboxCatalogue);
 		arg0.setResizable(false);
-		arg0.setTitle("Médiathèque");
-		arg0.setScene(scene);
+		//arg0.setTitle("Médiathèque");
+		arg0.setScene(sceneIdentification);
 		arg0.show();
+		
 	}
 }
