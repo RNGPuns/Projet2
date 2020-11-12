@@ -9,6 +9,8 @@ import donnees.Document;
 import donnees.Livre;
 import donnees.Periodique;
 import javafx.application.Application;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -66,6 +68,48 @@ public class InterfaceGraphique extends Application {
 		panneauInfosAdherent.setVgap(5);
 		TitledPane paneConnexion = new TitledPane("Connexion", panneauConnexion);
 		
+		//Layout Options Adhérent
+		//Rangée #1
+		Label infoIdentifier = new Label("Identification par :");
+		ToggleGroup togglegroup = new ToggleGroup();
+		RadioButton rbNomPrenom = new RadioButton("Nom et Prénom");
+		RadioButton rbNoTelephone = new RadioButton("Numéro de téléphone");
+		togglegroup.getToggles().addAll(rbNomPrenom,rbNoTelephone);
+				
+		panneauInfosAdherent.add(infoIdentifier, 1, 0);
+		panneauInfosAdherent.add(rbNomPrenom, 2, 0);
+		panneauInfosAdherent.add(rbNoTelephone, 2, 1);
+				
+		//Rangée #2
+		Label infoNom = new Label("Nom :");
+		TextField txtfldNom = new TextField();
+		
+		panneauInfosAdherent.add(infoNom, 1, 4);
+		panneauInfosAdherent.add(txtfldNom, 2, 4);
+		
+		//Rangée #3
+		Label infoPrenom = new Label("Prénom :");
+		TextField txtfldPrenom = new TextField();
+		
+		panneauInfosAdherent.add(infoPrenom, 1, 8);
+		panneauInfosAdherent.add(txtfldPrenom, 2, 8);
+				
+		//Rangée #4
+		HBox hboxDossier = new HBox();
+		Button btnConsulterDossier = new Button("Consulter mon dossier");
+		hboxDossier.getChildren().add(btnConsulterDossier);
+		hboxDossier.setAlignment(Pos.CENTER);
+		panneauInfosAdherent.add(hboxDossier, 1, 10,2,2);
+				
+		HBox hboxbtnCatalogue = new HBox();
+		Button btnConsulterCatalogue = new Button("Consulter le catalogue");
+		
+		
+		hboxbtnCatalogue.getChildren().add(btnConsulterCatalogue);
+		hboxbtnCatalogue.setAlignment(Pos.CENTER);
+		//btnConsulterCatalogue.setVisible(false);
+		vboxOptionsAdherents.getChildren().addAll(panneauInfosAdherent,hboxbtnCatalogue);
+		
 		//Layout Connexion
 		//Rangée #1
 		Label infoNoEmploye = new Label("Numéro d'employé :");
@@ -87,46 +131,6 @@ public class InterfaceGraphique extends Application {
 		hboxConnexion.getChildren().add(btnConnexion);
 		hboxConnexion.setAlignment(Pos.CENTER);
 		panneauConnexion.add(hboxConnexion, 1, 4,2,2);
-		
-		//Layout Options Adhérent
-		//Rangée #1
-		Label infoIdentifier = new Label("Identification par :");
-		ToggleGroup togglegroup = new ToggleGroup();
-		RadioButton rbNomPrenom = new RadioButton("Nom et Prénom");
-		RadioButton rbNoTelephone = new RadioButton("Numéro de téléphone");
-		togglegroup.getToggles().addAll(rbNomPrenom,rbNoTelephone);
-		
-		panneauInfosAdherent.add(infoIdentifier, 1, 0);
-		panneauInfosAdherent.add(rbNomPrenom, 2, 0);
-		panneauInfosAdherent.add(rbNoTelephone, 2, 1);
-		
-		//Rangée #2
-		Label infoNom = new Label("Nom :");
-		TextField txtfldNom = new TextField();
-		
-		panneauInfosAdherent.add(infoNom, 1, 4);
-		panneauInfosAdherent.add(txtfldNom, 2, 4);
-		
-		//Rangée #3
-		Label infoPrenom = new Label("Prénom :");
-		TextField txtfldPrenom = new TextField();
-		
-		panneauInfosAdherent.add(infoPrenom, 1, 8);
-		panneauInfosAdherent.add(txtfldPrenom, 2, 8);
-		
-		//Rangée #4
-		HBox hboxDossier = new HBox();
-		Button btnConsulterDossier = new Button("Consulter mon dossier");
-		hboxDossier.getChildren().add(btnConsulterDossier);
-		hboxDossier.setAlignment(Pos.CENTER);
-		panneauInfosAdherent.add(hboxDossier, 1, 10,2,2);
-		
-		HBox test = new HBox();
-		Button btnConsulterCatalogue = new Button("Consulter le catalogue");
-		test.getChildren().add(btnConsulterCatalogue);
-		test.setAlignment(Pos.CENTER);
-		//btnConsulterCatalogue.setVisible(false);
-		vboxOptionsAdherents.getChildren().addAll(panneauInfosAdherent,test);
 		
         rootIdentification.getPanes().addAll(paneOptionsAdherents,paneConnexion);
 		
@@ -215,10 +219,14 @@ public class InterfaceGraphique extends Application {
         rootCatalogue.getTabs().add(tabDVD);
         rootCatalogue.getTabs().add(tabPeriodique);
         
-        
-		//Scene scene = new Scene(vboxCatalogue);
+        btnConsulterCatalogue.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent e) {
+				arg0.setTitle("Médiathèque");
+				arg0.setScene(sceneCatalogue);
+			}});
+		
 		arg0.setResizable(false);
-		//arg0.setTitle("Médiathèque");
 		arg0.setScene(sceneIdentification);
 		arg0.show();
 		
