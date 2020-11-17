@@ -1,7 +1,12 @@
 package application;
 
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.time.LocalDate;
+import java.util.Scanner;
+
+import javax.swing.GroupLayout.Alignment;
 
 import donnees.Catalogue;
 import donnees.DVD;
@@ -12,12 +17,17 @@ import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
+import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
+import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Accordion;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
+import javafx.scene.control.Separator;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TableColumn;
@@ -25,8 +35,12 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TitledPane;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.ButtonBar.ButtonData;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Border;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.BorderStroke;
 import javafx.scene.layout.BorderStrokeStyle;
 import javafx.scene.layout.BorderWidths;
@@ -35,6 +49,8 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 
 public class InterfaceGraphique extends Application {
@@ -42,10 +58,14 @@ public class InterfaceGraphique extends Application {
 	private final TableView<Livre> tableLivre = new TableView<Livre>();
 	private final TableView<DVD> tableDVD = new TableView<DVD>();
 	private final TableView<Periodique> tablePeriodique = new TableView<Periodique>();
+	private final TableView<String> tablePreposes = new TableView<String>();
+	
+	String strIdentifiantAdmin = "";
+	String strMotDePasseAdmin = "";
 
 	@Override
 	public void start(Stage arg0) throws Exception {
-		//Identification
+		//Scene Identification
 		Accordion rootIdentification = new Accordion();
 		
 		VBox vboxOptionsAdherents = new VBox();
@@ -107,20 +127,19 @@ public class InterfaceGraphique extends Application {
 		
 		hboxbtnCatalogue.getChildren().add(btnConsulterCatalogue);
 		hboxbtnCatalogue.setAlignment(Pos.CENTER);
-		//btnConsulterCatalogue.setVisible(false);
 		vboxOptionsAdherents.getChildren().addAll(panneauInfosAdherent,hboxbtnCatalogue);
 		
 		//Layout Connexion
 		//Rangée #1
 		Label infoNoEmploye = new Label("Numéro d'employé :");
-		TextField txtfldNoEmploye = new TextField();
+		TextField txtfldNoEmploye = new TextField("admin");
 		
 		panneauConnexion.add(infoNoEmploye, 1, 0);
 		panneauConnexion.add(txtfldNoEmploye, 2, 0);
 		
 		//Rangée #2
 		Label infoMotDePasse = new Label("Mot de passe :");
-		TextField txtfldMotDePasse = new TextField();
+		TextField txtfldMotDePasse = new TextField("79251367");
 		
 		panneauConnexion.add(infoMotDePasse, 1, 2);
 		panneauConnexion.add(txtfldMotDePasse, 2, 2);
@@ -128,14 +147,14 @@ public class InterfaceGraphique extends Application {
 		//Rangée #3
 		HBox hboxConnexion = new HBox();
 		Button btnConnexion = new Button("Connexion");
+		
 		hboxConnexion.getChildren().add(btnConnexion);
 		hboxConnexion.setAlignment(Pos.CENTER);
 		panneauConnexion.add(hboxConnexion, 1, 4,2,2);
 		
         rootIdentification.getPanes().addAll(paneOptionsAdherents,paneConnexion);
 		
-
-		//Catalogue
+		//Scene Catalogue adhérent
 		TabPane rootCatalogue = new TabPane();
 		VBox vboxCatalogue = new VBox(rootCatalogue);
 		Scene sceneCatalogue = new Scene(vboxCatalogue);
@@ -218,6 +237,114 @@ public class InterfaceGraphique extends Application {
         rootCatalogue.getTabs().add(tabLivres);
         rootCatalogue.getTabs().add(tabDVD);
         rootCatalogue.getTabs().add(tabPeriodique);
+        
+        //Scene admin
+        Group rootAdmin = new Group();
+		HBox hboxRootAdmin = new HBox(rootAdmin);
+		VBox vboxOptionsAdmin = new VBox();
+		Scene sceneAdmin = new Scene(hboxRootAdmin);
+		
+		hboxRootAdmin.setSpacing(5);
+		hboxRootAdmin.setPadding(new Insets(5,5,5,5));
+		vboxOptionsAdmin.setSpacing(5);
+		vboxOptionsAdmin.setAlignment(Pos.TOP_CENTER);
+		
+		TableColumn<String, String> ColonneNoEmploye = new TableColumn<String, String>("Numéro d'employé");
+		ColonneNoEmploye.setPrefWidth(120);
+		ColonneNoEmploye.setMaxWidth(120);
+        TableColumn<String, String> ColonneNomEmploye = new TableColumn<String, String>("Nom");
+        ColonneNomEmploye.setPrefWidth(120);
+        ColonneNomEmploye.setMaxWidth(120);
+        TableColumn<String, LocalDate> ColonnePrenomEmploye = new TableColumn<String, LocalDate>("Prénom");
+        ColonnePrenomEmploye.setPrefWidth(120);
+        ColonnePrenomEmploye.setMaxWidth(120);
+        TableColumn<String, String> ColonneAdresseEmploye = new TableColumn<String, String>("Adresse");
+        ColonneAdresseEmploye.setPrefWidth(120);
+        ColonneAdresseEmploye.setMaxWidth(120);
+        TableColumn<String, String> ColonneNoTelephoneEmploye = new TableColumn<String, String>("Téléphone");
+        ColonneNoTelephoneEmploye.setPrefWidth(120);
+        ColonneNoTelephoneEmploye.setMaxWidth(120);
+        
+        tablePreposes.getColumns().addAll(ColonneNoEmploye,ColonneNomEmploye,ColonnePrenomEmploye,ColonneAdresseEmploye,ColonneNoTelephoneEmploye);
+        
+        Text txtGestionPrepose = new Text("Gestion préposés");
+        Button btnAjouterPrepose = new Button("Ajouter un préposé");
+        
+        btnAjouterPrepose.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent e) {
+				ButtonType confirmer = new ButtonType("Confirmer", ButtonData.OK_DONE);
+				ButtonType annuler = new ButtonType("Annuler", ButtonData.CANCEL_CLOSE);
+				Alert fenetreAjouterPrepose = new Alert(AlertType.NONE, "default Dialog",confirmer,annuler);
+				GridPane gridpane = new GridPane();
+				gridpane.setHgap(5);
+				
+				Text nom = new Text("Nom:");
+				Text prenom = new Text("Prénom:");
+				Text adresse = new Text("Adresse:");
+				Text telephone = new Text("Téléphone:");
+				Text motdepasse = new Text("Mot de passe:");
+				
+				gridpane.add(nom, 0, 0);
+				gridpane.add(prenom, 0, 1);
+				gridpane.add(adresse, 0, 2);
+				gridpane.add(telephone, 0, 3);
+				gridpane.add(motdepasse, 0, 4);
+				
+				TextField champsNom = new TextField();
+				TextField champsPrenom = new TextField();
+				TextField champsAdresse = new TextField();
+				TextField champsTelephone = new TextField();
+				TextField champsMotDePasse = new TextField();
+				
+				gridpane.add(champsNom, 1, 0);
+				gridpane.add(champsPrenom, 1, 1);
+				gridpane.add(champsAdresse, 1, 2);
+				gridpane.add(champsTelephone, 1, 3);
+				gridpane.add(champsMotDePasse, 1, 4);
+				
+				fenetreAjouterPrepose.setTitle("Ajouter un préposé");
+				Stage stage = (Stage) fenetreAjouterPrepose.getDialogPane().getScene().getWindow();
+				stage.getIcons().add(new Image("icon-utilisateur.png"));
+				fenetreAjouterPrepose.setHeaderText(null);
+				fenetreAjouterPrepose.getDialogPane().setContent(gridpane);
+				fenetreAjouterPrepose.showAndWait();
+			}});
+        
+        Button btnSupprimerPrepose = new Button("Supprimer un préposé");
+        Separator separateur = new Separator(Orientation.HORIZONTAL);
+        Button btnDeconnexion = new Button("Déconnexion");
+        
+        btnAjouterPrepose.setMaxWidth(Double.MAX_VALUE);
+        btnDeconnexion.setMaxWidth(Double.MAX_VALUE);
+        
+        vboxOptionsAdmin.getChildren().addAll(txtGestionPrepose,btnAjouterPrepose,btnSupprimerPrepose,separateur,btnDeconnexion);
+        
+        hboxRootAdmin.getChildren().addAll(tablePreposes,vboxOptionsAdmin);
+        
+        btnConnexion.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent e) {
+				try {
+					Scanner scFichierIdentifiant = new Scanner(new File("Identifiants préposé.txt")); //Début de la lecture du fichier
+					String strLigneIdentifiant = scFichierIdentifiant.nextLine().replaceAll("\\s+","");
+					String strLigneMotDePasse = scFichierIdentifiant.nextLine().replaceAll("\\s+","");
+					
+					strIdentifiantAdmin = strLigneIdentifiant.split(":")[1];
+					strMotDePasseAdmin = strLigneMotDePasse.split(":")[1];
+					
+					scFichierIdentifiant.close(); //Fin de la lecture du fichier identifiant
+					
+				} catch (FileNotFoundException exception) {
+					
+					exception.printStackTrace();
+				}
+				
+				if (txtfldNoEmploye.getText().equals(strIdentifiantAdmin) && txtfldMotDePasse.getText().equals(strMotDePasseAdmin)) {
+					arg0.setScene(sceneAdmin);
+				}
+				
+			}});
         
         btnConsulterCatalogue.setOnAction(new EventHandler<ActionEvent>() {
 			@Override

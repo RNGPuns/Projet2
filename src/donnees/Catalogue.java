@@ -8,10 +8,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-import application.InterfaceGraphique;
-import javafx.application.Application;
-import javafx.stage.Stage;
-
 public final class Catalogue implements Serializable {
 
 	// Complétez pour programmer la classe comme singleton
