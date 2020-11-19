@@ -1,9 +1,15 @@
 package application;
 
 
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.time.LocalDate;
+import java.util.Optional;
 import java.util.Scanner;
 
 import javax.swing.GroupLayout.Alignment;
@@ -13,6 +19,7 @@ import donnees.DVD;
 import donnees.Document;
 import donnees.Livre;
 import donnees.Periodique;
+import donnees.Prepose;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -35,6 +42,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TitledPane;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.image.Image;
@@ -58,10 +66,12 @@ public class InterfaceGraphique extends Application {
 	private final TableView<Livre> tableLivre = new TableView<Livre>();
 	private final TableView<DVD> tableDVD = new TableView<DVD>();
 	private final TableView<Periodique> tablePeriodique = new TableView<Periodique>();
-	private final TableView<String> tablePreposes = new TableView<String>();
+	private final TableView<Prepose> tablePreposes = new TableView<Prepose>();
 	
 	String strIdentifiantAdmin = "";
 	String strMotDePasseAdmin = "";
+	
+	int intNbEmploye =0;
 
 	@Override
 	public void start(Stage arg0) throws Exception {
@@ -249,19 +259,24 @@ public class InterfaceGraphique extends Application {
 		vboxOptionsAdmin.setSpacing(5);
 		vboxOptionsAdmin.setAlignment(Pos.TOP_CENTER);
 		
-		TableColumn<String, String> ColonneNoEmploye = new TableColumn<String, String>("Numéro d'employé");
+		TableColumn<Prepose, String> ColonneNoEmploye = new TableColumn<Prepose, String>("Numéro d'employé");
+		ColonneNoEmploye.setCellValueFactory(new PropertyValueFactory<>("strNoEmploye"));
 		ColonneNoEmploye.setPrefWidth(120);
 		ColonneNoEmploye.setMaxWidth(120);
-        TableColumn<String, String> ColonneNomEmploye = new TableColumn<String, String>("Nom");
+        TableColumn<Prepose, String> ColonneNomEmploye = new TableColumn<Prepose, String>("Nom");
+        ColonneNomEmploye.setCellValueFactory(new PropertyValueFactory<>("strNom"));
         ColonneNomEmploye.setPrefWidth(120);
         ColonneNomEmploye.setMaxWidth(120);
-        TableColumn<String, LocalDate> ColonnePrenomEmploye = new TableColumn<String, LocalDate>("Prénom");
+        TableColumn<Prepose, String> ColonnePrenomEmploye = new TableColumn<Prepose, String>("Prénom");
+        ColonnePrenomEmploye.setCellValueFactory(new PropertyValueFactory<>("strPrenom"));
         ColonnePrenomEmploye.setPrefWidth(120);
         ColonnePrenomEmploye.setMaxWidth(120);
-        TableColumn<String, String> ColonneAdresseEmploye = new TableColumn<String, String>("Adresse");
+        TableColumn<Prepose, String> ColonneAdresseEmploye = new TableColumn<Prepose, String>("Adresse");
+        ColonneAdresseEmploye.setCellValueFactory(new PropertyValueFactory<>("strAdresse"));
         ColonneAdresseEmploye.setPrefWidth(120);
         ColonneAdresseEmploye.setMaxWidth(120);
-        TableColumn<String, String> ColonneNoTelephoneEmploye = new TableColumn<String, String>("Téléphone");
+        TableColumn<Prepose, String> ColonneNoTelephoneEmploye = new TableColumn<Prepose, String>("Téléphone");
+        ColonneNoTelephoneEmploye.setCellValueFactory(new PropertyValueFactory<>("strTelephone"));
         ColonneNoTelephoneEmploye.setPrefWidth(120);
         ColonneNoTelephoneEmploye.setMaxWidth(120);
         
@@ -273,9 +288,9 @@ public class InterfaceGraphique extends Application {
         btnAjouterPrepose.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent e) {
-				ButtonType confirmer = new ButtonType("Confirmer", ButtonData.OK_DONE);
-				ButtonType annuler = new ButtonType("Annuler", ButtonData.CANCEL_CLOSE);
-				Alert fenetreAjouterPrepose = new Alert(AlertType.NONE, "default Dialog",confirmer,annuler);
+				ButtonType btnconfirmer = new ButtonType("Confirmer", ButtonData.YES);
+				ButtonType btnannuler = new ButtonType("Annuler", ButtonData.CANCEL_CLOSE);
+				Alert fenetreAjouterPrepose = new Alert(AlertType.NONE, "default Dialog",btnconfirmer,btnannuler);
 				GridPane gridpane = new GridPane();
 				gridpane.setHgap(5);
 				
@@ -291,11 +306,11 @@ public class InterfaceGraphique extends Application {
 				gridpane.add(telephone, 0, 3);
 				gridpane.add(motdepasse, 0, 4);
 				
-				TextField champsNom = new TextField();
-				TextField champsPrenom = new TextField();
-				TextField champsAdresse = new TextField();
-				TextField champsTelephone = new TextField();
-				TextField champsMotDePasse = new TextField();
+				TextField champsNom = new TextField("a");
+				TextField champsPrenom = new TextField("a");
+				TextField champsAdresse = new TextField("a");
+				TextField champsTelephone = new TextField("(123) 456-7891");
+				TextField champsMotDePasse = new TextField("a");
 				
 				gridpane.add(champsNom, 1, 0);
 				gridpane.add(champsPrenom, 1, 1);
@@ -308,6 +323,90 @@ public class InterfaceGraphique extends Application {
 				stage.getIcons().add(new Image("icon-utilisateur.png"));
 				fenetreAjouterPrepose.setHeaderText(null);
 				fenetreAjouterPrepose.getDialogPane().setContent(gridpane);
+				
+				Button btConfirmer = (Button) fenetreAjouterPrepose.getDialogPane().lookupButton(btnconfirmer);
+				btConfirmer.addEventFilter(ActionEvent.ACTION, event->{
+					if (champsNom.getText().trim().isEmpty()) {
+						Alert fenetreNomManquant = new Alert(AlertType.NONE, "default Dialog",ButtonType.OK);
+						fenetreNomManquant.setTitle("Erreur");
+						
+						Stage stage1 = (Stage) fenetreNomManquant.getDialogPane().getScene().getWindow();
+						stage1.getIcons().add(new Image("icon-erreur.png"));
+						fenetreNomManquant.setContentText("Vous avez oublié d'entrer le nom.");
+						fenetreNomManquant.setHeaderText(null);
+						fenetreNomManquant.showAndWait();
+						event.consume();
+					}
+					else if (champsPrenom.getText().trim().isEmpty()) {
+						Alert fenetrePrenomManquant = new Alert(AlertType.NONE, "default Dialog",ButtonType.OK);
+						fenetrePrenomManquant.setTitle("Erreur");
+						
+						Stage stage1 = (Stage) fenetrePrenomManquant.getDialogPane().getScene().getWindow();
+						stage1.getIcons().add(new Image("icon-erreur.png"));
+						fenetrePrenomManquant.setContentText("Vous avez oublié d'entrer le prénom.");
+						fenetrePrenomManquant.setHeaderText(null);
+						fenetrePrenomManquant.showAndWait();
+						event.consume();
+					}
+					else if (champsAdresse.getText().trim().isEmpty()) {
+						Alert fenetreAdresseManquante = new Alert(AlertType.NONE, "default Dialog",ButtonType.OK);
+						fenetreAdresseManquante.setTitle("Erreur");
+						
+						Stage stage1 = (Stage) fenetreAdresseManquante.getDialogPane().getScene().getWindow();
+						stage1.getIcons().add(new Image("icon-erreur.png"));
+						fenetreAdresseManquante.setContentText("Vous avez oublié d'entrer l'adresse.");
+						fenetreAdresseManquante.setHeaderText(null);
+						fenetreAdresseManquante.showAndWait();
+						event.consume();
+					}
+					else if (champsTelephone.getText().trim().isEmpty()) {
+						Alert fenetreTelephoneManquant = new Alert(AlertType.NONE, "default Dialog",ButtonType.OK);
+						fenetreTelephoneManquant.setTitle("Erreur");
+						
+						Stage stage1 = (Stage) fenetreTelephoneManquant.getDialogPane().getScene().getWindow();
+						stage1.getIcons().add(new Image("icon-erreur.png"));
+						fenetreTelephoneManquant.setContentText("Vous avez oublié d'entrer le numéro de téléphone.");
+						fenetreTelephoneManquant.setHeaderText(null);
+						fenetreTelephoneManquant.showAndWait();
+						event.consume();
+					}
+					else if (!champsTelephone.getText().matches("^\\(\\d{3}\\)\\s\\d{3}-\\d{4}")) {
+						Alert fenetreTelephoneIncorrect = new Alert(AlertType.NONE, "default Dialog",ButtonType.OK);
+						fenetreTelephoneIncorrect.setTitle("Erreur");
+						
+						Stage stage1 = (Stage) fenetreTelephoneIncorrect.getDialogPane().getScene().getWindow();
+						stage1.getIcons().add(new Image("icon-erreur.png"));
+						fenetreTelephoneIncorrect.setContentText("Le format du numéro de téléphone entré est incorrect. Le format est \"(###) ###-####\"."  );
+						fenetreTelephoneIncorrect.setHeaderText(null);
+						fenetreTelephoneIncorrect.showAndWait();
+						event.consume();
+					}
+					else if (champsMotDePasse.getText().trim().isEmpty()) {
+						Alert fenetreMotdePasseManquant = new Alert(AlertType.NONE, "default Dialog",ButtonType.OK);
+						fenetreMotdePasseManquant.setTitle("Erreur");
+						
+						Stage stage1 = (Stage) fenetreMotdePasseManquant.getDialogPane().getScene().getWindow();
+						stage1.getIcons().add(new Image("icon-erreur.png"));
+						fenetreMotdePasseManquant.setContentText("Vous avez oublié d'entrer le mot de passe.");
+						fenetreMotdePasseManquant.setHeaderText(null);
+						fenetreMotdePasseManquant.showAndWait();
+						event.consume();
+					}
+					else {
+						Prepose prepose = new Prepose("EMP" + intNbEmploye, champsNom.getText(), champsPrenom.getText(), champsAdresse.getText(), champsTelephone.getText());
+						intNbEmploye++;
+						ajouterPrepose(prepose, champsMotDePasse.getText());
+					}
+					
+				});
+				
+				Button btAnnuler = (Button) fenetreAjouterPrepose.getDialogPane().lookupButton(btnannuler); 
+				btAnnuler.setOnAction(new EventHandler<ActionEvent>() {
+					@Override
+					public void handle(ActionEvent e) {
+						fenetreAjouterPrepose.close();
+					}});
+				
 				fenetreAjouterPrepose.showAndWait();
 			}});
         
@@ -327,6 +426,7 @@ public class InterfaceGraphique extends Application {
 			public void handle(ActionEvent e) {
 				try {
 					Scanner scFichierIdentifiant = new Scanner(new File("Identifiants préposé.txt")); //Début de la lecture du fichier
+					String strTypeUtilisateur = scFichierIdentifiant.nextLine().replaceAll("\\s+","");
 					String strLigneIdentifiant = scFichierIdentifiant.nextLine().replaceAll("\\s+","");
 					String strLigneMotDePasse = scFichierIdentifiant.nextLine().replaceAll("\\s+","");
 					
@@ -343,6 +443,37 @@ public class InterfaceGraphique extends Application {
 				if (txtfldNoEmploye.getText().equals(strIdentifiantAdmin) && txtfldMotDePasse.getText().equals(strMotDePasseAdmin)) {
 					arg0.setScene(sceneAdmin);
 				}
+				else if (txtfldNoEmploye.getText().trim().isEmpty()) {
+					Alert fenetreNoEmployeManquant = new Alert(AlertType.NONE, "default Dialog",ButtonType.OK);
+					
+					fenetreNoEmployeManquant.setTitle("Erreur");
+					Stage stage = (Stage) fenetreNoEmployeManquant.getDialogPane().getScene().getWindow();
+					stage.getIcons().add(new Image("icon-erreur.png"));
+					fenetreNoEmployeManquant.setContentText("Vous avez oublié d'inscrire le numéro d'employé.");
+					fenetreNoEmployeManquant.setHeaderText(null);
+					fenetreNoEmployeManquant.showAndWait();
+				}
+				else if (txtfldMotDePasse.getText().trim().isEmpty()) {
+					Alert fenetreMotDePasseManquant = new Alert(AlertType.NONE, "default Dialog",ButtonType.OK);
+					
+					fenetreMotDePasseManquant.setTitle("Erreur");
+					Stage stage = (Stage) fenetreMotDePasseManquant.getDialogPane().getScene().getWindow();
+					stage.getIcons().add(new Image("icon-erreur.png"));
+					fenetreMotDePasseManquant.setContentText("Vous avez oublié d'inscrire le mot de passe.");
+					fenetreMotDePasseManquant.setHeaderText(null);
+					fenetreMotDePasseManquant.showAndWait();
+				}
+				
+				if (!txtfldNoEmploye.getText().equals(strIdentifiantAdmin) || !txtfldMotDePasse.getText().equals(strMotDePasseAdmin)) {
+					Alert fenetreIdentifiantManquantsIncorrects = new Alert(AlertType.NONE, "default Dialog",ButtonType.OK);
+					
+					fenetreIdentifiantManquantsIncorrects.setTitle("Avertissement");
+					Stage stage = (Stage) fenetreIdentifiantManquantsIncorrects.getDialogPane().getScene().getWindow();
+					stage.getIcons().add(new Image("icon-avertissement.png"));
+					fenetreIdentifiantManquantsIncorrects.setContentText("Les identifiants que vous avez entrés ne correspondent à aucun employés.");
+					fenetreIdentifiantManquantsIncorrects.setHeaderText(null);
+					fenetreIdentifiantManquantsIncorrects.showAndWait();
+				}
 				
 			}});
         
@@ -358,4 +489,28 @@ public class InterfaceGraphique extends Application {
 		arg0.show();
 		
 	}
+	
+	public void ajouterPrepose(Prepose prepose, String strMotDePasse) {
+		try {
+			System.out.println(prepose.getStrNom());
+			tablePreposes.getItems().add(prepose);
+			File file = new File("Identifiants préposé.txt");
+			BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file, true),"UTF-8"));
+			
+			bw.newLine();
+			bw.write("Preposé");
+			bw.newLine();
+			bw.write("Identifiant: " + prepose.getStrNoEmploye());
+			bw.newLine();
+			bw.write("Mot de passe: " + strMotDePasse);
+			bw.newLine();
+			
+			bw.close();
+			
+		} catch (IOException e) {
+			
+			e.printStackTrace();
+		}
+	}
+	
 }
