@@ -9,7 +9,6 @@ import application.InterfaceGraphique;
 public class SerialisationPreposes {
 	
 	public void Serialiser() {
-		//InterfaceGraphique t = new InterfaceGraphique();
 	     
         try {
             FileOutputStream fos = new FileOutputStream("Preposes.ser");

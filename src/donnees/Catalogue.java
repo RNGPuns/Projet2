@@ -16,10 +16,10 @@ public final class Catalogue implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	private static Catalogue instance;
-	private ArrayList<Document> lstDocuments = new ArrayList<>();
-	private ArrayList<Livre> lstLivres = new ArrayList<>();
-	private ArrayList<Periodique> lstPeriodiques = new ArrayList<>();
-	private ArrayList<DVD> lstDvd = new ArrayList<>();
+	private static ArrayList<Document> lstDocuments = new ArrayList<>();
+	private static ArrayList<Livre> lstLivres = new ArrayList<>();
+	private static ArrayList<Periodique> lstPeriodiques = new ArrayList<>();
+	private static ArrayList<DVD> lstDvd = new ArrayList<>();
 	DateTimeFormatter df = DateTimeFormatter.ofPattern("dd-MM-yyyy");
 	
 	
@@ -117,8 +117,20 @@ public final class Catalogue implements Serializable {
 		return serPeriodique;
 	}
 
-	public ArrayList<DVD> getLstDvd() {
+	public static ArrayList<DVD> getLstDvd() {
 		return lstDvd;
+	}
+
+	public static ArrayList<Document> getLstDocuments() {
+		return lstDocuments;
+	}
+
+	public static ArrayList<Livre> getLstLivres() {
+		return lstLivres;
+	}
+
+	public static ArrayList<Periodique> getLstPeriodiques() {
+		return lstPeriodiques;
 	}
 
 }

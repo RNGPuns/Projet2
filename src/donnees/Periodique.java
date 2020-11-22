@@ -5,6 +5,10 @@ import java.time.LocalDate;
 
 public class Periodique extends Document {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private int noVolume;
 	private int noPeriodique;
 
@@ -17,6 +21,14 @@ public class Periodique extends Document {
 	@Override
 	public String toString() {
 		return "Periodique [" + super.toString() + "noVolume=" + noVolume + ", noPeriodique=" + noPeriodique + "]";
+	}
+
+	public int getNoVolume() {
+		return noVolume;
+	}
+
+	public int getNoPeriodique() {
+		return noPeriodique;
 	}
 
 }

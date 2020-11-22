@@ -25,6 +25,7 @@ import donnees.Prepose;
 import donnees.SerialisationCatalogue;
 import donnees.SerialisationPreposes;
 import javafx.application.Application;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -66,10 +67,10 @@ import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 
 public class InterfaceGraphique extends Application {
-	private final TableView<Document> tableDocuments = new TableView<Document>();
-	private final TableView<Livre> tableLivre = new TableView<Livre>();
-	private final TableView<DVD> tableDVD = new TableView<DVD>();
-	private final TableView<Periodique> tablePeriodique = new TableView<Periodique>();
+	private final static TableView<Document> tableDocuments = new TableView<Document>();
+	private final static TableView<Livre> tableLivre = new TableView<Livre>();
+	private final static TableView<DVD> tableDVD = new TableView<DVD>();
+	private final static TableView<Periodique> tablePeriodique = new TableView<Periodique>();
 	private final static TableView<Prepose> tablePreposes = new TableView<Prepose>();
 	
 	ArrayList<IdentifiantsPrepose> lstIdentifiants = new ArrayList<IdentifiantsPrepose>();
@@ -126,6 +127,8 @@ public class InterfaceGraphique extends Application {
 		
 		Scene sceneIdentification = new Scene(rootIdentification,300,300);
 		arg0.setTitle("Identification");
+		
+		arg0.getIcons().add(new Image("icon-mediatheque.png"));
 		
 		TitledPane paneOptionsAdherents = new TitledPane("Options Adhérent", vboxOptionsAdherents);
 		
@@ -210,76 +213,119 @@ public class InterfaceGraphique extends Application {
 		Catalogue catalogue = Catalogue.getInstance();
 		
 		Tab tabCatalogue = new Tab("Catalogue");
+		tabCatalogue.setClosable(false);
 		tabCatalogue.setGraphic(new ImageView("icon-collection.png"));
 		tabCatalogue.setContent(tableDocuments);
 		
 		TableColumn<Document, String> ColonneNoDoc = new TableColumn<Document, String>("Numéro Document");
+		ColonneNoDoc.setCellValueFactory(f -> new SimpleStringProperty(f.getValue().getNoDoc()));
         ColonneNoDoc.setPrefWidth(120);
         TableColumn<Document, String> ColonneTitreDoc = new TableColumn<Document, String>("Titre du Document");
+        ColonneTitreDoc.setCellValueFactory(new PropertyValueFactory<>("Titre"));
         ColonneTitreDoc.setPrefWidth(400);
         TableColumn<Document, LocalDate> ColonneDateParutionDoc = new TableColumn<Document, LocalDate>("Date de parution");
+        ColonneDateParutionDoc.setCellValueFactory(new PropertyValueFactory<>("DateParution"));
         ColonneDateParutionDoc.setPrefWidth(120);
         TableColumn<Document, String> ColonneDocDispo = new TableColumn<Document, String>("Disponibilité");
+        ColonneDocDispo.setCellValueFactory(new PropertyValueFactory<>("Disponible"));
         ColonneDocDispo.setPrefWidth(120);
 		
         tableDocuments.getColumns().addAll(ColonneNoDoc,ColonneTitreDoc,ColonneDateParutionDoc,ColonneDocDispo);
         
+        for (Document doc : Catalogue.getLstDocuments()) {
+        	tableDocuments.getItems().add(doc);
+        }
+        
         Tab tabLivres = new Tab("Livres");
+        tabLivres.setClosable(false);
         tabLivres.setGraphic(new ImageView("icon-livre.png"));
         tabLivres.setContent(tableLivre);
         
         TableColumn<Livre, String> ColonneNoDocLivre = new TableColumn<Livre, String>("Numéro Document");
+        ColonneNoDocLivre.setCellValueFactory(new PropertyValueFactory<>("NoDoc"));
         ColonneNoDocLivre.setPrefWidth(120);
         TableColumn<Livre, String> ColonneTitreLivre = new TableColumn<Livre, String>("Titre du livre");
+        ColonneTitreLivre.setCellValueFactory(new PropertyValueFactory<>("Titre"));
         ColonneTitreLivre.setPrefWidth(120);
         TableColumn<Livre, LocalDate> ColonneDateParutionLivre = new TableColumn<Livre, LocalDate>("Date de parution");
+        ColonneDateParutionLivre.setCellValueFactory(new PropertyValueFactory<>("DateParution"));
         ColonneDateParutionLivre.setPrefWidth(120);
         TableColumn<Livre, String> ColonneLivreDispo = new TableColumn<Livre, String>("Disponibilité");
+        ColonneLivreDispo.setCellValueFactory(new PropertyValueFactory<>("Disponible"));
         ColonneLivreDispo.setPrefWidth(120);
         TableColumn<Livre, String> ColonneMotsClesLivre = new TableColumn<Livre, String>("Mots Clés");
+        /**/
         ColonneMotsClesLivre.setPrefWidth(120);
         TableColumn<Livre, String> ColonneAuteurLivre = new TableColumn<Livre, String>("Auteur");
+        ColonneAuteurLivre.setCellValueFactory(new PropertyValueFactory<>("Auteur"));
         ColonneAuteurLivre.setPrefWidth(120);
         
         tableLivre.getColumns().addAll(ColonneNoDocLivre,ColonneTitreLivre,ColonneDateParutionLivre,ColonneLivreDispo,ColonneMotsClesLivre,ColonneAuteurLivre);
         
+        for (Livre livre : Catalogue.getLstLivres()) {
+        	tableLivre.getItems().add(livre);
+        }
+        
         Tab tabDVD = new Tab("DVD");
+        tabDVD.setClosable(false);
         tabDVD.setGraphic(new ImageView("icon-dvd.png"));
         tabDVD.setContent(tableDVD);
         
         TableColumn<DVD, String> ColonneNoDocDVD = new TableColumn<DVD, String>("Numéro Document");
+        ColonneNoDocDVD.setCellValueFactory(new PropertyValueFactory<>("NoDoc"));
         ColonneNoDocDVD.setPrefWidth(120);
         TableColumn<DVD, String> ColonneTitreDVD = new TableColumn<DVD, String>("Titre du DVD");
+        ColonneTitreDVD.setCellValueFactory(new PropertyValueFactory<>("Titre"));
         ColonneTitreDVD.setPrefWidth(120);
         TableColumn<DVD, LocalDate> ColonneDateParutionDVD = new TableColumn<DVD, LocalDate>("Date de parution");
+        ColonneDateParutionDVD.setCellValueFactory(new PropertyValueFactory<>("DateParution"));
         ColonneDateParutionDVD.setPrefWidth(120);
         TableColumn<DVD, String> ColonneDVDDispo = new TableColumn<DVD, String>("Disponibilité");
+        ColonneDVDDispo.setCellValueFactory(new PropertyValueFactory<>("Disponible"));
         ColonneDVDDispo.setPrefWidth(120);
         TableColumn<DVD, Integer> ColonneNbDisques = new TableColumn<DVD, Integer>("Nombre de disques");
+        ColonneNbDisques.setCellValueFactory(new PropertyValueFactory<>("NbDisques"));
         ColonneNbDisques.setPrefWidth(120);
         TableColumn<DVD, String> ColonneRealisateur = new TableColumn<DVD, String>("Auteur");
+        ColonneRealisateur.setCellValueFactory(new PropertyValueFactory<>("StrRealisateur"));
         ColonneRealisateur.setPrefWidth(120);
         
         tableDVD.getColumns().addAll(ColonneNoDocDVD,ColonneTitreDVD,ColonneDateParutionDVD,ColonneDVDDispo,ColonneNbDisques,ColonneRealisateur);
         
+        for (DVD dvd : Catalogue.getLstDvd()) {
+        	tableDVD.getItems().add(dvd);
+        	System.out.println(dvd.getNoDoc());
+        }
+        
         Tab tabPeriodique = new Tab("Périodiques");
+        tabPeriodique.setClosable(false);
         tabPeriodique.setGraphic(new ImageView("icon-periodique.png"));
         tabPeriodique.setContent(tablePeriodique);
         
         TableColumn<Periodique, String> ColonneNoDocPeriodique = new TableColumn<Periodique, String>("Numéro Document");
+        ColonneNoDocPeriodique.setCellValueFactory(new PropertyValueFactory<>("NoDoc"));
         ColonneNoDocPeriodique.setPrefWidth(120);
         TableColumn<Periodique, String> ColonneTitrePeriodique = new TableColumn<Periodique, String>("Titre du Périodique");
+        ColonneTitrePeriodique.setCellValueFactory(new PropertyValueFactory<>("Titre"));
         ColonneTitrePeriodique.setPrefWidth(120);
         TableColumn<Periodique, LocalDate> ColonneDateParutionPeriodique = new TableColumn<Periodique, LocalDate>("Date de parution");
+        ColonneDateParutionPeriodique.setCellValueFactory(new PropertyValueFactory<>("DateParution"));
         ColonneDateParutionPeriodique.setPrefWidth(120);
         TableColumn<Periodique, String> ColonnePeriodiqueDispo = new TableColumn<Periodique, String>("Disponibilité");
+        ColonnePeriodiqueDispo.setCellValueFactory(new PropertyValueFactory<>("Disponible"));
         ColonnePeriodiqueDispo.setPrefWidth(120);
         TableColumn<Periodique, Integer> ColonneNoVolume = new TableColumn<Periodique, Integer>("Numéro Volume");
+        ColonneNoVolume.setCellValueFactory(new PropertyValueFactory<>("NoVolume"));
         ColonneNoVolume.setPrefWidth(120);
         TableColumn<Periodique, String> ColonneNoPeriodique = new TableColumn<Periodique, String>("Numéro Périodique");
+        ColonneNoPeriodique.setCellValueFactory(new PropertyValueFactory<>("NoPeriodique"));
         ColonneNoPeriodique.setPrefWidth(120);
         
         tablePeriodique.getColumns().addAll(ColonneNoDocPeriodique,ColonneTitrePeriodique,ColonneDateParutionPeriodique,ColonnePeriodiqueDispo,ColonneNoVolume,ColonneNoPeriodique);
+        
+        for (Periodique periodique : Catalogue.getLstPeriodiques()) {
+        	tablePeriodique.getItems().add(periodique);
+        }
         
         rootCatalogue.getTabs().addAll(tabCatalogue);
         rootCatalogue.getTabs().add(tabLivres);
@@ -573,6 +619,22 @@ public class InterfaceGraphique extends Application {
 
 	public static TableView<Prepose> getTablePreposes() {
 		return tablePreposes;
+	}
+
+	public static TableView<Document> getTableDocuments() {
+		return tableDocuments;
+	}
+
+	public static TableView<Livre> getTableLivre() {
+		return tableLivre;
+	}
+
+	public static TableView<DVD> getTableDVD() {
+		return tableDVD;
+	}
+
+	public static TableView<Periodique> getTablePeriodique() {
+		return tablePeriodique;
 	}
 	
 }
