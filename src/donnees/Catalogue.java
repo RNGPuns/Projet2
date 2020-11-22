@@ -97,7 +97,11 @@ public final class Catalogue implements Serializable {
 				instance = new Catalogue("Periodiques.txt", "Livres.txt", "DVD.txt");
 			}
 			else {
-				instance = new Catalogue("Periodiques.ser", "Livres.ser", "DVD.ser");
+				DeserialisationCatalogue dC = new DeserialisationCatalogue();
+				dC.DeserialiserDocuments();
+				dC.DeserialiserDVD();
+				dC.DeserialiserLivres();
+				dC.DeserialiserPeriodiques();
 			}
 			
 		}

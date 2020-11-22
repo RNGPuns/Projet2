@@ -500,6 +500,11 @@ public class InterfaceGraphique extends Application {
         	SerialisationPreposes sP = new SerialisationPreposes();
         	sP.Serialiser();
         	
+        	SerialisationCatalogue sC = new SerialisationCatalogue();
+        	sC.SerialiserDocuments();
+        	sC.SerialiserDVD();
+        	sC.SerialiserLivres();
+        	sC.SerialiserPeriodiques();
         });
 		
 		arg0.setResizable(false);
