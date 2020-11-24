@@ -4,6 +4,10 @@ import java.time.LocalDate;
 
 public class DVD extends Document {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private int nbDisques;
 	private String strRealisateur;
 
@@ -16,5 +20,13 @@ public class DVD extends Document {
 
 	public String toString() {
 		return " DVD :" + super.toString() + "nbDisques: " + this.nbDisques + " Réalisateur: " + this.strRealisateur;
+	}
+
+	public int getNbDisques() {
+		return nbDisques;
+	}
+
+	public String getStrRealisateur() {
+		return strRealisateur;
 	}
 }
