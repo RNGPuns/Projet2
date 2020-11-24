@@ -107,7 +107,7 @@ public class DeserialisationCatalogue {
      
      try
      {
-         FileInputStream fis = new FileInputStream("Livres.ser");
+         FileInputStream fis = new FileInputStream("Periodiques.ser");
          ObjectInputStream ois = new ObjectInputStream(fis);
 
          periodiques= (ArrayList) ois.readObject();

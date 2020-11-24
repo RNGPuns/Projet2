@@ -207,10 +207,26 @@ public class InterfaceGraphique extends Application {
         rootIdentification.getPanes().addAll(paneOptionsAdherents,paneConnexion);
 		
 		//Scene Catalogue adhérent
-		TabPane rootCatalogue = new TabPane();
-		VBox vboxCatalogue = new VBox(rootCatalogue);
-		Scene sceneCatalogue = new Scene(vboxCatalogue);
+        TabPane rootCatalogue = new TabPane();
+		HBox hboxOptionsRecherche = new HBox();
+		VBox vboxCatalogue = new VBox(hboxOptionsRecherche, rootCatalogue);
+		HBox hboxRootCatalogue = new HBox(vboxCatalogue);
+		Scene sceneCatalogue = new Scene(hboxRootCatalogue);
 		
+		hboxOptionsRecherche.setPadding(new Insets(7,10,7,10));
+		hboxOptionsRecherche.setSpacing(10);
+		
+		Text txtRecherche = new Text("Rechercher par: ");
+		
+		ToggleGroup togglegroup1 = new ToggleGroup();
+		RadioButton rbAuteurRealisateur = new RadioButton("Auteur/Réalisateur");
+		RadioButton rbMotsCles = new RadioButton("Mots Clés");
+		togglegroup1.getToggles().addAll(rbAuteurRealisateur,rbMotsCles);
+		
+		TextField txtfldRecherche = new TextField();
+		Button btnEffacer = new Button("Effacer");
+		
+		hboxOptionsRecherche.getChildren().addAll(txtRecherche,rbAuteurRealisateur,rbMotsCles,txtfldRecherche,btnEffacer);
 		Catalogue catalogue = Catalogue.getInstance();
 		
 		Tab tabCatalogue = new Tab("Catalogue");
