@@ -1,6 +1,7 @@
 package application;
 
 
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -411,6 +412,7 @@ public class InterfaceGraphique extends Application {
 			}});
         
         Button btnSupprimerPrepose = new Button("Supprimer un préposé");
+        
         Separator separateur = new Separator(Orientation.HORIZONTAL);
         Button btnDeconnexion = new Button("Déconnexion");
         
@@ -507,6 +509,30 @@ public class InterfaceGraphique extends Application {
 			
 			bw.close();
 			
+		} catch (IOException e) {
+			
+			e.printStackTrace();
+		}
+	}
+	
+	public void supprimerPrepose(Prepose prepose, String strMotDePasse) {
+		try {
+			
+			tablePreposes.getItems().add(prepose);
+			File inputFile = new File("Identifiants préposé.txt");
+			File tempFile = new File("préposéTemp.txt");
+
+			Scanner sc1 = new Scanner(inputFile);
+			BufferedWriter writer = new BufferedWriter(new FileWriter(tempFile));
+			
+			while (sc1.nextLine()!= null) {
+				String strLigneS = sc1.nextLine();
+				if (strLigneS=="Identifiant: " + prepose.getStrNoEmploye()) {
+					System.out.println("test");
+				}
+			}
+				sc1.close();
+
 		} catch (IOException e) {
 			
 			e.printStackTrace();
