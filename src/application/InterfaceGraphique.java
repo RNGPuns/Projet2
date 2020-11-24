@@ -138,6 +138,7 @@ public class InterfaceGraphique extends Application {
 		panneauInfosAdherent.setPadding(new Insets(5, -5, 5, -5));
 		panneauInfosAdherent.setHgap(24); //**Ne pas modifier svp**
 		panneauInfosAdherent.setVgap(5);
+		
 		TitledPane paneConnexion = new TitledPane("Connexion", panneauConnexion);
 		
 		//Layout Options Adhérent
@@ -176,7 +177,6 @@ public class InterfaceGraphique extends Application {
 		HBox hboxbtnCatalogue = new HBox();
 		Button btnConsulterCatalogue = new Button("Consulter le catalogue");
 		
-		
 		hboxbtnCatalogue.getChildren().add(btnConsulterCatalogue);
 		hboxbtnCatalogue.setAlignment(Pos.CENTER);
 		vboxOptionsAdherents.getChildren().addAll(panneauInfosAdherent,hboxbtnCatalogue);
@@ -212,6 +212,25 @@ public class InterfaceGraphique extends Application {
 		VBox vboxCatalogue = new VBox(hboxOptionsRecherche, rootCatalogue);
 		HBox hboxRootCatalogue = new HBox(vboxCatalogue);
 		Scene sceneCatalogue = new Scene(hboxRootCatalogue);
+		
+		GridPane panneauDossierAdherent = new GridPane();
+		VBox vboxDossierAdherent = new VBox(panneauDossierAdherent);
+		hboxRootCatalogue.getChildren().add(vboxDossierAdherent);
+		panneauDossierAdherent.setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, new CornerRadii(2), new BorderWidths(1))));
+		panneauDossierAdherent.setPadding(new Insets(5, -1, 5, -1));
+		panneauDossierAdherent.setHgap(24); //**Ne pas modifier svp**
+		panneauDossierAdherent.setVgap(5);
+		
+		Label infoIdentifierAdherent = new Label("Identification par :");
+		ToggleGroup togglegroup2 = new ToggleGroup();
+		RadioButton rbNomPrenomAdherent = new RadioButton("Nom et Prénom");
+		RadioButton rbNoTelephoneAdherent = new RadioButton("Numéro de téléphone");
+		togglegroup2.getToggles().addAll(rbNomPrenomAdherent,rbNoTelephoneAdherent);
+				
+		panneauDossierAdherent.add(infoIdentifierAdherent, 1, 0);
+		panneauDossierAdherent.add(rbNomPrenomAdherent, 2, 0);
+		panneauDossierAdherent.add(rbNoTelephoneAdherent, 2, 1);
+
 		
 		hboxOptionsRecherche.setPadding(new Insets(7,10,7,10));
 		hboxOptionsRecherche.setSpacing(10);

@@ -35,6 +35,7 @@ public class DeserialisationCatalogue {
        }
        
        for (Document document : doc) {
+    	   System.out.println("Ok" + document.getTitre());
            InterfaceGraphique.getTableDocuments().getItems().add(document);
        }
 
@@ -129,6 +130,7 @@ public class DeserialisationCatalogue {
      
      for (Periodique periodique : periodiques) {
          InterfaceGraphique.getTablePeriodique().getItems().add(periodique);
+         System.out.println(periodique.getNoPeriodique());
      }
 
 	}

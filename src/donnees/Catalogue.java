@@ -95,6 +95,7 @@ public final class Catalogue implements Serializable {
 			
 			if (!(serLivres.exists() && serDVD.exists() && serPeriodique.exists())) {
 				instance = new Catalogue("Periodiques.txt", "Livres.txt", "DVD.txt");
+				System.out.println("ok");
 			}
 			else {
 				DeserialisationCatalogue dC = new DeserialisationCatalogue();
