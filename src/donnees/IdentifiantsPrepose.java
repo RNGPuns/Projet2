@@ -1,4 +1,4 @@
-package application;
+package donnees;
 
 public class IdentifiantsPrepose {
 	String strType;
