@@ -35,8 +35,7 @@ public class DeserialisationCatalogue {
        }
        
        for (Document document : doc) {
-    	   System.out.println("Ok" + document.getTitre());
-           InterfaceGraphique.getTableDocuments().getItems().add(document);
+           Catalogue.getLstDocuments().add(document);
        }
 
 	}
@@ -49,7 +48,7 @@ public class DeserialisationCatalogue {
           FileInputStream fis = new FileInputStream("Livres.ser");
           ObjectInputStream ois = new ObjectInputStream(fis);
 
-          livres= (ArrayList) ois.readObject();
+          livres = (ArrayList) ois.readObject();
 
           ois.close();
           fis.close();
@@ -67,7 +66,7 @@ public class DeserialisationCatalogue {
       }
       
       for (Livre livre : livres) {
-          InterfaceGraphique.getTableLivre().getItems().add(livre);
+          Catalogue.getLstLivres().add(livre);
       }
 
 	}
@@ -98,7 +97,7 @@ public class DeserialisationCatalogue {
      }
      
      for (DVD DVD : dvd) {
-         InterfaceGraphique.getTableDVD().getItems().add(DVD);
+         Catalogue.getLstDvd().add(DVD);
      }
 
 	}
@@ -129,8 +128,7 @@ public class DeserialisationCatalogue {
      }
      
      for (Periodique periodique : periodiques) {
-         InterfaceGraphique.getTablePeriodique().getItems().add(periodique);
-         System.out.println(periodique.getNoPeriodique());
+         Catalogue.getLstPeriodiques().add(periodique);
      }
 
 	}
