@@ -217,9 +217,9 @@ public class InterfaceGraphique extends Application {
 		VBox vboxDossierAdherent = new VBox(panneauDossierAdherent);
 		hboxRootCatalogue.getChildren().add(vboxDossierAdherent);
 		panneauDossierAdherent.setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, new CornerRadii(2), new BorderWidths(1))));
-		panneauDossierAdherent.setPadding(new Insets(5, -1, 5, -1));
+		panneauDossierAdherent.setPadding(new Insets(5, 0, 5, 0));
 		panneauDossierAdherent.setHgap(24); //**Ne pas modifier svp**
-		panneauDossierAdherent.setVgap(5);
+		panneauDossierAdherent.setVgap(0);
 		
 		Label infoIdentifierAdherent = new Label("Identification par :");
 		ToggleGroup togglegroup2 = new ToggleGroup();
