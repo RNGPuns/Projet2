@@ -448,6 +448,18 @@ public class InterfaceGraphique extends Application {
         
         Button btnSupprimerPrepose = new Button("Supprimer un préposé");
         Separator separateur = new Separator(Orientation.HORIZONTAL);
+        
+        btnSupprimerPrepose.setOnAction(new EventHandler<ActionEvent>() {
+			
+			@Override
+			public void handle(ActionEvent e) {
+				// TODO Auto-generated method stub
+				int intLigneSelectionnee = tablePreposes.getSelectionModel().getSelectedCells().get(0).getRow();
+				supprimerPrepose(tablePreposes.getItems().get(intLigneSelectionnee), strMotDePasse);
+				
+			}
+		});
+        
         Button btnDeconnexion = new Button("Déconnexion");
         
         btnDeconnexion.setOnAction(new EventHandler<ActionEvent>() {
@@ -1032,24 +1044,42 @@ public class InterfaceGraphique extends Application {
 	public void supprimerPrepose(Prepose prepose, String strMotDePasse) {
 		try {
 			
-			tablePreposes.getItems().add(prepose);
+			
 			File inputFile = new File("Identifiants préposé.txt");
 			File tempFile = new File("préposéTemp.txt");
 
-			Scanner sc1 = new Scanner(inputFile);
+			Scanner sc1 = new Scanner(inputFile, "UTF-8");
 			
 			//Encodage en UTF-8 sinon les caractères accentués ne sont pas lus correctement
-			BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(tempFile), "UTF-8")); 
+			BufferedWriter bwPreposes = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(tempFile), "UTF-8")); 
 			
-			while (sc1.nextLine()!= null) {
+			while (sc1.hasNextLine()) {
 				String strLigneS = sc1.nextLine();
-				if (strLigneS == "Identifiant: " + prepose.getStrNoEmploye()) {
-					System.out.println("test");
+				System.out.println(strLigneS);
+				strLigneS=strLigneS.trim();
+				if (strLigneS.equals("Préposé")) {
 				}
+				else {
+					if (strLigneS.equals("Identifiant: " + prepose.getStrNoEmploye())) {
+				}
+				else {
+					if (strLigneS.equals("Mot de passe: " + strMotDePasse)) {
+				}
+				else {
+					bwPreposes.write(strLigneS);
+					bwPreposes.newLine();
+				}
+				}
+				}
+				
+				
 			}
 			
-			writer.close();
+			bwPreposes.close();
 			sc1.close();
+			tablePreposes.getItems().remove(prepose);
+			inputFile.delete();
+			tempFile.renameTo(inputFile);
 				
 		} catch (IOException e) {
 			
