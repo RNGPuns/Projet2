@@ -4,4 +4,9 @@ Mot de passe: 79251367
 
 Préposé
 Identifiant: EMP0
+<<<<<<< HEAD
 Mot de passe: EMP0
+=======
+Mot de passe: EMP0
+
+>>>>>>> parent of 7ed4a62... supprimer prepose
