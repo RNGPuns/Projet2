@@ -35,7 +35,7 @@ public class DeserialisationPreposes {
         }
         
         for (Prepose prepose : t) {
-            InterfaceGraphique.getLstPrepose().add(prepose);
+            InterfaceGraphique.getTablePreposes().getItems().add(prepose);
         }
 
  	}

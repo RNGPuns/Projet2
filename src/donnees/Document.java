@@ -14,23 +14,20 @@ public class Document implements Serializable {
 	private String titre;
 	private LocalDate dateParution;
 	private String disponible;
-	private int intNbPrets = 0;
-	private String strEmprunteur = "";
 
-	public Document(String noDoc, String titre, LocalDate dateParution, String disponible, int intNbPrets, String strEmprunteur) {
+	public Document(String noDoc, String titre, LocalDate dateParution, String disponible) {
 		super();
 		this.noDoc = noDoc;
 		this.titre = titre;
 		this.dateParution = dateParution;
 		this.disponible = disponible;
-		this.intNbPrets = intNbPrets;
-		this.strEmprunteur = strEmprunteur;
 	}
 
 	@Override
 	public String toString() {
 		return "noDoc=" + noDoc + ", titre=" + titre + ", dateParution=" + dateParution + ", disponible=" + disponible;
 	}
+	
 	
 
 	public String getNoDoc() {
@@ -47,14 +44,6 @@ public class Document implements Serializable {
 
 	public String getDisponible() {
 		return disponible;
-	}
-
-	public int getIntNbPrets() {
-		return intNbPrets;
-	}
-
-	public String getStrEmprunteur() {
-		return strEmprunteur;
 	}
 
 }

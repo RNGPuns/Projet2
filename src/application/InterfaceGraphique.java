@@ -5,11 +5,15 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Optional;
 import java.util.Scanner;
+
+import javax.swing.GroupLayout.Alignment;
 
 import donnees.Catalogue;
 import donnees.DVD;
@@ -34,9 +38,7 @@ import javafx.scene.control.Accordion;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
-import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
-import javafx.scene.control.PasswordField;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.Separator;
 import javafx.scene.control.Tab;
@@ -52,6 +54,7 @@ import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Border;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.BorderStroke;
 import javafx.scene.layout.BorderStrokeStyle;
 import javafx.scene.layout.BorderWidths;
@@ -61,6 +64,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 
 public class InterfaceGraphique extends Application {
@@ -70,11 +74,6 @@ public class InterfaceGraphique extends Application {
 	private final static TableView<Periodique> tablePeriodique = new TableView<Periodique>();
 	private final static TableView<Prepose> tablePreposes = new TableView<Prepose>();
 	
-	private final static TableView<Document> tableDocumentsPrepose = new TableView<Document>();
-	private final static TableView<Livre> tableLivrePrepose = new TableView<Livre>();
-	private final static TableView<DVD> tableDVDPrepose = new TableView<DVD>();
-	private final static TableView<Periodique> tablePeriodiquePrepose = new TableView<Periodique>();
-	
 	ArrayList<IdentifiantsPrepose> lstIdentifiants = new ArrayList<IdentifiantsPrepose>();
 	static ArrayList<Prepose> lstPrepose = new ArrayList<Prepose>();
 	
@@ -82,9 +81,6 @@ public class InterfaceGraphique extends Application {
 	String strMotDePasse = "";
 	
 	int intNbEmploye = 1;
-	static int intNbLivre = 0;
-	static int intNbDVD = 0;
-	static int intNbPeriodique = 0;
 	
 	File serPrepose = new File("Preposes.ser");
 	
@@ -188,41 +184,25 @@ public class InterfaceGraphique extends Application {
 		//Layout Connexion
 		//Rangée #1
 		Label infoNoEmploye = new Label("Numéro d'employé :");
-//		TextField txtfldNoEmploye = new TextField("admin"); //Mettre vide à fin***
-		TextField txtfldNoEmploye = new TextField("EMP0"); //Mettre vide à fin***
-
+		TextField txtfldNoEmploye = new TextField("admin");
 		
 		panneauConnexion.add(infoNoEmploye, 1, 0);
 		panneauConnexion.add(txtfldNoEmploye, 2, 0);
 		
 		//Rangée #2
 		Label infoMotDePasse = new Label("Mot de passe :");
-		PasswordField pwfldMotDePasse = new PasswordField();
-//		pwfldMotDePasse.setText("79251367"); //Mettre vide à fin***
-		pwfldMotDePasse.setText("EMP0"); //Mettre vide à fin***
+		TextField txtfldMotDePasse = new TextField("79251367");
 		
 		panneauConnexion.add(infoMotDePasse, 1, 2);
-		panneauConnexion.add(pwfldMotDePasse, 2, 2);
+		panneauConnexion.add(txtfldMotDePasse, 2, 2);
 		
 		//Rangée #3
-		Text txtPreposeAdmin = new Text("Type d'utilisateur:");
-		ToggleGroup tglgrpPreposeAdmin = new ToggleGroup();
-		RadioButton rbPrepose = new RadioButton("Préposé");
-		rbPrepose.setSelected(true);
-		RadioButton rbAdmin = new RadioButton("Administrateur");
-		tglgrpPreposeAdmin.getToggles().addAll(rbPrepose,rbAdmin);
-		
-		panneauConnexion.add(txtPreposeAdmin, 1, 4);
-		panneauConnexion.add(rbPrepose, 2, 4);
-		panneauConnexion.add(rbAdmin, 2, 5);
-		
-		//Rangée #4
 		HBox hboxConnexion = new HBox();
 		Button btnConnexion = new Button("Connexion");
 		
 		hboxConnexion.getChildren().add(btnConnexion);
 		hboxConnexion.setAlignment(Pos.CENTER);
-		panneauConnexion.add(hboxConnexion, 1, 6,2,2);
+		panneauConnexion.add(hboxConnexion, 1, 4,2,2);
 		
         rootIdentification.getPanes().addAll(paneOptionsAdherents,paneConnexion);
 		
@@ -235,30 +215,11 @@ public class InterfaceGraphique extends Application {
 		
 		GridPane panneauDossierAdherent = new GridPane();
 		VBox vboxDossierAdherent = new VBox(panneauDossierAdherent);
-		vboxDossierAdherent.setSpacing(5);
 		hboxRootCatalogue.getChildren().add(vboxDossierAdherent);
 		panneauDossierAdherent.setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, new CornerRadii(2), new BorderWidths(1))));
-		panneauDossierAdherent.setPadding(new Insets(5, 10, 5, 0));
-		panneauDossierAdherent.setHgap(20); //**Ne pas modifier svp**
-		panneauDossierAdherent.setVgap(2);
-		
-		Label infoNomAdherent = new Label("Nom :");
-		TextField txtfldNomAdherent = new TextField();
-		
-		panneauDossierAdherent.add(infoNomAdherent, 1, 4);
-		panneauDossierAdherent.add(txtfldNomAdherent, 2, 4);
-		
-		Label infoPrenomAdherent = new Label("Prénom :");
-		TextField txtfldPrenomAdherent = new TextField();
-		
-		panneauDossierAdherent.add(infoPrenomAdherent, 1, 8);
-		panneauDossierAdherent.add(txtfldPrenomAdherent, 2, 8);
-		
-		HBox hboxDossierAdherent = new HBox();
-		Button btnConsulterDossierAdherent = new Button("Consulter mon dossier");
-		hboxDossierAdherent.getChildren().add(btnConsulterDossierAdherent);
-		hboxDossierAdherent.setAlignment(Pos.CENTER);
-		panneauDossierAdherent.add(hboxDossierAdherent, 1, 10,2,2);
+		panneauDossierAdherent.setPadding(new Insets(5, 0, 5, 0));
+		panneauDossierAdherent.setHgap(24); //**Ne pas modifier svp**
+		panneauDossierAdherent.setVgap(0);
 		
 		Label infoIdentifierAdherent = new Label("Identification par :");
 		ToggleGroup togglegroup2 = new ToggleGroup();
@@ -270,19 +231,16 @@ public class InterfaceGraphique extends Application {
 		panneauDossierAdherent.add(rbNomPrenomAdherent, 2, 0);
 		panneauDossierAdherent.add(rbNoTelephoneAdherent, 2, 1);
 
-		Button btnQuitterCatalogue = new Button("Quitter");
-		vboxDossierAdherent.getChildren().add(btnQuitterCatalogue);
-		vboxDossierAdherent.setAlignment(Pos.TOP_CENTER);
 		
 		hboxOptionsRecherche.setPadding(new Insets(7,10,7,10));
 		hboxOptionsRecherche.setSpacing(10);
 		
 		Text txtRecherche = new Text("Rechercher par: ");
 		
-		ToggleGroup togglegroupOptionsRechercheAdherent = new ToggleGroup();
+		ToggleGroup togglegroup1 = new ToggleGroup();
 		RadioButton rbAuteurRealisateur = new RadioButton("Auteur/Réalisateur");
 		RadioButton rbMotsCles = new RadioButton("Mots Clés");
-		togglegroupOptionsRechercheAdherent.getToggles().addAll(rbAuteurRealisateur,rbMotsCles);
+		togglegroup1.getToggles().addAll(rbAuteurRealisateur,rbMotsCles);
 		
 		TextField txtfldRecherche = new TextField();
 		Button btnEffacer = new Button("Effacer");
@@ -296,7 +254,7 @@ public class InterfaceGraphique extends Application {
 		tabCatalogue.setContent(tableDocuments);
 		
 		TableColumn<Document, String> ColonneNoDoc = new TableColumn<Document, String>("Numéro Document");
-		ColonneNoDoc.setCellValueFactory(f -> new SimpleStringProperty(f.getValue().getNoDoc())); //Changer à comme les autres
+		ColonneNoDoc.setCellValueFactory(f -> new SimpleStringProperty(f.getValue().getNoDoc()));
         ColonneNoDoc.setPrefWidth(120);
         TableColumn<Document, String> ColonneTitreDoc = new TableColumn<Document, String>("Titre du Document");
         ColonneTitreDoc.setCellValueFactory(new PropertyValueFactory<>("Titre"));
@@ -331,11 +289,14 @@ public class InterfaceGraphique extends Application {
         TableColumn<Livre, String> ColonneLivreDispo = new TableColumn<Livre, String>("Disponibilité");
         ColonneLivreDispo.setCellValueFactory(new PropertyValueFactory<>("Disponible"));
         ColonneLivreDispo.setPrefWidth(120);
+        TableColumn<Livre, String> ColonneMotsClesLivre = new TableColumn<Livre, String>("Mots Clés");
+        /**/
+        ColonneMotsClesLivre.setPrefWidth(120);
         TableColumn<Livre, String> ColonneAuteurLivre = new TableColumn<Livre, String>("Auteur");
         ColonneAuteurLivre.setCellValueFactory(new PropertyValueFactory<>("Auteur"));
         ColonneAuteurLivre.setPrefWidth(120);
         
-        tableLivre.getColumns().addAll(ColonneNoDocLivre,ColonneTitreLivre,ColonneDateParutionLivre,ColonneLivreDispo,ColonneAuteurLivre);
+        tableLivre.getColumns().addAll(ColonneNoDocLivre,ColonneTitreLivre,ColonneDateParutionLivre,ColonneLivreDispo,ColonneMotsClesLivre,ColonneAuteurLivre);
         
         for (Livre livre : Catalogue.getLstLivres()) {
         	tableLivre.getItems().add(livre);
@@ -401,7 +362,10 @@ public class InterfaceGraphique extends Application {
         	tablePeriodique.getItems().add(periodique);
         }
         
-        rootCatalogue.getTabs().addAll(tabCatalogue,tabLivres,tabDVD,tabPeriodique);
+        rootCatalogue.getTabs().addAll(tabCatalogue);
+        rootCatalogue.getTabs().add(tabLivres);
+        rootCatalogue.getTabs().add(tabDVD);
+        rootCatalogue.getTabs().add(tabPeriodique);
         
         //Scene admin
         Group rootAdmin = new Group();
@@ -437,399 +401,10 @@ public class InterfaceGraphique extends Application {
         
         tablePreposes.getColumns().addAll(ColonneNoEmploye,ColonneNomEmploye,ColonnePrenomEmploye,ColonneAdresseEmploye,ColonneNoTelephoneEmploye);
         
-        for (Prepose prepose : lstPrepose) {
-        	tablePreposes.getItems().add(prepose);
-        }
-        
         Text txtGestionPrepose = new Text("Gestion préposés");
         Button btnAjouterPrepose = new Button("Ajouter un préposé");
         
-       
-        
-        Button btnSupprimerPrepose = new Button("Supprimer un préposé");
-        Separator separateur = new Separator(Orientation.HORIZONTAL);
-        Button btnDeconnexion = new Button("Déconnexion");
-        
-        btnDeconnexion.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent e) {
-				arg0.setScene(sceneIdentification);
-				arg0.setTitle("Identification");
-			}});
-        
-        btnAjouterPrepose.setMaxWidth(Double.MAX_VALUE);
-        btnDeconnexion.setMaxWidth(Double.MAX_VALUE);
-        
-        vboxOptionsAdmin.getChildren().addAll(txtGestionPrepose,btnAjouterPrepose,btnSupprimerPrepose,separateur,btnDeconnexion);
-        
-        hboxRootAdmin.getChildren().addAll(tablePreposes,vboxOptionsAdmin);
-        
-        //Scene préposé
-        TabPane rootPrepose= new TabPane();
-		HBox hboxOptionsRecherchePrepose = new HBox();
-		hboxOptionsRecherchePrepose.setPadding(new Insets(3,10,3,10));
-		hboxOptionsRecherchePrepose.setSpacing(10);
-		
-		hboxOptionsRecherchePrepose.setSpacing(20);
-		VBox vboxPrepose = new VBox(hboxOptionsRecherchePrepose, rootPrepose);
-		HBox hboxRootPrepose = new HBox(vboxPrepose);
-		Scene scenePrepose = new Scene(hboxRootPrepose);
-		
-		VBox vboxOptionsPrepose = new VBox();
-		hboxRootPrepose.getChildren().add(vboxOptionsPrepose);
-		
-		Accordion accordionOptionsPrepose = new Accordion();
-		
-		VBox vboxGestionCatalogue = new VBox();
-		vboxGestionCatalogue.setSpacing(5);
-		vboxGestionCatalogue.setAlignment(Pos.CENTER);
-		
-		Button btnAjouterDocument = new Button("Ajouter un document");
-		btnAjouterDocument.setMaxWidth(Double.MAX_VALUE);
-		
-		Button btnSupprimerDocument = new Button("Supprimer un document");
-		btnSupprimerDocument.setMaxWidth(Double.MAX_VALUE);
-		
-		vboxGestionCatalogue.getChildren().addAll(btnAjouterDocument,btnSupprimerDocument);
-		
-		VBox vboxGestionAdherent = new VBox();
-		vboxGestionAdherent.setSpacing(5);
-		vboxGestionAdherent.setAlignment(Pos.CENTER);
-		
-		Button btnAjouterAdherent = new Button("Ajouter un adhérent");
-		btnAjouterAdherent.setMaxWidth(Double.MAX_VALUE);
-		
-		Button btnModifierAdherent = new Button("Modifier un adhérent");
-		btnModifierAdherent.setMaxWidth(Double.MAX_VALUE);
-		
-		Button btnSupprimerAdherent = new Button("Supprimer un adhérent");
-		btnSupprimerAdherent.setMaxWidth(Double.MAX_VALUE);
-		
-		Button btnPayerSolde = new Button("Payer un solde");
-		btnPayerSolde.setMaxWidth(Double.MAX_VALUE);
-		
-		vboxGestionAdherent.getChildren().addAll(btnAjouterAdherent,btnModifierAdherent,btnSupprimerAdherent,btnPayerSolde);
-		
-		VBox vboxGestionPrets = new VBox();
-		vboxGestionPrets.setSpacing(5);
-		vboxGestionPrets.setAlignment(Pos.CENTER);
-		
-		Button btnInscrirePret = new Button("Inscrire un prêt");
-		btnInscrirePret.setMaxWidth(Double.MAX_VALUE);
-		
-		Button btnInscrireRetour = new Button("Inscrire un retour");
-		btnInscrireRetour.setMaxWidth(Double.MAX_VALUE);
-		
-		vboxGestionPrets.getChildren().addAll(btnInscrirePret,btnInscrireRetour);
-		
-		TitledPane tpGestionCatalogue = new TitledPane("Gestion du catalogue" , vboxGestionCatalogue);
-		TitledPane tpGestionPrets = new TitledPane("Gestion des prêts" , vboxGestionPrets);
-		TitledPane tpGestionAdherents = new TitledPane("Gestion des adhérents" , vboxGestionAdherent);
-		
-		Button btnQuitterPrepose = new Button("Déconnexion");
-		
-		vboxOptionsPrepose.setAlignment(Pos.TOP_CENTER);
-		vboxOptionsPrepose.setSpacing(5);
-		accordionOptionsPrepose.getPanes().addAll(tpGestionCatalogue,tpGestionPrets,tpGestionAdherents);
-		vboxOptionsPrepose.getChildren().addAll(accordionOptionsPrepose,btnQuitterPrepose);
-		
-		Text txtRecherchePrepose = new Text("Rechercher par: ");
-		
-		ToggleGroup togglegroupPrepose = new ToggleGroup();
-		RadioButton rbAuteurRealisateurPrepose = new RadioButton("Auteur/Réalisateur");
-		RadioButton rbMotsClesPrepose = new RadioButton("Mots Clés");
-		togglegroupPrepose.getToggles().addAll(rbAuteurRealisateur,rbMotsCles);
-		
-		TextField txtfldRecherchePrepose = new TextField();
-		Button btnEffacerPrepose = new Button("Effacer");
-		
-		hboxOptionsRecherchePrepose.getChildren().addAll(txtRecherchePrepose,rbAuteurRealisateurPrepose,rbMotsClesPrepose,txtfldRecherchePrepose,btnEffacerPrepose);
-		
-		TableColumn<Document, String> ColonneNoDocPrepose = new TableColumn<Document, String>("Numéro Document");
-		ColonneNoDocPrepose.setCellValueFactory(f -> new SimpleStringProperty(f.getValue().getNoDoc())); //Changer à comme les autres
-		ColonneNoDocPrepose.setPrefWidth(120);
-        TableColumn<Document, String> ColonneTitreDocPrepose = new TableColumn<Document, String>("Titre du Document");
-        ColonneTitreDocPrepose.setCellValueFactory(new PropertyValueFactory<>("Titre"));
-        ColonneTitreDocPrepose.setPrefWidth(400);
-        TableColumn<Document, LocalDate> ColonneDateParutionDocPrepose = new TableColumn<Document, LocalDate>("Date de parution");
-        ColonneDateParutionDocPrepose.setCellValueFactory(new PropertyValueFactory<>("DateParution"));
-        ColonneDateParutionDocPrepose.setPrefWidth(120);
-        TableColumn<Document, String> ColonneDocDispoPrepose = new TableColumn<Document, String>("Disponibilité");
-        ColonneDocDispoPrepose.setCellValueFactory(new PropertyValueFactory<>("Disponible"));
-        ColonneDocDispoPrepose.setPrefWidth(120);
-        TableColumn<Document, Integer> ColonneNbPretsDoc = new TableColumn<Document, Integer>("Nombre de prêts");
-        ColonneNbPretsDoc.setCellValueFactory(new PropertyValueFactory<>("IntNbPrets"));
-        ColonneNbPretsDoc.setPrefWidth(120);
-        TableColumn<Document, String> ColonneEmprunteurDoc = new TableColumn<Document, String>("Emprunteur");
-        ColonneEmprunteurDoc.setCellValueFactory(new PropertyValueFactory<>("StrEmprunteur"));
-        ColonneEmprunteurDoc.setPrefWidth(120);
-        
-        tableDocumentsPrepose.getColumns().addAll(ColonneNoDocPrepose,ColonneTitreDocPrepose,ColonneDateParutionDocPrepose,ColonneDocDispoPrepose,ColonneNbPretsDoc,ColonneEmprunteurDoc);
-		
-        for (Document doc : Catalogue.getLstDocuments()) {
-        	tableDocumentsPrepose.getItems().add(doc);
-        }
-		
-        Tab tabCataloguePrepose = new Tab("Catalogue");
-		tabCataloguePrepose.setClosable(false);
-		tabCataloguePrepose.setGraphic(new ImageView("icon-collection.png"));
-		tabCataloguePrepose.setContent(tableDocumentsPrepose);
-		
-		TableColumn<Livre, String> ColonneNoDocLivrePrepose = new TableColumn<Livre, String>("Numéro Document");
-		ColonneNoDocLivrePrepose.setCellValueFactory(new PropertyValueFactory<>("NoDoc"));
-		ColonneNoDocLivrePrepose.setPrefWidth(120);
-        TableColumn<Livre, String> ColonneTitreLivrePrepose = new TableColumn<Livre, String>("Titre du livre");
-        ColonneTitreLivrePrepose.setCellValueFactory(new PropertyValueFactory<>("Titre"));
-        ColonneTitreLivrePrepose.setPrefWidth(120);
-        TableColumn<Livre, LocalDate> ColonneDateParutionLivrePrepose = new TableColumn<Livre, LocalDate>("Date de parution");
-        ColonneDateParutionLivrePrepose.setCellValueFactory(new PropertyValueFactory<>("DateParution"));
-        ColonneDateParutionLivrePrepose.setPrefWidth(120);
-        TableColumn<Livre, String> ColonneLivreDispoPrepose = new TableColumn<Livre, String>("Disponibilité");
-        ColonneLivreDispoPrepose.setCellValueFactory(new PropertyValueFactory<>("Disponible"));
-        ColonneLivreDispoPrepose.setPrefWidth(120);
-        TableColumn<Livre, String> ColonneAuteurLivrePrepose = new TableColumn<Livre, String>("Auteur");
-        ColonneAuteurLivrePrepose.setCellValueFactory(new PropertyValueFactory<>("Auteur"));
-        ColonneAuteurLivrePrepose.setPrefWidth(120);
-        TableColumn<Livre, Integer> ColonneNbPretsLivre = new TableColumn<Livre, Integer>("Nombre de prêts");
-        ColonneNbPretsLivre.setCellValueFactory(new PropertyValueFactory<>("IntNbPrets"));
-        ColonneNbPretsLivre.setPrefWidth(120);
-        TableColumn<Livre, String> ColonneEmprunteurLivre = new TableColumn<Livre, String>("Emprunteur");
-        ColonneEmprunteurLivre.setCellValueFactory(new PropertyValueFactory<>("StrEmprunteur"));
-        ColonneEmprunteurLivre.setPrefWidth(120);
-        
-        tableLivrePrepose.getColumns().addAll(ColonneNoDocLivrePrepose,ColonneTitreLivrePrepose,ColonneDateParutionLivrePrepose,ColonneLivreDispoPrepose,ColonneAuteurLivrePrepose,ColonneNbPretsLivre,ColonneEmprunteurLivre);
-        
-        for (Livre livre : Catalogue.getLstLivres()) {
-        	tableLivrePrepose.getItems().add(livre);
-        }
-		
-		Tab tabLivresPrepose = new Tab("Livres");
-		tabLivresPrepose.setClosable(false);
-		tabLivresPrepose.setGraphic(new ImageView("icon-livre.png"));
-		tabLivresPrepose.setContent(tableLivrePrepose);
-		
-		TableColumn<DVD, String> ColonneNoDocDVDPrepose = new TableColumn<DVD, String>("Numéro Document");
-		ColonneNoDocDVDPrepose.setCellValueFactory(new PropertyValueFactory<>("NoDoc"));
-		ColonneNoDocDVDPrepose.setPrefWidth(120);
-        TableColumn<DVD, String> ColonneTitreDVDPrepose = new TableColumn<DVD, String>("Titre du DVD");
-        ColonneTitreDVDPrepose.setCellValueFactory(new PropertyValueFactory<>("Titre"));
-        ColonneTitreDVDPrepose.setPrefWidth(120);
-        TableColumn<DVD, LocalDate> ColonneDateParutionDVDPrepose = new TableColumn<DVD, LocalDate>("Date de parution");
-        ColonneDateParutionDVDPrepose.setCellValueFactory(new PropertyValueFactory<>("DateParution"));
-        ColonneDateParutionDVDPrepose.setPrefWidth(120);
-        TableColumn<DVD, String> ColonneDVDDispoPrepose = new TableColumn<DVD, String>("Disponibilité");
-        ColonneDVDDispoPrepose.setCellValueFactory(new PropertyValueFactory<>("Disponible"));
-        ColonneDVDDispoPrepose.setPrefWidth(120);
-        TableColumn<DVD, Integer> ColonneNbDisquesPrepose = new TableColumn<DVD, Integer>("Nombre de disques");
-        ColonneNbDisquesPrepose.setCellValueFactory(new PropertyValueFactory<>("NbDisques"));
-        ColonneNbDisquesPrepose.setPrefWidth(120);
-        TableColumn<DVD, String> ColonneRealisateurPrepose = new TableColumn<DVD, String>("Auteur");
-        ColonneRealisateurPrepose.setCellValueFactory(new PropertyValueFactory<>("StrRealisateur"));
-        ColonneRealisateurPrepose.setPrefWidth(120);
-        TableColumn<DVD, Integer> ColonneNbPretsDVD = new TableColumn<DVD, Integer>("Nombre de prêts");
-        ColonneNbPretsDVD.setCellValueFactory(new PropertyValueFactory<>("IntNbPrets"));
-        ColonneNbPretsDVD.setPrefWidth(120);
-        TableColumn<DVD, String> ColonneEmprunteurDVD = new TableColumn<DVD, String>("Emprunteur");
-        ColonneEmprunteurDVD.setCellValueFactory(new PropertyValueFactory<>("StrEmprunteur"));
-        ColonneEmprunteurDVD.setPrefWidth(120);
-        
-        tableDVDPrepose.getColumns().addAll(ColonneNoDocDVDPrepose,ColonneTitreDVDPrepose,ColonneDateParutionDVDPrepose,ColonneDVDDispoPrepose,ColonneNbDisquesPrepose,ColonneRealisateurPrepose,ColonneNbPretsDVD,ColonneEmprunteurDVD);
-        
-        for (DVD dvd : Catalogue.getLstDvd()) {
-        	tableDVDPrepose.getItems().add(dvd);
-        }
-		
-		Tab tabDVDPrepose = new Tab("DVD");
-		tabDVDPrepose.setClosable(false);
-		tabDVDPrepose.setGraphic(new ImageView("icon-dvd.png"));
-		tabDVDPrepose.setContent(tableDVDPrepose);
-		
-		TableColumn<Periodique, String> ColonneNoDocPeriodiquePrepose = new TableColumn<Periodique, String>("Numéro Document");
-		ColonneNoDocPeriodiquePrepose.setCellValueFactory(new PropertyValueFactory<>("NoDoc"));
-		ColonneNoDocPeriodiquePrepose.setPrefWidth(120);
-        TableColumn<Periodique, String> ColonneTitrePeriodiquePrepose = new TableColumn<Periodique, String>("Titre du Périodique");
-        ColonneTitrePeriodiquePrepose.setCellValueFactory(new PropertyValueFactory<>("Titre"));
-        ColonneTitrePeriodiquePrepose.setPrefWidth(120);
-        TableColumn<Periodique, LocalDate> ColonneDateParutionPeriodiquePrepose = new TableColumn<Periodique, LocalDate>("Date de parution");
-        ColonneDateParutionPeriodiquePrepose.setCellValueFactory(new PropertyValueFactory<>("DateParution"));
-        ColonneDateParutionPeriodiquePrepose.setPrefWidth(120);
-        TableColumn<Periodique, String> ColonnePeriodiqueDispoPrepose = new TableColumn<Periodique, String>("Disponibilité");
-        ColonnePeriodiqueDispoPrepose.setCellValueFactory(new PropertyValueFactory<>("Disponible"));
-        ColonnePeriodiqueDispoPrepose.setPrefWidth(120);
-        TableColumn<Periodique, Integer> ColonneNoVolumePrepose = new TableColumn<Periodique, Integer>("Numéro Volume");
-        ColonneNoVolumePrepose.setCellValueFactory(new PropertyValueFactory<>("NoVolume"));
-        ColonneNoVolumePrepose.setPrefWidth(120);
-        TableColumn<Periodique, String> ColonneNoPeriodiquePrepose = new TableColumn<Periodique, String>("Numéro Périodique");
-        ColonneNoPeriodiquePrepose.setCellValueFactory(new PropertyValueFactory<>("NoPeriodique"));
-        ColonneNoPeriodiquePrepose.setPrefWidth(120);
-        TableColumn<Periodique, Integer> ColonneNbPretsPeriodique = new TableColumn<Periodique, Integer>("Nombre de prêts");
-        ColonneNbPretsPeriodique.setCellValueFactory(new PropertyValueFactory<>("IntNbPrets"));
-        ColonneNbPretsPeriodique.setPrefWidth(120);
-        TableColumn<Periodique, String> ColonneEmprunteurPeriodique = new TableColumn<Periodique, String>("Emprunteur");
-        ColonneEmprunteurPeriodique.setCellValueFactory(new PropertyValueFactory<>("StrEmprunteur"));
-        ColonneEmprunteurPeriodique.setPrefWidth(120);
-        
-        tablePeriodiquePrepose.getColumns().addAll(ColonneNoDocPeriodiquePrepose,ColonneTitrePeriodiquePrepose,ColonneDateParutionPeriodiquePrepose,ColonnePeriodiqueDispoPrepose,ColonneNoVolumePrepose,ColonneNoPeriodiquePrepose,ColonneNbPretsPeriodique,ColonneEmprunteurPeriodique);
-        
-        for (Periodique periodique : Catalogue.getLstPeriodiques()) {
-        	tablePeriodiquePrepose.getItems().add(periodique);
-        }
-		
-		Tab tabPeriodiquePrepose = new Tab("Périodiques");
-		tabPeriodiquePrepose.setClosable(false);
-		tabPeriodiquePrepose.setGraphic(new ImageView("icon-periodique.png"));
-		tabPeriodiquePrepose.setContent(tablePeriodiquePrepose);
-		
-		rootPrepose.getTabs().addAll(tabCataloguePrepose,tabLivresPrepose,tabDVDPrepose,tabPeriodiquePrepose);
-		
-		btnAjouterDocument.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent e) {
-				ButtonType btnconfirmer = new ButtonType("Confirmer", ButtonData.YES);
-				ButtonType btnannuler = new ButtonType("Annuler", ButtonData.CANCEL_CLOSE);
-				Alert fenetreAjouterDocument = new Alert(AlertType.NONE, "default Dialog",btnconfirmer,btnannuler);
-				GridPane gridpaneLivre = new GridPane();
-				GridPane gridpaneDVD = new GridPane();
-				GridPane gridpanePeriodique = new GridPane();
-				
-				gridpaneLivre.setHgap(5);
-				gridpaneDVD.setHgap(5);
-				gridpanePeriodique.setHgap(5);
-				
-				//Button btConfirmer = (Button) fenetreAjouterDocument.getDialogPane().lookupButton(btnconfirmer);
-				Text TypeDoc = new Text("Type de document:");
-				
-				ComboBox<String> cbxTypeDoc = new ComboBox<String>();
-				cbxTypeDoc.getItems().addAll("Livre","DVD","Périodique");
-				cbxTypeDoc.getSelectionModel().selectFirst();
-				
-				Text TitreLivre = new Text("Titre:");
-				TextField champsTitreLivre = new TextField("");
-				
-				TextField champsDateParutionLivre = new TextField("");
-				Text DateParutionLivre = new Text("Date de parution:");
-				
-				Text AuteurLivre = new Text("Auteur:");
-				TextField champsAuteurLivre = new TextField();
-				
-				Text MotsClesLivre = new Text("Mots Clés:");
-				TextField champsMotsClesLivre = new TextField();
-				
-				gridpaneLivre.add(TypeDoc, 0, 0);
-				gridpaneLivre.add(cbxTypeDoc, 1, 0);
-				gridpaneLivre.add(TitreLivre, 0, 1);
-				gridpaneLivre.add(champsTitreLivre, 1, 1);
-				gridpaneLivre.add(AuteurLivre, 0, 2);
-				gridpaneLivre.add(champsAuteurLivre, 1, 2);
-				gridpaneLivre.add(DateParutionLivre, 0, 3);
-				gridpaneLivre.add(champsDateParutionLivre, 1, 3);
-				gridpaneLivre.add(MotsClesLivre, 0, 4);
-				gridpaneLivre.add(champsMotsClesLivre, 1, 4);
-				
-				cbxTypeDoc.setOnAction(new EventHandler<ActionEvent>() {
-					@Override
-					public void handle(ActionEvent e) {
-						
-						if (cbxTypeDoc.getValue() == "Livre") {
-							gridpaneDVD.getChildren().clear();
-							gridpanePeriodique.getChildren().clear();
-							gridpaneLivre.getChildren().clear();
-							
-							gridpaneLivre.add(TypeDoc, 0, 0);
-							gridpaneLivre.add(cbxTypeDoc, 1, 0);
-							gridpaneLivre.add(TitreLivre, 0, 1);
-							gridpaneLivre.add(champsTitreLivre, 1, 1);
-							gridpaneLivre.add(AuteurLivre, 0, 2);
-							gridpaneLivre.add(champsAuteurLivre, 1, 2);
-							gridpaneLivre.add(DateParutionLivre, 0, 3);
-							gridpaneLivre.add(champsDateParutionLivre, 1, 3);
-							gridpaneLivre.add(MotsClesLivre, 0, 4);
-							gridpaneLivre.add(champsMotsClesLivre, 1, 4);
-							fenetreAjouterDocument.getDialogPane().setContent(gridpaneLivre);
-						}
-						else if (cbxTypeDoc.getValue() == "DVD" ) {
-							gridpaneDVD.getChildren().clear();
-							gridpanePeriodique.getChildren().clear();
-							gridpaneLivre.getChildren().clear();
-							
-							Text TitreDVD = new Text("Titre:");
-							TextField champsTitreDVD = new TextField();
-							
-							Text DateParutionDVD = new Text("Date de parution:");
-							TextField champsDateParutionDVD = new TextField("");
-							
-							Text NbDisques = new Text("Nombre de disques:");
-							TextField champsNbDisques = new TextField();
-							
-							Text Realisateur = new Text("Réalisateur:");
-							TextField champsRealisateur = new TextField();
-							
-							gridpaneDVD.add(TypeDoc, 0, 0);
-							gridpaneDVD.add(cbxTypeDoc, 1, 0);
-							gridpaneDVD.add(TitreDVD, 0, 1);
-							gridpaneDVD.add(champsTitreDVD, 1, 1);
-							gridpaneDVD.add(DateParutionDVD, 0, 2);
-							gridpaneDVD.add(champsDateParutionDVD, 1, 2);
-							gridpaneDVD.add(NbDisques, 0, 3);
-							gridpaneDVD.add(champsNbDisques, 1, 3);
-							gridpaneDVD.add(Realisateur, 0, 4);
-							gridpaneDVD.add(champsRealisateur, 1, 4);
-							
-							fenetreAjouterDocument.getDialogPane().setContent(gridpaneDVD);
-							
-						}
-						else if (cbxTypeDoc.getValue() == "Périodique") {
-							gridpaneDVD.getChildren().clear();
-							gridpanePeriodique.getChildren().clear();
-							gridpaneLivre.getChildren().clear();
-							
-							Text TitrePeriodique = new Text("Titre:");
-							TextField champsTitrePeriodique = new TextField();
-							
-							Text DateParutionPeriodique = new Text("Date de parution:");
-							TextField champsDateParutionPeriodique = new TextField();	
-							
-							Text NoPeriodique = new Text("Numéro de Périodique:");
-							TextField champsNoPeriodique = new TextField();
-							
-							Text NoVolume = new Text("Numéro de volume:");
-							TextField champsNoVolume = new TextField();
-							
-							gridpanePeriodique.add(TypeDoc, 0, 0);
-							gridpanePeriodique.add(cbxTypeDoc, 1, 0);
-							gridpanePeriodique.add(TitrePeriodique, 0, 1);
-							gridpanePeriodique.add(champsTitrePeriodique, 1, 1);
-							gridpanePeriodique.add(DateParutionPeriodique, 0, 2);
-							gridpanePeriodique.add(champsDateParutionPeriodique, 1, 2);
-							gridpanePeriodique.add(NoPeriodique, 0, 3);
-							gridpanePeriodique.add(champsNoPeriodique, 1, 3);
-							gridpanePeriodique.add(NoVolume, 0, 4);
-							gridpanePeriodique.add(champsNoVolume, 1, 4);
-							
-							fenetreAjouterDocument.getDialogPane().setContent(gridpanePeriodique);
-						}
-					}});
-				
-				
-
-				fenetreAjouterDocument.setTitle("Ajouter un document");
-				Stage stage = (Stage) fenetreAjouterDocument.getDialogPane().getScene().getWindow();
-				stage.getIcons().add(new Image("icon-ajouterdocument.png"));
-				fenetreAjouterDocument.setHeaderText(null);
-				fenetreAjouterDocument.getDialogPane().setContent(gridpaneLivre);
-
-				
-				Button btAnnuler = (Button) fenetreAjouterDocument.getDialogPane().lookupButton(btnannuler); 
-				btAnnuler.setOnAction(new EventHandler<ActionEvent>() {
-					@Override
-					public void handle(ActionEvent e) {
-						fenetreAjouterDocument.close();
-					}});
-				
-				fenetreAjouterDocument.showAndWait();
-			}});
-		
-		//Fenêtre d'ajout de préposé(s)
+        //Fenétre d'ajout de préposé(s)
         btnAjouterPrepose.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent e) {
@@ -881,99 +456,78 @@ public class InterfaceGraphique extends Application {
 				fenetreAjouterPrepose.showAndWait();
 			}});
         
+        Button btnSupprimerPrepose = new Button("Supprimer un préposé");
+        Separator separateur = new Separator(Orientation.HORIZONTAL);
+        Button btnDeconnexion = new Button("Déconnexion");
+        
+        btnDeconnexion.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent e) {
+				arg0.setScene(sceneIdentification);
+				arg0.setTitle("Identification");
+			}});
+        
+        btnAjouterPrepose.setMaxWidth(Double.MAX_VALUE);
+        btnDeconnexion.setMaxWidth(Double.MAX_VALUE);
+        
+        vboxOptionsAdmin.getChildren().addAll(txtGestionPrepose,btnAjouterPrepose,btnSupprimerPrepose,separateur,btnDeconnexion);
+        
+        hboxRootAdmin.getChildren().addAll(tablePreposes,vboxOptionsAdmin);
+        
         btnConnexion.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent e) {
-				if (!rbAdmin.isSelected() && !rbPrepose.isSelected()) {
-					Alert fenetreTypeUtilisateur = new Alert(AlertType.NONE, "default Dialog",ButtonType.OK);
-					
-					fenetreTypeUtilisateur.setTitle("Avertissement");
-					Stage stage = (Stage) fenetreTypeUtilisateur.getDialogPane().getScene().getWindow();
-					stage.getIcons().add(new Image("icon-avertissement.png"));
-					fenetreTypeUtilisateur.setContentText("Veuillez sélectionner le type d'utilisateur.");
-					fenetreTypeUtilisateur.setHeaderText(null);
-					fenetreTypeUtilisateur.showAndWait();
-				}
 				
-				if (txtfldNoEmploye.getText().trim().isEmpty()) {
-					Alert fenetreNoEmployeManquant = new Alert(AlertType.NONE, "default Dialog",ButtonType.OK);
-					
-					fenetreNoEmployeManquant.setTitle("Erreur");
-					Stage stage = (Stage) fenetreNoEmployeManquant.getDialogPane().getScene().getWindow();
-					stage.getIcons().add(new Image("icon-erreur.png"));
-					fenetreNoEmployeManquant.setContentText("Vous avez oublié d'inscrire le numéro d'employé.");
-					fenetreNoEmployeManquant.setHeaderText(null);
-					fenetreNoEmployeManquant.showAndWait();
-				}
-				
-				if (pwfldMotDePasse.getText().trim().isEmpty()) {
-					Alert fenetreMotDePasseManquant = new Alert(AlertType.NONE, "default Dialog",ButtonType.OK);
-					
-					fenetreMotDePasseManquant.setTitle("Erreur");
-					Stage stage = (Stage) fenetreMotDePasseManquant.getDialogPane().getScene().getWindow();
-					stage.getIcons().add(new Image("icon-erreur.png"));
-					fenetreMotDePasseManquant.setContentText("Vous avez oublié d'inscrire le mot de passe.");
-					fenetreMotDePasseManquant.setHeaderText(null);
-					fenetreMotDePasseManquant.showAndWait();
-				}
-				
-				if (rbAdmin.isSelected()) {
-					if (txtfldNoEmploye.getText().equals(lstIdentifiants.get(0).getStrIdentifiant()) && pwfldMotDePasse.getText().equals(lstIdentifiants.get(0).getStrMotDePasse())) {
-						arg0.setScene(sceneAdmin);
-						arg0.setTitle("Gérer les préposés");
-					}
-					else {
-						Alert fenetreIdentifiantManquantsIncorrects = new Alert(AlertType.NONE, "default Dialog",ButtonType.OK);
-						
-						fenetreIdentifiantManquantsIncorrects.setTitle("Avertissement");
-						Stage stage = (Stage) fenetreIdentifiantManquantsIncorrects.getDialogPane().getScene().getWindow();
-						stage.getIcons().add(new Image("icon-avertissement.png"));
-						fenetreIdentifiantManquantsIncorrects.setContentText("Les identifiants que vous avez entrés ne correspondent pas à un administrateur de la médiathèque.");
-						fenetreIdentifiantManquantsIncorrects.setHeaderText(null);
-						fenetreIdentifiantManquantsIncorrects.showAndWait();
-					}
-				}
-				else if(rbPrepose.isSelected()) {
-					int intNbIdentifiant = lstIdentifiants.size();
-					
-					for (int i=lstIdentifiants.size(); i>0; i--) {
-						intNbIdentifiant--;
-						if (txtfldNoEmploye.getText().equals(lstIdentifiants.get(i-1).getStrIdentifiant())) {
-							if (pwfldMotDePasse.getText().equals(lstIdentifiants.get(i-1).getStrMotDePasse())) {
-								arg0.setScene(scenePrepose);
-								arg0.setTitle("Gèrer les adhérents");
-								break;
-							}
-							else {
-								Alert fenetreMotDePasseManquant = new Alert(AlertType.NONE, "default Dialog",ButtonType.OK);
-								
-								fenetreMotDePasseManquant.setTitle("Erreur");
-								Stage stage = (Stage) fenetreMotDePasseManquant.getDialogPane().getScene().getWindow();
-								stage.getIcons().add(new Image("icon-erreur.png"));
-								fenetreMotDePasseManquant.setContentText("Le mot de passe ou l'identifiant entré sont incorrects.");
-								fenetreMotDePasseManquant.setHeaderText(null);
-								fenetreMotDePasseManquant.showAndWait();
-							}
+				for (IdentifiantsPrepose identifiants : lstIdentifiants) {
+					if (txtfldNoEmploye.getText().equals(identifiants.getStrIdentifiant()) && txtfldMotDePasse.getText().equals(identifiants.getStrMotDePasse())) {
+						//Si l'utilisateur est administrateur, ouvrir la fénetre administrateur sinon ouvrir préposé
+						if (identifiants.getStrType().equals("Administrateur")) {
+							arg0.setScene(sceneAdmin);
+							arg0.setTitle("Gérer les préposés");
+							break;
+						}
+						else {
+//							arg0.setScene(scenePrepose);
+							break;
 						}
 					}
-					if (intNbIdentifiant <= 0) {
+					else if (txtfldNoEmploye.getText().trim().isEmpty()) {
+						Alert fenetreNoEmployeManquant = new Alert(AlertType.NONE, "default Dialog",ButtonType.OK);
+						
+						fenetreNoEmployeManquant.setTitle("Erreur");
+						Stage stage = (Stage) fenetreNoEmployeManquant.getDialogPane().getScene().getWindow();
+						stage.getIcons().add(new Image("icon-erreur.png"));
+						fenetreNoEmployeManquant.setContentText("Vous avez oublié d'inscrire le numéro d'employé.");
+						fenetreNoEmployeManquant.setHeaderText(null);
+						fenetreNoEmployeManquant.showAndWait();
+					}
+					else if (txtfldMotDePasse.getText().trim().isEmpty()) {
+						Alert fenetreMotDePasseManquant = new Alert(AlertType.NONE, "default Dialog",ButtonType.OK);
+						
+						fenetreMotDePasseManquant.setTitle("Erreur");
+						Stage stage = (Stage) fenetreMotDePasseManquant.getDialogPane().getScene().getWindow();
+						stage.getIcons().add(new Image("icon-erreur.png"));
+						fenetreMotDePasseManquant.setContentText("Vous avez oublié d'inscrire le mot de passe.");
+						fenetreMotDePasseManquant.setHeaderText(null);
+						fenetreMotDePasseManquant.showAndWait();
+					}
+					else if (((!txtfldNoEmploye.getText().equals(identifiants.getStrIdentifiant()) && !(txtfldNoEmploye.getText().trim().isEmpty())) || (!txtfldMotDePasse.getText().equals(identifiants.getStrMotDePasse()) && !(txtfldMotDePasse.getText().trim().isEmpty())))) {
 						Alert fenetreIdentifiantManquantsIncorrects = new Alert(AlertType.NONE, "default Dialog",ButtonType.OK);
 						
 						fenetreIdentifiantManquantsIncorrects.setTitle("Avertissement");
 						Stage stage = (Stage) fenetreIdentifiantManquantsIncorrects.getDialogPane().getScene().getWindow();
 						stage.getIcons().add(new Image("icon-avertissement.png"));
-						fenetreIdentifiantManquantsIncorrects.setContentText("Les identifiants que vous avez entrés ne correspondent à aucun employés.");
+						fenetreIdentifiantManquantsIncorrects.setContentText("Les identifiants que vous avez entrés ne correspondent é aucun employés.");
 						fenetreIdentifiantManquantsIncorrects.setHeaderText(null);
 						fenetreIdentifiantManquantsIncorrects.showAndWait();
 					}
 				}
-				
 			}});
         
         btnConsulterCatalogue.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent e) {
-				arg0.setTitle("Médiathèque");
+				arg0.setTitle("Médiathéque");
 				arg0.setScene(sceneCatalogue);
 			}});
         
@@ -987,20 +541,6 @@ public class InterfaceGraphique extends Application {
         	sC.SerialiserLivres();
         	sC.SerialiserPeriodiques();
         });
-        
-        btnQuitterCatalogue.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent e) {
-				arg0.setTitle("Identification");
-				arg0.setScene(sceneIdentification);
-			}});
-        
-        btnQuitterPrepose.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent e) {
-				arg0.setTitle("Identification");
-				arg0.setScene(sceneIdentification);
-			}});
 		
 		arg0.setResizable(false);
 		arg0.setScene(sceneIdentification);
@@ -1047,124 +587,17 @@ public class InterfaceGraphique extends Application {
 					System.out.println("test");
 				}
 			}
-			
-			writer.close();
-			sc1.close();
-				
+				sc1.close();
+
 		} catch (IOException e) {
 			
 			e.printStackTrace();
 		}
 	}
 	
-	private void verifierDocument(Alert fenetreAjouterDocument, ButtonType btnconfirmer, TextField champsTitre,TextField champsAuteur,TextField champsDateParution,TextField champsMotCles, ComboBox<String> cbxTypeDoc,TextField champsNbDisques,TextField champsRealisateur,TextField champsNoPeriodique,TextField champsNoVolume) {
-		Button btConfirmer = (Button) fenetreAjouterDocument.getDialogPane().lookupButton(btnconfirmer);
-		
-		btConfirmer.addEventFilter(ActionEvent.ACTION, event->{
-			if (champsTitre.getText().trim().isEmpty()) {
-				Alert fenetreTitreManquant = new Alert(AlertType.NONE, "default Dialog",ButtonType.OK);
-				fenetreTitreManquant.setTitle("Erreur");
-				
-				Stage stage1 = (Stage) fenetreTitreManquant.getDialogPane().getScene().getWindow();
-				stage1.getIcons().add(new Image("icon-erreur.png"));
-				fenetreTitreManquant.setContentText("Veuillez entrer le titre du document.");
-				fenetreTitreManquant.setHeaderText(null);
-				fenetreTitreManquant.showAndWait();
-				event.consume();
-			}
-			else if (champsAuteur.getText().trim().isEmpty()) {
-				Alert fenetreAuteurManquant = new Alert(AlertType.NONE, "default Dialog",ButtonType.OK);
-				fenetreAuteurManquant.setTitle("Erreur");
-				
-				Stage stage1 = (Stage) fenetreAuteurManquant.getDialogPane().getScene().getWindow();
-				stage1.getIcons().add(new Image("icon-erreur.png"));
-				fenetreAuteurManquant.setContentText("Veuillez entrer l'auteur du document.");
-				fenetreAuteurManquant.setHeaderText(null);
-				fenetreAuteurManquant.showAndWait();
-				event.consume();
-			}
-			else if (champsDateParution.getText().trim().isEmpty()) {
-				Alert fenetreDateParutionManquante = new Alert(AlertType.NONE, "default Dialog",ButtonType.OK);
-				fenetreDateParutionManquante.setTitle("Erreur");
-				
-				Stage stage1 = (Stage) fenetreDateParutionManquante.getDialogPane().getScene().getWindow();
-				stage1.getIcons().add(new Image("icon-erreur.png"));
-				fenetreDateParutionManquante.setContentText("Vous avez oublié d'entrer l'adresse.");
-				fenetreDateParutionManquante.setHeaderText(null);
-				fenetreDateParutionManquante.showAndWait();
-				event.consume();
-			}
-			else if (!champsDateParution.getText().trim().matches("^(?:(?:31(-)(?:0?[13578]|1[02]))\\1|(?:(?:29|30)(-)(?:0?[13-9]|1[0-2])\\2))"
-					+ "(?:(?:1[6-9]|[2-9]\\d)\\d{2})$|^(?:29(-)0?2\\3(?:(?:(?:1[6-9]|[2-9]\\d)(?:0[48]|[2468][048]|[13579][26])|"
-					+ "(?:(?:16|[2468][048]|[3579][26])00))))$|^(?:0?[1-9]|1\\d|2[0-8])(-)(?:(?:0?[1-9])|(?:1[0-2]))\\4(?:(?:1[6-9]|[2-9]\\d)\\d{2})$")) 
-			{
-				Alert fenetreTelephoneIncorrect = new Alert(AlertType.NONE, "default Dialog",ButtonType.OK);
-				fenetreTelephoneIncorrect.setTitle("Erreur");
-				
-				Stage stage1 = (Stage) fenetreTelephoneIncorrect.getDialogPane().getScene().getWindow();
-				stage1.getIcons().add(new Image("icon-erreur.png"));
-				fenetreTelephoneIncorrect.setContentText("La date que vous avez entré ou son format sont incorrects. Le format est \"JJ-MM-AAAA\"."  );
-				fenetreTelephoneIncorrect.setHeaderText(null);
-				fenetreTelephoneIncorrect.showAndWait();
-				event.consume();
-			}
-			else if (champsMotCles.getText().trim().isEmpty()) {
-				Alert fenetreMotsClesManquants = new Alert(AlertType.NONE, "default Dialog",ButtonType.OK);
-				fenetreMotsClesManquants.setTitle("Erreur");
-				
-				Stage stage1 = (Stage) fenetreMotsClesManquants.getDialogPane().getScene().getWindow();
-				stage1.getIcons().add(new Image("icon-erreur.png"));
-				fenetreMotsClesManquants.setContentText("Vous avez oublié d'entrer le numéro de téléphone.");
-				fenetreMotsClesManquants.setHeaderText(null);
-				fenetreMotsClesManquants.showAndWait();
-				event.consume();
-			}
-			else {
-				if (cbxTypeDoc.getValue() == "Livre") {
-					
-					Livre livre = new Livre("Liv"+intNbLivre, champsTitre.getText().trim(), LocalDate.parse(champsDateParution.getText().trim(), Catalogue.getDf()), "Disponible", champsMotCles.getText(), champsAuteur.getText().trim(), 0, "");
-					Catalogue.getLstLivres().add(livre);
-					Catalogue.getLstDocuments().add(livre);
-					
-					tableLivre.getItems().add(livre);
-					tableLivrePrepose.getItems().add(livre);
-					
-					tableDocuments.getItems().add(livre);
-					tableDocumentsPrepose.getItems().add(livre);
-					
-				}
-				else if (cbxTypeDoc.getValue() == "DVD") {
-					
-					DVD dvd = new DVD("DVD"+intNbDVD, champsTitre.getText().trim(), LocalDate.parse(champsDateParution.getText().trim(), Catalogue.getDf()), "Disponible", Integer.parseInt(champsNbDisques.getText().trim()), champsRealisateur.getText().trim(), 0, "");
-					Catalogue.getLstDvd().add(dvd);
-					Catalogue.getLstDocuments().add(dvd);
-					
-					tableDVD.getItems().add(dvd);
-					tableDVDPrepose.getItems().add(dvd);
-					
-					tableDocuments.getItems().add(dvd);
-					tableDocumentsPrepose.getItems().add(dvd);
-					
-				}
-				else if (cbxTypeDoc.getValue() == "Périodique") {
-					Periodique periodique = new Periodique("Per"+ intNbPeriodique, champsTitre.getText().trim(), LocalDate.parse(champsDateParution.getText().trim(), Catalogue.getDf()), "Disponible", Integer.parseInt(champsNoVolume.getText().trim()), Integer.parseInt(champsNoPeriodique.getText().trim()), 0, "");
-					Catalogue.getLstPeriodiques().add(periodique);
-					Catalogue.getLstDocuments().add(periodique);
-					
-					tablePeriodique.getItems().add(periodique);
-					tablePeriodiquePrepose.getItems().add(periodique);
-					
-					tableDocuments.getItems().add(periodique);
-					tableDocumentsPrepose.getItems().add(periodique);
-				}
-			}
-		});
-	}
-	
 	private void verifierInfosPrepose(Alert fenetreAjouterPrepose, ButtonType btnconfirmer,TextField champsNom,TextField champsPrenom,TextField champsAdresse,TextField champsTelephone,TextField champsMotDePasse ) {
-		//Vérification si tout les éléments sont entrés. EventFilter et consommation de l'événement en lambda sinon la fenêtre en arrière-plan se ferme.
+		//Vérification si tout les éléments sont entrés. EventFilter et consommation de l'événement en lambda sinon la fenétre en arriére-plan se ferme.
 		Button btConfirmer = (Button) fenetreAjouterPrepose.getDialogPane().lookupButton(btnconfirmer);
-		
 		btConfirmer.addEventFilter(ActionEvent.ACTION, event->{
 			if (champsNom.getText().trim().isEmpty()) {
 				Alert fenetreNomManquant = new Alert(AlertType.NONE, "default Dialog",ButtonType.OK);
@@ -1268,19 +701,6 @@ public class InterfaceGraphique extends Application {
 
 	public static TableView<Periodique> getTablePeriodique() {
 		return tablePeriodique;
-	}
-
-
-	public static void setIntNbLivre(int intNbLivre) {
-		InterfaceGraphique.intNbLivre = intNbLivre;
-	}
-
-	public static void setIntNbDVD(int intNbDVD) {
-		InterfaceGraphique.intNbDVD = intNbDVD;
-	}
-
-	public static void setIntNbPeriodique(int intNbPeriodique) {
-		InterfaceGraphique.intNbPeriodique = intNbPeriodique;
 	}
 	
 }
