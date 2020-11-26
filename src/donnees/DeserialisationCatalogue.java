@@ -8,6 +8,9 @@ import java.util.ArrayList;
 import application.InterfaceGraphique;
 
 public class DeserialisationCatalogue {
+	int intNbLivres = 0;
+	int intNbDVD = 0;
+	int intNbPeriodiques = 0;
 
 	public void DeserialiserDocuments() {
 		 ArrayList<Document> doc = new ArrayList<Document>();
@@ -66,7 +69,9 @@ public class DeserialisationCatalogue {
       }
       
       for (Livre livre : livres) {
+    	  intNbLivres++;
           Catalogue.getLstLivres().add(livre);
+          InterfaceGraphique.setIntNbLivre(intNbLivres);
       }
 
 	}
@@ -97,7 +102,9 @@ public class DeserialisationCatalogue {
      }
      
      for (DVD DVD : dvd) {
+    	 intNbDVD++;
          Catalogue.getLstDvd().add(DVD);
+         InterfaceGraphique.setIntNbDVD(intNbDVD);
      }
 
 	}
@@ -128,7 +135,9 @@ public class DeserialisationCatalogue {
      }
      
      for (Periodique periodique : periodiques) {
+    	 intNbPeriodiques++;
          Catalogue.getLstPeriodiques().add(periodique);
+         InterfaceGraphique.setIntNbPeriodique(intNbPeriodiques);
      }
 
 	}

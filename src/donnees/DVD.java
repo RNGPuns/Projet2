@@ -11,9 +11,9 @@ public class DVD extends Document {
 	private int nbDisques;
 	private String strRealisateur;
 
-	public DVD(String noDoc, String titre, LocalDate dateParution, String disponible, int nbDisques, String strRealisateur) {
+	public DVD(String noDoc, String titre, LocalDate dateParution, String disponible, int nbDisques, String strRealisateur, int intNbPrets, String strEmprunteur) {
 
-		super(noDoc, titre, dateParution, disponible);
+		super(noDoc, titre, dateParution, disponible, intNbPrets, strEmprunteur);
 		this.nbDisques = nbDisques;
 		this.strRealisateur = strRealisateur;
 	}
