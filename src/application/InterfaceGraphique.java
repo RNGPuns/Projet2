@@ -784,16 +784,16 @@ public class InterfaceGraphique extends Application {
 				cbxTypeDoc.getSelectionModel().selectFirst();
 				
 				Text Titre = new Text("Titre:");
-				TextField champsTitre = new TextField("");
+				TextField champsTitre = new TextField("A");
 				
-				TextField champsDateParution = new TextField("");
+				TextField champsDateParution = new TextField("12-12-1990");
 				Text DateParution = new Text("Date de parution:");
 				
 				Text AuteurLivre = new Text("Auteur:");
-				TextField champsAuteurLivre = new TextField();
+				TextField champsAuteurLivre = new TextField("A");
 				
 				Text MotsClesLivre = new Text("Mots Clés:");
-				TextField champsMotsClesLivre = new TextField();
+				TextField champsMotsClesLivre = new TextField("A");
 				
 				gridpaneLivre.add(TypeDoc, 0, 0);
 				gridpaneLivre.add(cbxTypeDoc, 1, 0);
@@ -906,20 +906,14 @@ public class InterfaceGraphique extends Application {
 				
 				verifierEtAjouterDocument(fenetreAjouterDocument, btnconfirmer, champsTitre, champsAuteurLivre, champsDateParution, champsMotsClesLivre, cbxTypeDoc, champsNbDisques, champsRealisateur, champsNoPeriodique, champsNoVolume);
 				
+				fenetreAjouterDocument.showAndWait();
+				
+				
 //				Button btConfirmer = (Button) fenetreAjouterDocument.getDialogPane().lookupButton(btnconfirmer);
 //				btConfirmer.setOnMouseClicked(new EventHandler<MouseEvent>() {
 //					@Override
 //					public void handle(MouseEvent e) {
-//						if (cbxTypeDoc.getValue() == "Livre") {
-//							verifierEtAjouterDocument(fenetreAjouterDocument, btnconfirmer, champsTitreLivre, champsAuteurLivre, champsDateParutionLivre, champsMotsClesLivre, cbxTypeDoc, champsNbDisques, champsRealisateur, champsNoPeriodique, champsNoVolume);
-//						}
-//						else if (cbxTypeDoc.getValue() == "DVD") {
-//							verifierEtAjouterDocument(fenetreAjouterDocument, btnconfirmer, champsTitreDVD, champsAuteurLivre, champsDateParutionDVD, champsMotsClesLivre, cbxTypeDoc, champsNbDisques, champsRealisateur, champsNoPeriodique, champsNoVolume);
-//						}
-//						else if (cbxTypeDoc.getValue() == "Périodique") {
-//							verifierEtAjouterDocument(fenetreAjouterDocument, btnconfirmer, champsTitrePeriodique, champsAuteurLivre, champsDateParutionPeriodique, champsMotsClesLivre, cbxTypeDoc, champsNbDisques, champsRealisateur, champsNoPeriodique, champsNoVolume );
-//
-//						}
+////						verifierEtAjouterDocument(fenetreAjouterDocument, btnconfirmer, champsTitre, champsAuteurLivre, champsDateParution, champsMotsClesLivre, cbxTypeDoc, champsNbDisques, champsRealisateur, champsNoPeriodique, champsNoVolume);
 //					}});
 
 				
@@ -930,7 +924,7 @@ public class InterfaceGraphique extends Application {
 						fenetreAjouterDocument.close();
 					}});
 				
-				fenetreAjouterDocument.showAndWait();
+				
 			}});
 		
 		//Fenêtre d'ajout de préposé(s)
@@ -1288,6 +1282,7 @@ public class InterfaceGraphique extends Application {
 	
 	private void verifierEtAjouterDocument(Alert fenetreAjouterDocument, ButtonType btnconfirmer, TextField champsTitre,TextField champsAuteur,TextField champsDateParution,TextField champsMotsCles, ComboBox<String> cbxTypeDoc,TextField champsNbDisques,TextField champsRealisateur,TextField champsNoPeriodique,TextField champsNoVolume) {
 		Button btConfirmer = (Button) fenetreAjouterDocument.getDialogPane().lookupButton(btnconfirmer);
+//		System.out.println("ok");
 		btConfirmer.addEventFilter(ActionEvent.ACTION, event->{
 			if (champsTitre.getText().trim().isEmpty()) {
 				Alert fenetreTitreManquant = new Alert(AlertType.NONE, "default Dialog",ButtonType.OK);
@@ -1300,24 +1295,13 @@ public class InterfaceGraphique extends Application {
 				fenetreTitreManquant.showAndWait();
 				event.consume();
 			}
-			else if (champsAuteur.getText().trim().isEmpty()) {
-				Alert fenetreAuteurManquant = new Alert(AlertType.NONE, "default Dialog",ButtonType.OK);
-				fenetreAuteurManquant.setTitle("Erreur");
-				
-				Stage stage1 = (Stage) fenetreAuteurManquant.getDialogPane().getScene().getWindow();
-				stage1.getIcons().add(new Image("icon-erreur.png"));
-				fenetreAuteurManquant.setContentText("Veuillez entrer l'auteur du document.");
-				fenetreAuteurManquant.setHeaderText(null);
-				fenetreAuteurManquant.showAndWait();
-				event.consume();
-			}
 			else if (champsDateParution.getText().trim().isEmpty()) {
 				Alert fenetreDateParutionManquante = new Alert(AlertType.NONE, "default Dialog",ButtonType.OK);
 				fenetreDateParutionManquante.setTitle("Erreur");
 				
 				Stage stage1 = (Stage) fenetreDateParutionManquante.getDialogPane().getScene().getWindow();
 				stage1.getIcons().add(new Image("icon-erreur.png"));
-				fenetreDateParutionManquante.setContentText("Vous avez oublié d'entrer l'adresse.");
+				fenetreDateParutionManquante.setContentText("Vous avez oublié d'entrer la date de parution.");
 				fenetreDateParutionManquante.setHeaderText(null);
 				fenetreDateParutionManquante.showAndWait();
 				event.consume();
@@ -1326,30 +1310,41 @@ public class InterfaceGraphique extends Application {
 					+ "(?:(?:1[6-9]|[2-9]\\d)\\d{2})$|^(?:29(-)0?2\\3(?:(?:(?:1[6-9]|[2-9]\\d)(?:0[48]|[2468][048]|[13579][26])|"
 					+ "(?:(?:16|[2468][048]|[3579][26])00))))$|^(?:0?[1-9]|1\\d|2[0-8])(-)(?:(?:0?[1-9])|(?:1[0-2]))\\4(?:(?:1[6-9]|[2-9]\\d)\\d{2})$")) 
 			{
-				Alert fenetreTelephoneIncorrect = new Alert(AlertType.NONE, "default Dialog",ButtonType.OK);
-				fenetreTelephoneIncorrect.setTitle("Erreur");
+				Alert fenetreDateIncorrecte = new Alert(AlertType.NONE, "default Dialog",ButtonType.OK);
+				fenetreDateIncorrecte.setTitle("Erreur");
 				
-				Stage stage1 = (Stage) fenetreTelephoneIncorrect.getDialogPane().getScene().getWindow();
+				Stage stage1 = (Stage) fenetreDateIncorrecte.getDialogPane().getScene().getWindow();
 				stage1.getIcons().add(new Image("icon-erreur.png"));
-				fenetreTelephoneIncorrect.setContentText("La date que vous avez entré ou son format sont incorrects. Le format est \"JJ-MM-AAAA\"."  );
-				fenetreTelephoneIncorrect.setHeaderText(null);
-				fenetreTelephoneIncorrect.showAndWait();
+				fenetreDateIncorrecte.setContentText("La date que vous avez entré ou son format sont incorrects. Le format est \"JJ-MM-AAAA\"."  );
+				fenetreDateIncorrecte.setHeaderText(null);
+				fenetreDateIncorrecte.showAndWait();
 				event.consume();
 			}
-			else if (champsMotsCles.getText().trim().isEmpty()) {
-				Alert fenetreMotsClesManquants = new Alert(AlertType.NONE, "default Dialog",ButtonType.OK);
-				fenetreMotsClesManquants.setTitle("Erreur");
-				
-				Stage stage1 = (Stage) fenetreMotsClesManquants.getDialogPane().getScene().getWindow();
-				stage1.getIcons().add(new Image("icon-erreur.png"));
-				fenetreMotsClesManquants.setContentText("Vous avez oublié d'entrer le numéro de téléphone.");
-				fenetreMotsClesManquants.setHeaderText(null);
-				fenetreMotsClesManquants.showAndWait();
-				event.consume();
-			}
-			else {
-				if (cbxTypeDoc.getValue() == "Livre") {
+			else if (cbxTypeDoc.getValue() == "Livre") {
+				if (champsAuteur.getText().isEmpty()) {
+					Alert fenetreAuteurManquant = new Alert(AlertType.NONE, "default Dialog",ButtonType.OK);
+					fenetreAuteurManquant.setTitle("Erreur");
 					
+					Stage stage1 = (Stage) fenetreAuteurManquant.getDialogPane().getScene().getWindow();
+					stage1.getIcons().add(new Image("icon-erreur.png"));
+					fenetreAuteurManquant.setContentText("Veuillez entrer l'auteur du document.");
+					fenetreAuteurManquant.setHeaderText(null);
+					fenetreAuteurManquant.showAndWait();
+					event.consume();
+				}
+				else if (champsMotsCles.getText().trim().isEmpty()) {
+					Alert fenetreMotsClesManquants = new Alert(AlertType.NONE, "default Dialog",ButtonType.OK);
+					fenetreMotsClesManquants.setTitle("Erreur");
+					
+					Stage stage1 = (Stage) fenetreMotsClesManquants.getDialogPane().getScene().getWindow();
+					stage1.getIcons().add(new Image("icon-erreur.png"));
+					fenetreMotsClesManquants.setContentText("Vous avez oublié d'entrer des mots clés");
+					fenetreMotsClesManquants.setHeaderText(null);
+					fenetreMotsClesManquants.showAndWait();
+					event.consume();
+				}
+				else {
+					System.out.println("Ok L");
 					Livre livre = new Livre("Liv"+intNbLivre, champsTitre.getText(), LocalDate.parse(champsDateParution.getText().trim(), Catalogue.getDf()), "Disponible", champsMotsCles.getText(), champsAuteur.getText().trim(), 0, "");
 					Catalogue.getLstLivres().add(livre);
 					Catalogue.getLstDocuments().add(livre);
@@ -1366,16 +1361,37 @@ public class InterfaceGraphique extends Application {
 						File file = new File("Livres.txt");
 						BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file, true),"UTF-8"));
 						
-						bw.write("Liv"+intNbLivre+ "," + champsTitre.getText() + "," + champsDateParution.getText().trim() + "," + champsAuteur.getText().trim());
+						bw.write("Liv"+intNbLivre+ "," + champsTitre.getText() + "," + champsDateParution.getText().trim() + "," + champsAuteur.getText().trim() + "\r\n");
 						bw.close();
 					} catch (IOException e) {
 						e.printStackTrace();
 					}
-					
-					
 				}
-				else if (cbxTypeDoc.getValue() == "DVD") {
+			}
+			else if (cbxTypeDoc.getValue() == "DVD") {
+				if (champsNbDisques.getText().trim().isEmpty()) {
+					Alert fenetreNbDisquesIncorrect = new Alert(AlertType.NONE, "default Dialog",ButtonType.OK);
+					fenetreNbDisquesIncorrect.setTitle("Erreur");
 					
+					Stage stage1 = (Stage) fenetreNbDisquesIncorrect.getDialogPane().getScene().getWindow();
+					stage1.getIcons().add(new Image("icon-erreur.png"));
+					fenetreNbDisquesIncorrect.setContentText("Veuillez entrer le nombre de disques."  );
+					fenetreNbDisquesIncorrect.setHeaderText(null);
+					fenetreNbDisquesIncorrect.showAndWait();
+					event.consume();
+				}
+				else if (champsRealisateur.getText().trim().isEmpty()) {
+					Alert fenetreRealisateurIncorrect = new Alert(AlertType.NONE, "default Dialog",ButtonType.OK);
+					fenetreRealisateurIncorrect.setTitle("Erreur");
+					
+					Stage stage1 = (Stage) fenetreRealisateurIncorrect.getDialogPane().getScene().getWindow();
+					stage1.getIcons().add(new Image("icon-erreur.png"));
+					fenetreRealisateurIncorrect.setContentText("Veuillez entrer le réalisateur.");
+					fenetreRealisateurIncorrect.setHeaderText(null);
+					fenetreRealisateurIncorrect.showAndWait();
+					event.consume();
+				}
+				else {
 					DVD dvd = new DVD("DVD"+intNbDVD, champsTitre.getText(), LocalDate.parse(champsDateParution.getText().trim(), Catalogue.getDf()), "Disponible", Integer.parseInt(champsNbDisques.getText().trim()), champsRealisateur.getText().trim(), 0, "");
 					Catalogue.getLstDvd().add(dvd);
 					Catalogue.getLstDocuments().add(dvd);
@@ -1392,14 +1408,38 @@ public class InterfaceGraphique extends Application {
 						File file = new File("DVD.txt");
 						BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file, true),"UTF-8"));
 						
-						bw.write("DVD"+intNbDVD+ "," + champsTitre.getText() + "," + champsDateParution.getText().trim() + "," + champsNbDisques.getText() + "," + champsRealisateur.getText());
+						bw.write("DVD"+intNbDVD+ "," + champsTitre.getText() + "," + champsDateParution.getText().trim() + "," + champsNbDisques.getText() + "," + champsRealisateur.getText()+ "\r\n");
 						bw.close();
 					} catch (IOException e) {
 						e.printStackTrace();
 					}
 					
 				}
-				else if (cbxTypeDoc.getValue() == "Périodique") {
+			}
+			else if (cbxTypeDoc.getValue() == "Périodique") {
+				if (champsNoPeriodique.getText().isEmpty()) {
+					Alert fenetreNoPeriodiqueIncorrect = new Alert(AlertType.NONE, "default Dialog",ButtonType.OK);
+					fenetreNoPeriodiqueIncorrect.setTitle("Erreur");
+					
+					Stage stage1 = (Stage) fenetreNoPeriodiqueIncorrect.getDialogPane().getScene().getWindow();
+					stage1.getIcons().add(new Image("icon-erreur.png"));
+					fenetreNoPeriodiqueIncorrect.setContentText("Veuillez entrer le numéro du périodique.");
+					fenetreNoPeriodiqueIncorrect.setHeaderText(null);
+					fenetreNoPeriodiqueIncorrect.showAndWait();
+					event.consume();
+				}
+				else if (champsNoVolume.getText().isEmpty()) {
+					Alert fenetreNoVolumeIncorrect = new Alert(AlertType.NONE, "default Dialog",ButtonType.OK);
+					fenetreNoVolumeIncorrect.setTitle("Erreur");
+					
+					Stage stage1 = (Stage) fenetreNoVolumeIncorrect.getDialogPane().getScene().getWindow();
+					stage1.getIcons().add(new Image("icon-erreur.png"));
+					fenetreNoVolumeIncorrect.setContentText("Veuillez entrer le numéro du périodique.");
+					fenetreNoVolumeIncorrect.setHeaderText(null);
+					fenetreNoVolumeIncorrect.showAndWait();
+					event.consume();
+				}
+				else {
 					Periodique periodique = new Periodique("Per"+ intNbPeriodique, champsTitre.getText(), LocalDate.parse(champsDateParution.getText().trim(), Catalogue.getDf()), "Disponible", Integer.parseInt(champsNoVolume.getText().trim()), Integer.parseInt(champsNoPeriodique.getText().trim()), 0, "");
 					Catalogue.getLstPeriodiques().add(periodique);
 					Catalogue.getLstDocuments().add(periodique);
@@ -1415,8 +1455,7 @@ public class InterfaceGraphique extends Application {
 					try {
 						File file = new File("Periodiques.txt");
 						BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file, true),"UTF-8"));
-						
-						bw.write("DVD"+intNbPeriodique+ "," + champsTitre.getText() + "," + champsDateParution.getText().trim() + "," + champsNoVolume.getText().trim() + "," + champsNoPeriodique.getText().trim());
+						bw.write("Per"+intNbPeriodique+ "," + champsTitre.getText() + "," + champsDateParution.getText().trim() + "," + champsNoVolume.getText().trim() + "," + champsNoPeriodique.getText().trim() + "\r\n");
 						bw.close();
 					} catch (IOException e) {
 						e.printStackTrace();
