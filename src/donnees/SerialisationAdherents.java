@@ -6,14 +6,14 @@ import java.io.ObjectOutputStream;
 
 import application.InterfaceGraphique;
 
-public class SerialisationPreposes {
+public class SerialisationAdherents {
 	
 	public void Serialiser() {
 	     
         try {
-            FileOutputStream fos = new FileOutputStream("Données sérialisées/Preposes.ser");
+            FileOutputStream fos = new FileOutputStream("Données sérialisées/Adherents.ser");
             ObjectOutputStream oos = new ObjectOutputStream(fos);
-            oos.writeObject(InterfaceGraphique.getLstPrepose());
+            oos.writeObject(InterfaceGraphique.getLstAdherents());
             oos.close();
             fos.close();
         } 

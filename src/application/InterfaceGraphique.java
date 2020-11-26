@@ -9,21 +9,26 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Optional;
 import java.util.Scanner;
 
+import donnees.Adherent;
 import donnees.Catalogue;
 import donnees.DVD;
+import donnees.DeserialisationAdherents;
 import donnees.DeserialisationPreposes;
 import donnees.Document;
 import donnees.IdentifiantsPrepose;
 import donnees.Livre;
 import donnees.Periodique;
 import donnees.Prepose;
+import donnees.SerialisationAdherents;
 import donnees.SerialisationCatalogue;
 import donnees.SerialisationPreposes;
 import javafx.application.Application;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
@@ -51,6 +56,7 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Border;
 import javafx.scene.layout.BorderStroke;
 import javafx.scene.layout.BorderStrokeStyle;
@@ -74,9 +80,11 @@ public class InterfaceGraphique extends Application {
 	private final static TableView<Livre> tableLivrePrepose = new TableView<Livre>();
 	private final static TableView<DVD> tableDVDPrepose = new TableView<DVD>();
 	private final static TableView<Periodique> tablePeriodiquePrepose = new TableView<Periodique>();
+	private final static TableView<Adherent> tableAdherent = new TableView<Adherent>();
 	
 	ArrayList<IdentifiantsPrepose> lstIdentifiants = new ArrayList<IdentifiantsPrepose>();
 	static ArrayList<Prepose> lstPrepose = new ArrayList<Prepose>();
+	static ArrayList<Adherent> lstAdherents = new ArrayList<Adherent>();
 	
 	String strIdentifiant = "";
 	String strMotDePasse = "";
@@ -85,8 +93,10 @@ public class InterfaceGraphique extends Application {
 	static int intNbLivre = 0;
 	static int intNbDVD = 0;
 	static int intNbPeriodique = 0;
+	static int intNbAdherent = 0;
 	
-	File serPrepose = new File("Preposes.ser");
+	File serPrepose = new File("Données sérialisées/Preposes.ser");
+	File serAdherent = new File("Données sérialisées/Adherents.ser");
 	
 	@Override
 	public void start(Stage arg0) throws Exception {
@@ -96,6 +106,11 @@ public class InterfaceGraphique extends Application {
 			if (serPrepose.exists()) {
 				DeserialisationPreposes dP = new DeserialisationPreposes();
 	        	dP.Deserialiser();
+			}
+			
+			if (serAdherent.exists()) {
+				DeserialisationAdherents dA = new DeserialisationAdherents();
+				dA.Deserialiser();
 			}
 			
 			Scanner scFichierIdentifiant = new Scanner(new File("Identifiants préposé.txt")); //Début de la lecture du fichier
@@ -444,7 +459,6 @@ public class InterfaceGraphique extends Application {
         Text txtGestionPrepose = new Text("Gestion préposés");
         Button btnAjouterPrepose = new Button("Ajouter un préposé");
         
-       
         
         Button btnSupprimerPrepose = new Button("Supprimer un préposé");
         Separator separateur = new Separator(Orientation.HORIZONTAL);
@@ -523,15 +537,81 @@ public class InterfaceGraphique extends Application {
 		vboxGestionPrets.getChildren().addAll(btnInscrirePret,btnInscrireRetour);
 		
 		TitledPane tpGestionCatalogue = new TitledPane("Gestion du catalogue" , vboxGestionCatalogue);
-		TitledPane tpGestionPrets = new TitledPane("Gestion des prêts" , vboxGestionPrets);
+		
 		TitledPane tpGestionAdherents = new TitledPane("Gestion des adhérents" , vboxGestionAdherent);
+		
+		tpGestionAdherents.setOnMouseClicked(new EventHandler<Event>() {
+			@Override
+			public void handle(Event event) {
+				vboxPrepose.getChildren().clear();
+				hboxRootPrepose.getChildren().remove(vboxOptionsPrepose);
+				
+				
+				TableColumn<Adherent, String> ColonneNoAdherent = new TableColumn<Adherent, String>("Numéro de l'Adhérent");
+				ColonneNoAdherent.setCellValueFactory(new PropertyValueFactory<>("StrNoAdherent"));
+				ColonneNoAdherent.setPrefWidth(175);
+		        TableColumn<Adherent, String> ColonneNomAdherent = new TableColumn<Adherent, String>("Nom");
+		        ColonneNomAdherent.setCellValueFactory(new PropertyValueFactory<>("StrNomAdherent"));
+		        ColonneNomAdherent.setPrefWidth(120);
+		        TableColumn<Adherent, String> ColonnePrenomAdherent = new TableColumn<Adherent, String>("Prénom");
+		        ColonnePrenomAdherent.setCellValueFactory(new PropertyValueFactory<>("StrPrenomAdherent"));
+		        ColonnePrenomAdherent.setPrefWidth(120);
+		        TableColumn<Adherent, String> ColonneAdresseAdherent = new TableColumn<Adherent, String>("Adresse");
+		        ColonneAdresseAdherent.setCellValueFactory(new PropertyValueFactory<>("StrAdresseAdherent"));
+		        ColonneAdresseAdherent.setPrefWidth(120);
+		        TableColumn<Adherent, String> ColonneTelephoneAdherent = new TableColumn<Adherent, String>("Téléphone");
+		        ColonneTelephoneAdherent.setCellValueFactory(new PropertyValueFactory<>("StrTelephoneAdherent"));
+		        ColonneTelephoneAdherent.setPrefWidth(120);
+		        TableColumn<Adherent, Integer> ColonneNbPretsActifs = new TableColumn<Adherent, Integer>("Prêts Actifs");
+		        ColonneNbPretsActifs.setCellValueFactory(new PropertyValueFactory<>("IntNbPretsActifs"));
+		        ColonneNbPretsActifs.setPrefWidth(120);
+		        TableColumn<Adherent, Double> ColonneSoldeDu = new TableColumn<Adherent, Double>("Solde dû");
+		        ColonneSoldeDu.setCellValueFactory(new PropertyValueFactory<>("DblSoldeDu"));
+		        ColonneSoldeDu.setPrefWidth(120);
+		        
+		        for (Adherent adherent : lstAdherents) {
+		        	tableAdherent.getItems().add(adherent);
+		        }
+		        
+		        tableAdherent.getColumns().clear();
+		        tableAdherent.getColumns().addAll(ColonneNoAdherent,ColonneNomAdherent,ColonnePrenomAdherent,ColonneAdresseAdherent,ColonneTelephoneAdherent,ColonneNbPretsActifs,ColonneSoldeDu);
+				
+				vboxPrepose.getChildren().add(tableAdherent);
+				hboxRootPrepose.getChildren().add(vboxOptionsPrepose);
+			}
+		});
+		
+		TitledPane tpGestionPrets = new TitledPane("Gestion des prêts" , vboxGestionPrets);
 		
 		Button btnQuitterPrepose = new Button("Déconnexion");
 		
+		tpGestionCatalogue.setOnMouseClicked(new EventHandler<Event>() {
+			@Override
+			public void handle(Event event) {
+				vboxPrepose.getChildren().clear();
+				hboxRootPrepose.getChildren().removeAll(tableAdherent,vboxOptionsPrepose);
+				
+				vboxPrepose.getChildren().addAll(hboxOptionsRecherchePrepose, rootPrepose);
+				hboxRootPrepose.getChildren().addAll(vboxOptionsPrepose);
+			}
+		});
+		
+		tpGestionPrets.setOnMouseClicked(new EventHandler<Event>() {
+			@Override
+			public void handle(Event event) {
+				vboxPrepose.getChildren().clear();
+				hboxRootPrepose.getChildren().removeAll(tableAdherent,vboxOptionsPrepose);
+				
+				vboxPrepose.getChildren().addAll(hboxOptionsRecherchePrepose, rootPrepose);
+				hboxRootPrepose.getChildren().addAll(vboxOptionsPrepose);
+			}
+		});
+		
 		vboxOptionsPrepose.setAlignment(Pos.TOP_CENTER);
 		vboxOptionsPrepose.setSpacing(5);
-		accordionOptionsPrepose.getPanes().addAll(tpGestionCatalogue,tpGestionPrets,tpGestionAdherents);
+		accordionOptionsPrepose.getPanes().addAll(tpGestionCatalogue,tpGestionAdherents,tpGestionPrets);
 		vboxOptionsPrepose.getChildren().addAll(accordionOptionsPrepose,btnQuitterPrepose);
+		
 		
 		Text txtRecherchePrepose = new Text("Rechercher par: ");
 		
@@ -703,11 +783,11 @@ public class InterfaceGraphique extends Application {
 				cbxTypeDoc.getItems().addAll("Livre","DVD","Périodique");
 				cbxTypeDoc.getSelectionModel().selectFirst();
 				
-				Text TitreLivre = new Text("Titre:");
-				TextField champsTitreLivre = new TextField("");
+				Text Titre = new Text("Titre:");
+				TextField champsTitre = new TextField("");
 				
-				TextField champsDateParutionLivre = new TextField("");
-				Text DateParutionLivre = new Text("Date de parution:");
+				TextField champsDateParution = new TextField("");
+				Text DateParution = new Text("Date de parution:");
 				
 				Text AuteurLivre = new Text("Auteur:");
 				TextField champsAuteurLivre = new TextField();
@@ -717,14 +797,39 @@ public class InterfaceGraphique extends Application {
 				
 				gridpaneLivre.add(TypeDoc, 0, 0);
 				gridpaneLivre.add(cbxTypeDoc, 1, 0);
-				gridpaneLivre.add(TitreLivre, 0, 1);
-				gridpaneLivre.add(champsTitreLivre, 1, 1);
+				gridpaneLivre.add(Titre, 0, 1);
+				gridpaneLivre.add(champsTitre, 1, 1);
 				gridpaneLivre.add(AuteurLivre, 0, 2);
 				gridpaneLivre.add(champsAuteurLivre, 1, 2);
-				gridpaneLivre.add(DateParutionLivre, 0, 3);
-				gridpaneLivre.add(champsDateParutionLivre, 1, 3);
+				gridpaneLivre.add(DateParution, 0, 3);
+				gridpaneLivre.add(champsDateParution, 1, 3);
 				gridpaneLivre.add(MotsClesLivre, 0, 4);
 				gridpaneLivre.add(champsMotsClesLivre, 1, 4);
+				
+//				Text TitreDVD = new Text("Titre:");
+//				TextField champsTitreDVD = new TextField();
+//				
+//				Text DateParutionDVD = new Text("Date de parution:");
+//				TextField champsDateParutionDVD = new TextField("");
+				
+				Text NbDisques = new Text("Nombre de disques:");
+				TextField champsNbDisques = new TextField();
+				
+				Text Realisateur = new Text("Réalisateur:");
+				TextField champsRealisateur = new TextField();
+				
+				
+//				Text TitrePeriodique = new Text("Titre:");
+//				TextField champsTitrePeriodique = new TextField();
+//				
+//				Text DateParutionPeriodique = new Text("Date de parution:");
+//				TextField champsDateParutionPeriodique = new TextField();	
+				
+				Text NoPeriodique = new Text("Numéro de périodique:");
+				TextField champsNoPeriodique = new TextField();
+				
+				Text NoVolume = new Text("Numéro de volume:");
+				TextField champsNoVolume = new TextField();
 				
 				cbxTypeDoc.setOnAction(new EventHandler<ActionEvent>() {
 					@Override
@@ -737,45 +842,38 @@ public class InterfaceGraphique extends Application {
 							
 							gridpaneLivre.add(TypeDoc, 0, 0);
 							gridpaneLivre.add(cbxTypeDoc, 1, 0);
-							gridpaneLivre.add(TitreLivre, 0, 1);
-							gridpaneLivre.add(champsTitreLivre, 1, 1);
+							gridpaneLivre.add(Titre, 0, 1);
+							gridpaneLivre.add(champsTitre, 1, 1);
 							gridpaneLivre.add(AuteurLivre, 0, 2);
 							gridpaneLivre.add(champsAuteurLivre, 1, 2);
-							gridpaneLivre.add(DateParutionLivre, 0, 3);
-							gridpaneLivre.add(champsDateParutionLivre, 1, 3);
+							gridpaneLivre.add(DateParution, 0, 3);
+							gridpaneLivre.add(champsDateParution, 1, 3);
 							gridpaneLivre.add(MotsClesLivre, 0, 4);
 							gridpaneLivre.add(champsMotsClesLivre, 1, 4);
+							
 							fenetreAjouterDocument.getDialogPane().setContent(gridpaneLivre);
+//							verifierEtAjouterDocument(fenetreAjouterDocument, btnconfirmer, champsTitreLivre, champsAuteurLivre, champsDateParutionLivre, champsMotsClesLivre, cbxTypeDoc, champsNbDisques, champsRealisateur, champsNoPeriodique, champsNoVolume);
+							
+							
 						}
 						else if (cbxTypeDoc.getValue() == "DVD" ) {
 							gridpaneDVD.getChildren().clear();
 							gridpanePeriodique.getChildren().clear();
 							gridpaneLivre.getChildren().clear();
 							
-							Text TitreDVD = new Text("Titre:");
-							TextField champsTitreDVD = new TextField();
-							
-							Text DateParutionDVD = new Text("Date de parution:");
-							TextField champsDateParutionDVD = new TextField("");
-							
-							Text NbDisques = new Text("Nombre de disques:");
-							TextField champsNbDisques = new TextField();
-							
-							Text Realisateur = new Text("Réalisateur:");
-							TextField champsRealisateur = new TextField();
-							
 							gridpaneDVD.add(TypeDoc, 0, 0);
 							gridpaneDVD.add(cbxTypeDoc, 1, 0);
-							gridpaneDVD.add(TitreDVD, 0, 1);
-							gridpaneDVD.add(champsTitreDVD, 1, 1);
-							gridpaneDVD.add(DateParutionDVD, 0, 2);
-							gridpaneDVD.add(champsDateParutionDVD, 1, 2);
+							gridpaneDVD.add(Titre, 0, 1);
+							gridpaneDVD.add(champsTitre, 1, 1);
+							gridpaneDVD.add(DateParution, 0, 2);
+							gridpaneDVD.add(champsDateParution, 1, 2);
 							gridpaneDVD.add(NbDisques, 0, 3);
 							gridpaneDVD.add(champsNbDisques, 1, 3);
 							gridpaneDVD.add(Realisateur, 0, 4);
 							gridpaneDVD.add(champsRealisateur, 1, 4);
 							
 							fenetreAjouterDocument.getDialogPane().setContent(gridpaneDVD);
+//							verifierEtAjouterDocument(fenetreAjouterDocument, btnconfirmer, champsTitreDVD, champsAuteurLivre, champsDateParutionDVD, champsMotsClesLivre, cbxTypeDoc, champsNbDisques, champsRealisateur, champsNoPeriodique, champsNoVolume);
 							
 						}
 						else if (cbxTypeDoc.getValue() == "Périodique") {
@@ -783,40 +881,46 @@ public class InterfaceGraphique extends Application {
 							gridpanePeriodique.getChildren().clear();
 							gridpaneLivre.getChildren().clear();
 							
-							Text TitrePeriodique = new Text("Titre:");
-							TextField champsTitrePeriodique = new TextField();
-							
-							Text DateParutionPeriodique = new Text("Date de parution:");
-							TextField champsDateParutionPeriodique = new TextField();	
-							
-							Text NoPeriodique = new Text("Numéro de Périodique:");
-							TextField champsNoPeriodique = new TextField();
-							
-							Text NoVolume = new Text("Numéro de volume:");
-							TextField champsNoVolume = new TextField();
-							
 							gridpanePeriodique.add(TypeDoc, 0, 0);
 							gridpanePeriodique.add(cbxTypeDoc, 1, 0);
-							gridpanePeriodique.add(TitrePeriodique, 0, 1);
-							gridpanePeriodique.add(champsTitrePeriodique, 1, 1);
-							gridpanePeriodique.add(DateParutionPeriodique, 0, 2);
-							gridpanePeriodique.add(champsDateParutionPeriodique, 1, 2);
+							gridpanePeriodique.add(Titre, 0, 1);
+							gridpanePeriodique.add(champsTitre, 1, 1);
+							gridpanePeriodique.add(DateParution, 0, 2);
+							gridpanePeriodique.add(champsDateParution, 1, 2);
 							gridpanePeriodique.add(NoPeriodique, 0, 3);
 							gridpanePeriodique.add(champsNoPeriodique, 1, 3);
 							gridpanePeriodique.add(NoVolume, 0, 4);
 							gridpanePeriodique.add(champsNoVolume, 1, 4);
 							
 							fenetreAjouterDocument.getDialogPane().setContent(gridpanePeriodique);
+//							verifierEtAjouterDocument(fenetreAjouterDocument, btnconfirmer, champsTitrePeriodique, champsAuteurLivre, champsDateParutionPeriodique, champsMotsClesLivre, cbxTypeDoc, champsNbDisques, champsRealisateur, champsNoPeriodique, champsNoVolume );
+							
 						}
 					}});
 				
-				
-
 				fenetreAjouterDocument.setTitle("Ajouter un document");
 				Stage stage = (Stage) fenetreAjouterDocument.getDialogPane().getScene().getWindow();
 				stage.getIcons().add(new Image("icon-ajouterdocument.png"));
 				fenetreAjouterDocument.setHeaderText(null);
 				fenetreAjouterDocument.getDialogPane().setContent(gridpaneLivre);
+				
+				verifierEtAjouterDocument(fenetreAjouterDocument, btnconfirmer, champsTitre, champsAuteurLivre, champsDateParution, champsMotsClesLivre, cbxTypeDoc, champsNbDisques, champsRealisateur, champsNoPeriodique, champsNoVolume);
+				
+//				Button btConfirmer = (Button) fenetreAjouterDocument.getDialogPane().lookupButton(btnconfirmer);
+//				btConfirmer.setOnMouseClicked(new EventHandler<MouseEvent>() {
+//					@Override
+//					public void handle(MouseEvent e) {
+//						if (cbxTypeDoc.getValue() == "Livre") {
+//							verifierEtAjouterDocument(fenetreAjouterDocument, btnconfirmer, champsTitreLivre, champsAuteurLivre, champsDateParutionLivre, champsMotsClesLivre, cbxTypeDoc, champsNbDisques, champsRealisateur, champsNoPeriodique, champsNoVolume);
+//						}
+//						else if (cbxTypeDoc.getValue() == "DVD") {
+//							verifierEtAjouterDocument(fenetreAjouterDocument, btnconfirmer, champsTitreDVD, champsAuteurLivre, champsDateParutionDVD, champsMotsClesLivre, cbxTypeDoc, champsNbDisques, champsRealisateur, champsNoPeriodique, champsNoVolume);
+//						}
+//						else if (cbxTypeDoc.getValue() == "Périodique") {
+//							verifierEtAjouterDocument(fenetreAjouterDocument, btnconfirmer, champsTitrePeriodique, champsAuteurLivre, champsDateParutionPeriodique, champsMotsClesLivre, cbxTypeDoc, champsNbDisques, champsRealisateur, champsNoPeriodique, champsNoVolume );
+//
+//						}
+//					}});
 
 				
 				Button btAnnuler = (Button) fenetreAjouterDocument.getDialogPane().lookupButton(btnannuler); 
@@ -869,8 +973,9 @@ public class InterfaceGraphique extends Application {
 				fenetreAjouterPrepose.setHeaderText(null);
 				fenetreAjouterPrepose.getDialogPane().setContent(gridpane);
 				
-				verifierInfosPrepose(fenetreAjouterPrepose, btnconfirmer, champsNom, champsPrenom, champsAdresse, champsTelephone, champsMotDePasse);
 				
+				verifierInfosPrepose(fenetreAjouterPrepose, btnconfirmer, champsNom, champsPrenom, champsAdresse, champsTelephone, champsMotDePasse);
+					
 				Button btAnnuler = (Button) fenetreAjouterPrepose.getDialogPane().lookupButton(btnannuler); 
 				btAnnuler.setOnAction(new EventHandler<ActionEvent>() {
 					@Override
@@ -879,6 +984,57 @@ public class InterfaceGraphique extends Application {
 					}});
 				
 				fenetreAjouterPrepose.showAndWait();
+			}});
+        
+        btnAjouterAdherent.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent e) {
+				ButtonType btnconfirmer = new ButtonType("Confirmer", ButtonData.YES);
+				ButtonType btnannuler = new ButtonType("Annuler", ButtonData.CANCEL_CLOSE);
+				Alert fenetreAjouterAdherent = new Alert(AlertType.NONE, "default Dialog",btnconfirmer,btnannuler);
+				GridPane gridpane = new GridPane();
+				gridpane.setHgap(5);
+				
+				Button btConfirmer = (Button) fenetreAjouterAdherent.getDialogPane().lookupButton(btnconfirmer);
+				Button btAnnuler = (Button) fenetreAjouterAdherent.getDialogPane().lookupButton(btnannuler);
+				
+				Text nom = new Text("Nom:");
+				Text prenom = new Text("Prénom:");
+				Text adresse = new Text("Adresse:");
+				Text telephone = new Text("Téléphone:");
+				
+				gridpane.add(nom, 0, 0);
+				gridpane.add(prenom, 0, 1);
+				gridpane.add(adresse, 0, 2);
+				gridpane.add(telephone, 0, 3);
+				
+				TextField champsNom = new TextField("a");
+				TextField champsPrenom = new TextField("a");
+				TextField champsAdresse = new TextField("a");
+				TextField champsTelephone = new TextField("(123) 456-7891");
+				
+				gridpane.add(champsNom, 1, 0);
+				gridpane.add(champsPrenom, 1, 1);
+				gridpane.add(champsAdresse, 1, 2);
+				gridpane.add(champsTelephone, 1, 3);
+				
+				fenetreAjouterAdherent.setTitle("Ajouter un adhérent");
+				Stage stage = (Stage) fenetreAjouterAdherent.getDialogPane().getScene().getWindow();
+				stage.getIcons().add(new Image("icon-ajouteradherent.png"));
+				fenetreAjouterAdherent.setHeaderText(null);
+				fenetreAjouterAdherent.getDialogPane().setContent(gridpane);
+				
+				verifierEtAjouterAdherent(fenetreAjouterAdherent, btnconfirmer, champsNom, champsPrenom, champsAdresse, champsTelephone);
+				
+				fenetreAjouterAdherent.showAndWait();
+				
+				btAnnuler.setOnAction(new EventHandler<ActionEvent>() {
+					@Override
+					public void handle(ActionEvent e) {
+						fenetreAjouterAdherent.close();
+					}});
+				
+				
 			}});
         
         btnConnexion.setOnAction(new EventHandler<ActionEvent>() {
@@ -986,6 +1142,9 @@ public class InterfaceGraphique extends Application {
         	sC.SerialiserDVD();
         	sC.SerialiserLivres();
         	sC.SerialiserPeriodiques();
+        	
+        	SerialisationAdherents sA = new SerialisationAdherents();
+        	sA.Serialiser();
         });
         
         btnQuitterCatalogue.setOnAction(new EventHandler<ActionEvent>() {
@@ -1057,9 +1216,78 @@ public class InterfaceGraphique extends Application {
 		}
 	}
 	
-	private void verifierDocument(Alert fenetreAjouterDocument, ButtonType btnconfirmer, TextField champsTitre,TextField champsAuteur,TextField champsDateParution,TextField champsMotCles, ComboBox<String> cbxTypeDoc,TextField champsNbDisques,TextField champsRealisateur,TextField champsNoPeriodique,TextField champsNoVolume) {
-		Button btConfirmer = (Button) fenetreAjouterDocument.getDialogPane().lookupButton(btnconfirmer);
+	private void verifierEtAjouterAdherent(Alert fenetreAjouterAdherent, ButtonType btnconfirmer,TextField champsNom,TextField champsPrenom,TextField champsAdresse,TextField champsTelephone) {
 		
+		Button btConfirmer = (Button) fenetreAjouterAdherent.getDialogPane().lookupButton(btnconfirmer);
+		btConfirmer.addEventFilter(ActionEvent.ACTION, event ->{
+			if (champsNom.getText().trim().isEmpty()) {
+				Alert fenetreNomManquant = new Alert(AlertType.NONE, "default Dialog",ButtonType.OK);
+				fenetreNomManquant.setTitle("Erreur");
+				
+				Stage stage1 = (Stage) fenetreNomManquant.getDialogPane().getScene().getWindow();
+				stage1.getIcons().add(new Image("icon-erreur.png"));
+				fenetreNomManquant.setContentText("Vous avez oublié d'entrer le nom.");
+				fenetreNomManquant.setHeaderText(null);
+				fenetreNomManquant.showAndWait();
+				event.consume();
+			}
+			else if (champsPrenom.getText().trim().isEmpty()) {
+				Alert fenetrePrenomManquant = new Alert(AlertType.NONE, "default Dialog",ButtonType.OK);
+				fenetrePrenomManquant.setTitle("Erreur");
+				
+				Stage stage1 = (Stage) fenetrePrenomManquant.getDialogPane().getScene().getWindow();
+				stage1.getIcons().add(new Image("icon-erreur.png"));
+				fenetrePrenomManquant.setContentText("Vous avez oublié d'entrer le prénom.");
+				fenetrePrenomManquant.setHeaderText(null);
+				fenetrePrenomManquant.showAndWait();
+				event.consume();
+			}
+			else if (champsAdresse.getText().trim().isEmpty())  {
+				Alert fenetreAdresseManquante = new Alert(AlertType.NONE, "default Dialog",ButtonType.OK);
+				fenetreAdresseManquante.setTitle("Erreur");
+				
+				Stage stage1 = (Stage) fenetreAdresseManquante.getDialogPane().getScene().getWindow();
+				stage1.getIcons().add(new Image("icon-erreur.png"));
+				fenetreAdresseManquante.setContentText("Vous avez oublié d'entrer l'adresse.");
+				fenetreAdresseManquante.setHeaderText(null);
+				fenetreAdresseManquante.showAndWait();
+				event.consume();
+			}
+			else if (champsTelephone.getText().trim().isEmpty()) {
+				Alert fenetreTelephoneManquant = new Alert(AlertType.NONE, "default Dialog",ButtonType.OK);
+				fenetreTelephoneManquant.setTitle("Erreur");
+				
+				Stage stage1 = (Stage) fenetreTelephoneManquant.getDialogPane().getScene().getWindow();
+				stage1.getIcons().add(new Image("icon-erreur.png"));
+				fenetreTelephoneManquant.setContentText("Vous avez oublié d'entrer le numéro de téléphone.");
+				fenetreTelephoneManquant.setHeaderText(null);
+				fenetreTelephoneManquant.showAndWait();
+				event.consume();
+			}
+			else if (!champsTelephone.getText().matches("^\\(\\d{3}\\)\\s\\d{3}-\\d{4}")) {
+				Alert fenetreTelephoneIncorrect = new Alert(AlertType.NONE, "default Dialog",ButtonType.OK);
+				fenetreTelephoneIncorrect.setTitle("Erreur");
+				
+				Stage stage1 = (Stage) fenetreTelephoneIncorrect.getDialogPane().getScene().getWindow();
+				stage1.getIcons().add(new Image("icon-erreur.png"));
+				fenetreTelephoneIncorrect.setContentText("Le format du numéro de téléphone entré est incorrect. Le format est \"(###) ###-####\"."  );
+				fenetreTelephoneIncorrect.setHeaderText(null);
+				fenetreTelephoneIncorrect.showAndWait();
+				event.consume();
+			}
+			else {
+				Adherent adherent = new Adherent("ADH"+intNbAdherent, champsNom.getText().trim(), champsPrenom.getText().trim(), champsAdresse.getText(), champsTelephone.getText().trim(), 0, 0.00);
+				lstAdherents.add(adherent);
+				tableAdherent.getItems().add(adherent);
+				
+				intNbAdherent++;
+			}
+			
+		});
+	}
+	
+	private void verifierEtAjouterDocument(Alert fenetreAjouterDocument, ButtonType btnconfirmer, TextField champsTitre,TextField champsAuteur,TextField champsDateParution,TextField champsMotsCles, ComboBox<String> cbxTypeDoc,TextField champsNbDisques,TextField champsRealisateur,TextField champsNoPeriodique,TextField champsNoVolume) {
+		Button btConfirmer = (Button) fenetreAjouterDocument.getDialogPane().lookupButton(btnconfirmer);
 		btConfirmer.addEventFilter(ActionEvent.ACTION, event->{
 			if (champsTitre.getText().trim().isEmpty()) {
 				Alert fenetreTitreManquant = new Alert(AlertType.NONE, "default Dialog",ButtonType.OK);
@@ -1108,7 +1336,7 @@ public class InterfaceGraphique extends Application {
 				fenetreTelephoneIncorrect.showAndWait();
 				event.consume();
 			}
-			else if (champsMotCles.getText().trim().isEmpty()) {
+			else if (champsMotsCles.getText().trim().isEmpty()) {
 				Alert fenetreMotsClesManquants = new Alert(AlertType.NONE, "default Dialog",ButtonType.OK);
 				fenetreMotsClesManquants.setTitle("Erreur");
 				
@@ -1122,7 +1350,7 @@ public class InterfaceGraphique extends Application {
 			else {
 				if (cbxTypeDoc.getValue() == "Livre") {
 					
-					Livre livre = new Livre("Liv"+intNbLivre, champsTitre.getText().trim(), LocalDate.parse(champsDateParution.getText().trim(), Catalogue.getDf()), "Disponible", champsMotCles.getText(), champsAuteur.getText().trim(), 0, "");
+					Livre livre = new Livre("Liv"+intNbLivre, champsTitre.getText(), LocalDate.parse(champsDateParution.getText().trim(), Catalogue.getDf()), "Disponible", champsMotsCles.getText(), champsAuteur.getText().trim(), 0, "");
 					Catalogue.getLstLivres().add(livre);
 					Catalogue.getLstDocuments().add(livre);
 					
@@ -1132,10 +1360,23 @@ public class InterfaceGraphique extends Application {
 					tableDocuments.getItems().add(livre);
 					tableDocumentsPrepose.getItems().add(livre);
 					
+					intNbLivre++;
+					
+					try {
+						File file = new File("Livres.txt");
+						BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file, true),"UTF-8"));
+						
+						bw.write("Liv"+intNbLivre+ "," + champsTitre.getText() + "," + champsDateParution.getText().trim() + "," + champsAuteur.getText().trim());
+						bw.close();
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+					
+					
 				}
 				else if (cbxTypeDoc.getValue() == "DVD") {
 					
-					DVD dvd = new DVD("DVD"+intNbDVD, champsTitre.getText().trim(), LocalDate.parse(champsDateParution.getText().trim(), Catalogue.getDf()), "Disponible", Integer.parseInt(champsNbDisques.getText().trim()), champsRealisateur.getText().trim(), 0, "");
+					DVD dvd = new DVD("DVD"+intNbDVD, champsTitre.getText(), LocalDate.parse(champsDateParution.getText().trim(), Catalogue.getDf()), "Disponible", Integer.parseInt(champsNbDisques.getText().trim()), champsRealisateur.getText().trim(), 0, "");
 					Catalogue.getLstDvd().add(dvd);
 					Catalogue.getLstDocuments().add(dvd);
 					
@@ -1145,9 +1386,21 @@ public class InterfaceGraphique extends Application {
 					tableDocuments.getItems().add(dvd);
 					tableDocumentsPrepose.getItems().add(dvd);
 					
+					intNbDVD++;
+					
+					try {
+						File file = new File("DVD.txt");
+						BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file, true),"UTF-8"));
+						
+						bw.write("DVD"+intNbDVD+ "," + champsTitre.getText() + "," + champsDateParution.getText().trim() + "," + champsNbDisques.getText() + "," + champsRealisateur.getText());
+						bw.close();
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+					
 				}
 				else if (cbxTypeDoc.getValue() == "Périodique") {
-					Periodique periodique = new Periodique("Per"+ intNbPeriodique, champsTitre.getText().trim(), LocalDate.parse(champsDateParution.getText().trim(), Catalogue.getDf()), "Disponible", Integer.parseInt(champsNoVolume.getText().trim()), Integer.parseInt(champsNoPeriodique.getText().trim()), 0, "");
+					Periodique periodique = new Periodique("Per"+ intNbPeriodique, champsTitre.getText(), LocalDate.parse(champsDateParution.getText().trim(), Catalogue.getDf()), "Disponible", Integer.parseInt(champsNoVolume.getText().trim()), Integer.parseInt(champsNoPeriodique.getText().trim()), 0, "");
 					Catalogue.getLstPeriodiques().add(periodique);
 					Catalogue.getLstDocuments().add(periodique);
 					
@@ -1156,6 +1409,18 @@ public class InterfaceGraphique extends Application {
 					
 					tableDocuments.getItems().add(periodique);
 					tableDocumentsPrepose.getItems().add(periodique);
+					
+					intNbPeriodique++;
+					
+					try {
+						File file = new File("Periodiques.txt");
+						BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file, true),"UTF-8"));
+						
+						bw.write("DVD"+intNbPeriodique+ "," + champsTitre.getText() + "," + champsDateParution.getText().trim() + "," + champsNoVolume.getText().trim() + "," + champsNoPeriodique.getText().trim());
+						bw.close();
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
 				}
 			}
 		});
@@ -1164,7 +1429,6 @@ public class InterfaceGraphique extends Application {
 	private void verifierInfosPrepose(Alert fenetreAjouterPrepose, ButtonType btnconfirmer,TextField champsNom,TextField champsPrenom,TextField champsAdresse,TextField champsTelephone,TextField champsMotDePasse ) {
 		//Vérification si tout les éléments sont entrés. EventFilter et consommation de l'événement en lambda sinon la fenêtre en arrière-plan se ferme.
 		Button btConfirmer = (Button) fenetreAjouterPrepose.getDialogPane().lookupButton(btnconfirmer);
-		
 		btConfirmer.addEventFilter(ActionEvent.ACTION, event->{
 			if (champsNom.getText().trim().isEmpty()) {
 				Alert fenetreNomManquant = new Alert(AlertType.NONE, "default Dialog",ButtonType.OK);
@@ -1269,7 +1533,10 @@ public class InterfaceGraphique extends Application {
 	public static TableView<Periodique> getTablePeriodique() {
 		return tablePeriodique;
 	}
-
+	
+	public static ArrayList<Adherent> getLstAdherents() {
+		return lstAdherents;
+	}
 
 	public static void setIntNbLivre(int intNbLivre) {
 		InterfaceGraphique.intNbLivre = intNbLivre;
@@ -1282,5 +1549,11 @@ public class InterfaceGraphique extends Application {
 	public static void setIntNbPeriodique(int intNbPeriodique) {
 		InterfaceGraphique.intNbPeriodique = intNbPeriodique;
 	}
+
+	public static void setIntNbAdherent(int intNbAdherent) {
+		InterfaceGraphique.intNbAdherent = intNbAdherent;
+	}
+
+	
 	
 }

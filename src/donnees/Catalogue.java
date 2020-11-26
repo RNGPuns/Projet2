@@ -23,9 +23,9 @@ public final class Catalogue implements Serializable {
 	static DateTimeFormatter df = DateTimeFormatter.ofPattern("dd-MM-yyyy");
 	
 	
-	static File serLivres = new File("Livres.ser");
-	static File serDVD = new File("DVD.ser");
-	static File serPeriodique = new File("Periodiques.ser");
+	static File serLivres = new File("Données sérialisées/Livres.ser");
+	static File serDVD = new File("Données sérialisées/DVD.ser");
+	static File serPeriodique = new File("Données sérialisées/Periodiques.ser");
 	
 	//Private pour singleton
 	private Catalogue (String strNomFichier1, String strNomFichier2, String strNomFichier3) {
