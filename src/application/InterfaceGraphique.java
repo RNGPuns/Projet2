@@ -1,12 +1,18 @@
 package application;
 
 
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.text.NumberFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -84,6 +90,8 @@ public class InterfaceGraphique extends Application {
 	private final static TableView<Periodique> tablePeriodiquePrepose = new TableView<Periodique>();
 	private final static TableView<Adherent> tableAdherent = new TableView<Adherent>();
 	
+	ArrayList<String> lstLignes = new ArrayList<String>();
+	ArrayList<String> lstLignesTemp = new ArrayList<String>();
 	ArrayList<IdentifiantsPrepose> lstIdentifiants = new ArrayList<IdentifiantsPrepose>();
 	static ArrayList<Prepose> lstPrepose = new ArrayList<Prepose>();
 	static ArrayList<Adherent> lstAdherents = new ArrayList<Adherent>();
@@ -463,6 +471,13 @@ public class InterfaceGraphique extends Application {
         
         
         Button btnSupprimerPrepose = new Button("Supprimer un préposé");
+        btnSupprimerPrepose.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent e) {
+				Prepose prepose = tablePreposes.getSelectionModel().getSelectedItem();
+				supprimerPrepose(prepose, strMotDePasse);
+			}});
+        
         Separator separateur = new Separator(Orientation.HORIZONTAL);
         Button btnDeconnexion = new Button("Déconnexion");
         
@@ -1305,6 +1320,10 @@ public class InterfaceGraphique extends Application {
 					if (txtfldNoEmploye.getText().equals(lstIdentifiants.get(0).getStrIdentifiant()) && pwfldMotDePasse.getText().equals(lstIdentifiants.get(0).getStrMotDePasse())) {
 						arg0.setScene(sceneAdmin);
 						arg0.setTitle("Gérer les préposés");
+						
+						for (Prepose prepose : lstPrepose) {
+							tablePreposes.getItems().add(prepose);
+						}
 					}
 					else {
 						Alert fenetreIdentifiantManquantsIncorrects = new Alert(AlertType.NONE, "default Dialog",ButtonType.OK);
@@ -1410,6 +1429,13 @@ public class InterfaceGraphique extends Application {
 			bw.write("\r\n");
 			bw.close();
 			
+			lstPrepose.add(prepose);
+			tablePreposes.getItems().clear();
+
+			for (Prepose prep : lstPrepose) {
+				tablePreposes.getItems().add(prepose);
+			}
+			
 		} catch (IOException e) {
 			
 			e.printStackTrace();
@@ -1417,31 +1443,79 @@ public class InterfaceGraphique extends Application {
 	}
 	
 	public void supprimerPrepose(Prepose prepose, String strMotDePasse) {
+		
+		tablePreposes.getItems().remove(prepose);
+		lstPrepose.remove(prepose);
+		
+		File inputFile = new File("Identifiants préposé.txt");
+		File tempFile = new File("préposéTemp.txt");
+		
 		try {
 			
-			tablePreposes.getItems().add(prepose);
-			File inputFile = new File("Identifiants préposé.txt");
-			File tempFile = new File("préposéTemp.txt");
-
-			Scanner sc1 = new Scanner(inputFile);
+			FileInputStream fis = new FileInputStream(inputFile);
+		    InputStreamReader isr = new InputStreamReader(fis, StandardCharsets.UTF_8);
+		    BufferedReader br = new BufferedReader(isr);
+			BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(tempFile, false),"UTF-8"));
+			String strLigne = br.readLine();
 			
-			//Encodage en UTF-8 sinon les caractères accentués ne sont pas lus correctement
-			BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(tempFile), "UTF-8")); 
+			while (strLigne != null ) { //Copie chaque ligne du fichier dans un arraylist
+				lstLignes.add(strLigne);
+				strLigne = br.readLine();
+			}
 			
-			while (sc1.nextLine()!= null) {
-				String strLigneS = sc1.nextLine();
-				if (strLigneS == "Identifiant: " + prepose.getStrNoEmploye()) {
-					System.out.println("test");
-				}
+			for (String ligne : lstLignes) {
+				writer.write(ligne + "\r\n");
 			}
 			
 			writer.close();
-			sc1.close();
+			br.close();
 				
 		} catch (IOException e) {
 			
 			e.printStackTrace();
 		}
+		
+		
+		try {
+			FileInputStream fisTemp = new FileInputStream(tempFile);
+			InputStreamReader isrTemp = new InputStreamReader(fisTemp, StandardCharsets.UTF_8);
+		    BufferedReader brTemp = new BufferedReader(isrTemp);
+		    BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(tempFile, false),"UTF-8"));
+		    String strLigne = brTemp.readLine();
+		    
+		    
+		    while (strLigne != null ) { //Copie chaque ligne du fichier dans un arraylist
+				lstLignesTemp.add(strLigne);
+				strLigne = brTemp.readLine();
+			}
+		    
+		    for (int i=0; i<lstLignesTemp.size(); i++) {
+		    	if (lstLignesTemp.get(i).contains(prepose.getStrNoEmploye())) {
+		    		
+		    		System.out.println(prepose.getStrNoEmploye());
+		    		System.out.println(lstLignesTemp.get(i));
+//		    		lstLignesTemp.set(i, "");
+//		    		
+//		    		lstLignesTemp.set(i-1, "");
+//		    		lstLignesTemp.set(i-2, "");
+//		    		
+//		    		lstLignesTemp.set(i+1, "");
+//		    		lstLignesTemp.set(i+2, "");
+		    		break;
+		    	}
+		    }
+		    
+		    for (String ligne : lstLignesTemp) {
+				writer.write(ligne + "\r\n");
+			}
+		    writer.close();
+		    brTemp.close();
+		    
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	    
+		
 	}
 	
 	private void verifierEtAjouterAdherent(Alert fenetreAjouterAdherent, ButtonType btnconfirmer,TextField champsNom,TextField champsPrenom,TextField champsAdresse,TextField champsTelephone) {
@@ -1774,8 +1848,6 @@ public class InterfaceGraphique extends Application {
 				intNbEmploye++;
 				IdentifiantsPrepose identifiants = new IdentifiantsPrepose("Préposé", prepose.getStrNoEmploye(), champsMotDePasse.getText());
 				lstIdentifiants.add(identifiants);
-				lstPrepose.add(prepose);
-				tablePreposes.getItems().add(prepose);
 				ajouterPrepose(prepose, identifiants);
 				
 			}

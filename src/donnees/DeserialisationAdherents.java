@@ -37,7 +37,6 @@ public class DeserialisationAdherents {
        
        for (Adherent adherent : t) {
     	   intNbAdherent++;
-//    	   System.out.println(adherent.strNoAdherent);
            InterfaceGraphique.getLstAdherents().add(adherent);
            InterfaceGraphique.setIntNbAdherent(intNbAdherent);
        }
