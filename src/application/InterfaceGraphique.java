@@ -84,7 +84,6 @@ public class InterfaceGraphique extends Application {
 	private final static TableView<Periodique> tablePeriodique = new TableView<Periodique>();
 	private final static TableView<Prepose> tablePreposes = new TableView<Prepose>();
 	
-	
 	private final static TableView<Document> tableDocumentsPrepose = new TableView<Document>();
 	private final static TableView<Livre> tableLivrePrepose = new TableView<Livre>();
 	private final static TableView<DVD> tableDVDPrepose = new TableView<DVD>();
