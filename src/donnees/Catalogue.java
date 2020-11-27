@@ -20,12 +20,12 @@ public final class Catalogue implements Serializable {
 	private static ArrayList<Livre> lstLivres = new ArrayList<>();
 	private static ArrayList<Periodique> lstPeriodiques = new ArrayList<>();
 	private static ArrayList<DVD> lstDvd = new ArrayList<>();
-	DateTimeFormatter df = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+	static DateTimeFormatter df = DateTimeFormatter.ofPattern("dd-MM-yyyy");
 	
 	
-	static File serLivres = new File("Livres.ser");
-	static File serDVD = new File("DVD.ser");
-	static File serPeriodique = new File("Periodiques.ser");
+	static File serLivres = new File("Données sérialisées/Livres.ser");
+	static File serDVD = new File("Données sérialisées/DVD.ser");
+	static File serPeriodique = new File("Données sérialisées/Periodiques.ser");
 	
 	//Private pour singleton
 	private Catalogue (String strNomFichier1, String strNomFichier2, String strNomFichier3) {
@@ -36,7 +36,7 @@ public final class Catalogue implements Serializable {
 			
 			while (scFichier1.hasNextLine()) { //Lecture du fichier
 				strLigne1 = scFichier1.nextLine();
-				Periodique periodique = new Periodique(strLigne1.split(",")[0], strLigne1.split(",")[1], LocalDate.parse(strLigne1.split(",")[2].replaceAll("\\s+",""),df), "oui ", Integer.parseInt(strLigne1.split(",")[3].replaceAll("\\s+","")), Integer.parseInt(strLigne1.split(",")[4].replaceAll("\\s+","")));
+				Periodique periodique = new Periodique(strLigne1.split(",")[0], strLigne1.split(",")[1], LocalDate.parse(strLigne1.split(",")[2].replaceAll("\\s+",""),df), "Disponible", Integer.parseInt(strLigne1.split(",")[3].replaceAll("\\s+","")), Integer.parseInt(strLigne1.split(",")[4].replaceAll("\\s+","")), 0, "");
 				lstPeriodiques.add(periodique);
 				lstDocuments.add(periodique);
 			}
@@ -54,7 +54,7 @@ public final class Catalogue implements Serializable {
 			
 			while (scFichier2.hasNextLine()) { //Lecture du fichier
 				strLigne2 = scFichier2.nextLine();
-				Livre livre = new Livre(strLigne2.split(",")[0], strLigne2.split(",")[1], LocalDate.parse(strLigne2.split(",")[2].replaceAll("\\s+",""),df), "oui", null, strLigne2.split(",")[3]);
+				Livre livre = new Livre(strLigne2.split(",")[0], strLigne2.split(",")[1], LocalDate.parse(strLigne2.split(",")[2].replaceAll("\\s+",""),df), "Disponible", "", strLigne2.split(",")[3],0, "");
 				lstLivres.add(livre);
 				lstDocuments.add(livre);
 			}
@@ -73,7 +73,7 @@ public final class Catalogue implements Serializable {
 			
 			while (scFichier3.hasNextLine()) { //Lecture du fichier
 				strLigne3 = scFichier3.nextLine();
-				DVD dvd = new DVD(strLigne3.split(",")[0], strLigne3.split(",")[1], LocalDate.parse(strLigne3.split(",")[2].replaceAll("\\s+",""),df), "oui", Integer.parseInt(strLigne3.split(",")[3]), strLigne3.split(",")[4]);
+				DVD dvd = new DVD(strLigne3.split(",")[0], strLigne3.split(",")[1], LocalDate.parse(strLigne3.split(",")[2].replaceAll("\\s+",""),df), "Disponible", Integer.parseInt(strLigne3.split(",")[3]), strLigne3.split(",")[4], 0, "");
 				lstDvd.add(dvd);
 				lstDocuments.add(dvd);
 			}
@@ -95,7 +95,6 @@ public final class Catalogue implements Serializable {
 			
 			if (!(serLivres.exists() && serDVD.exists() && serPeriodique.exists())) {
 				instance = new Catalogue("Periodiques.txt", "Livres.txt", "DVD.txt");
-				System.out.println("ok");
 			}
 			else {
 				DeserialisationCatalogue dC = new DeserialisationCatalogue();
@@ -136,6 +135,10 @@ public final class Catalogue implements Serializable {
 
 	public static ArrayList<Periodique> getLstPeriodiques() {
 		return lstPeriodiques;
+	}
+
+	public static DateTimeFormatter getDf() {
+		return df;
 	}
 
 }

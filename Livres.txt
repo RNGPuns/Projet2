@@ -8,3 +8,7 @@ Liv7,Conceptions croyances et représentations en maths, 20-12-2003, Lafortune Lo
 Liv8,Enigmes mathématiques, 12-12-2007, Warren Atkins
 Liv9,Le Démon des maths:le livre de chevet de tous ceux qui ont peur des mathématiques,12-12-1998, Hans-Magnus Henzesberger
 Liv10, Le Parlement du Québec : de 1867 à aujourd'hui, 12-11-1953, Massicotte Louis   
+Liv11,a,12-12-1990,a
+Liv12,a,12-12-1990,a
+Liv12,a,12-12-1990,a
+Liv13,A,12-12-1990,A

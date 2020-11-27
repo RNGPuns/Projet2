@@ -8,13 +8,16 @@ import java.util.ArrayList;
 import application.InterfaceGraphique;
 
 public class DeserialisationCatalogue {
+	int intNbLivres = 1;
+	int intNbDVD = 1;
+	int intNbPeriodiques = 1;
 
 	public void DeserialiserDocuments() {
 		 ArrayList<Document> doc = new ArrayList<Document>();
        
        try
        {
-           FileInputStream fis = new FileInputStream("Documents.ser");
+           FileInputStream fis = new FileInputStream("Données sérialisées/Documents.ser");
            ObjectInputStream ois = new ObjectInputStream(fis);
 
            doc = (ArrayList) ois.readObject();
@@ -45,7 +48,7 @@ public class DeserialisationCatalogue {
       
       try
       {
-          FileInputStream fis = new FileInputStream("Livres.ser");
+          FileInputStream fis = new FileInputStream("Données sérialisées/Livres.ser");
           ObjectInputStream ois = new ObjectInputStream(fis);
 
           livres = (ArrayList) ois.readObject();
@@ -66,7 +69,9 @@ public class DeserialisationCatalogue {
       }
       
       for (Livre livre : livres) {
+    	  intNbLivres++;
           Catalogue.getLstLivres().add(livre);
+          InterfaceGraphique.setIntNbLivre(intNbLivres);
       }
 
 	}
@@ -76,7 +81,7 @@ public class DeserialisationCatalogue {
      
      try
      {
-         FileInputStream fis = new FileInputStream("DVD.ser");
+         FileInputStream fis = new FileInputStream("Données sérialisées/DVD.ser");
          ObjectInputStream ois = new ObjectInputStream(fis);
 
          dvd= (ArrayList) ois.readObject();
@@ -97,7 +102,9 @@ public class DeserialisationCatalogue {
      }
      
      for (DVD DVD : dvd) {
+    	 intNbDVD++;
          Catalogue.getLstDvd().add(DVD);
+         InterfaceGraphique.setIntNbDVD(intNbDVD);
      }
 
 	}
@@ -107,7 +114,7 @@ public class DeserialisationCatalogue {
      
      try
      {
-         FileInputStream fis = new FileInputStream("Periodiques.ser");
+         FileInputStream fis = new FileInputStream("Données sérialisées/Periodiques.ser");
          ObjectInputStream ois = new ObjectInputStream(fis);
 
          periodiques= (ArrayList) ois.readObject();
@@ -128,7 +135,9 @@ public class DeserialisationCatalogue {
      }
      
      for (Periodique periodique : periodiques) {
+    	 intNbPeriodiques++;
          Catalogue.getLstPeriodiques().add(periodique);
+         InterfaceGraphique.setIntNbPeriodique(intNbPeriodiques);
      }
 
 	}

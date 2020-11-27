@@ -9,7 +9,7 @@ public class SerialisationCatalogue {
 	// Sérialisation des données de la médiathèque
 	public void SerialiserDocuments() {
 		try {
-            FileOutputStream fos = new FileOutputStream("Documents.ser");
+            FileOutputStream fos = new FileOutputStream("Données sérialisées/Documents.ser");
             ObjectOutputStream oos = new ObjectOutputStream(fos);
             oos.writeObject(Catalogue.getLstDocuments());
             oos.close();
@@ -23,7 +23,7 @@ public class SerialisationCatalogue {
 	
 	public void SerialiserLivres() {
 		try {
-            FileOutputStream fos = new FileOutputStream("Livres.ser");
+            FileOutputStream fos = new FileOutputStream("Données sérialisées/Livres.ser");
             ObjectOutputStream oos = new ObjectOutputStream(fos);
             oos.writeObject(Catalogue.getLstLivres());
             oos.close();
@@ -37,7 +37,7 @@ public class SerialisationCatalogue {
 	
 	public void SerialiserDVD() {
 		try {
-            FileOutputStream fos = new FileOutputStream("DVD.ser");
+            FileOutputStream fos = new FileOutputStream("Données sérialisées/DVD.ser");
             ObjectOutputStream oos = new ObjectOutputStream(fos);
             oos.writeObject(Catalogue.getLstDvd());
             oos.close();
@@ -51,7 +51,7 @@ public class SerialisationCatalogue {
 	
 	public void SerialiserPeriodiques() {
 		try {
-            FileOutputStream fos = new FileOutputStream("Periodiques.ser");
+            FileOutputStream fos = new FileOutputStream("Données sérialisées/Periodiques.ser");
             ObjectOutputStream oos = new ObjectOutputStream(fos);
             oos.writeObject(Catalogue.getLstPeriodiques());
             oos.close();

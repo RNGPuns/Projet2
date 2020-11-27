@@ -14,7 +14,7 @@ public class DeserialisationPreposes {
         
         try
         {
-            FileInputStream fis = new FileInputStream("Preposes.ser");
+            FileInputStream fis = new FileInputStream("Données sérialisées/Preposes.ser");
             ObjectInputStream ois = new ObjectInputStream(fis);
  
             t = (ArrayList) ois.readObject();
@@ -35,7 +35,7 @@ public class DeserialisationPreposes {
         }
         
         for (Prepose prepose : t) {
-            InterfaceGraphique.getTablePreposes().getItems().add(prepose);
+            InterfaceGraphique.getLstPrepose().add(prepose);
         }
 
  	}

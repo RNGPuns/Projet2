@@ -12,8 +12,8 @@ public class Periodique extends Document {
 	private int noVolume;
 	private int noPeriodique;
 
-	public Periodique(String noDoc, String titre, LocalDate dateParution, String disponible, int noVolume, int noPeriodique) {
-		super(noDoc, titre, dateParution, disponible);
+	public Periodique(String noDoc, String titre, LocalDate dateParution, String disponible, int noVolume, int noPeriodique, int intNbPrets, String strEmprunteur) {
+		super(noDoc, titre, dateParution, disponible, intNbPrets, strEmprunteur);
 		this.noVolume = noVolume;
 		this.noPeriodique = noPeriodique;
 	}
