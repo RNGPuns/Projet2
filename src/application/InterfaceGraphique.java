@@ -7,6 +7,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
+import java.text.NumberFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Optional;
@@ -46,6 +47,7 @@ import javafx.scene.control.RadioButton;
 import javafx.scene.control.Separator;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -516,11 +518,136 @@ public class InterfaceGraphique extends Application {
 		Button btnModifierAdherent = new Button("Modifier un adhérent");
 		btnModifierAdherent.setMaxWidth(Double.MAX_VALUE);
 		
+		btnModifierAdherent.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent e) {
+				Adherent adherentSelectionne = tableAdherent.getSelectionModel().getSelectedItem();
+				
+				if (adherentSelectionne == null) {
+					Alert fenetreAucunAdherentSelectionne = new Alert(AlertType.NONE, "default Dialog",ButtonType.OK);
+					
+					fenetreAucunAdherentSelectionne.setTitle("Erreur");
+					Stage stage = (Stage) fenetreAucunAdherentSelectionne.getDialogPane().getScene().getWindow();
+					stage.getIcons().add(new Image("icon-erreur.png"));
+					fenetreAucunAdherentSelectionne.setContentText("Veuillez sélectionner un adhérent dans la table.");
+					fenetreAucunAdherentSelectionne.setHeaderText(null);
+					fenetreAucunAdherentSelectionne.showAndWait();
+				}
+				else {
+					ButtonType btnconfirmer = new ButtonType("Confirmer", ButtonData.YES);
+					ButtonType btnannuler = new ButtonType("Annuler", ButtonData.CANCEL_CLOSE);
+					Alert fenetreAjouterPrepose = new Alert(AlertType.NONE, "default Dialog",btnconfirmer,btnannuler);
+					GridPane gridpane = new GridPane();
+					gridpane.setHgap(5);
+					
+					Text adresse = new Text("Adresse:");
+					Text telephone = new Text("Téléphone:");
+					
+					gridpane.add(adresse, 0, 2);
+					gridpane.add(telephone, 0, 3);
+
+					TextField champsAdresse = new TextField();
+					champsAdresse.setText(adherentSelectionne.getStrAdresseAdherent());
+					
+					TextField champsTelephone = new TextField();
+					champsTelephone.setText(adherentSelectionne.getStrTelephoneAdherent());
+					
+					gridpane.add(champsAdresse, 1, 2);
+					gridpane.add(champsTelephone, 1, 3);
+					
+					fenetreAjouterPrepose.setTitle("Modifier un adhérent");
+					Stage stage = (Stage) fenetreAjouterPrepose.getDialogPane().getScene().getWindow();
+					stage.getIcons().add(new Image("icon-modifieradherent.png"));
+					fenetreAjouterPrepose.setHeaderText(null);
+					fenetreAjouterPrepose.getDialogPane().setContent(gridpane);
+					
+					fenetreAjouterPrepose.showAndWait();
+					
+					adherentSelectionne.setStrAdresseAdherent(champsAdresse.getText());
+					adherentSelectionne.setStrTelephoneAdherent(champsTelephone.getText());
+					
+					tableAdherent.getItems().clear();
+					
+			        for (Adherent adherent : lstAdherents) {
+			        	tableAdherent.getItems().add(adherent);
+			        }
+				}
+				
+			}});
+		
 		Button btnSupprimerAdherent = new Button("Supprimer un adhérent");
 		btnSupprimerAdherent.setMaxWidth(Double.MAX_VALUE);
 		
+		btnSupprimerAdherent.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent e) {
+				Adherent adherentSelectionne = tableAdherent.getSelectionModel().getSelectedItem();
+				
+				if (adherentSelectionne == null) {
+					Alert fenetreAucunAdherentSelectionne = new Alert(AlertType.NONE, "default Dialog",ButtonType.OK);
+					
+					fenetreAucunAdherentSelectionne.setTitle("Erreur");
+					Stage stage = (Stage) fenetreAucunAdherentSelectionne.getDialogPane().getScene().getWindow();
+					stage.getIcons().add(new Image("icon-erreur.png"));
+					fenetreAucunAdherentSelectionne.setContentText("Veuillez sélectionner un adhérent dans la table.");
+					fenetreAucunAdherentSelectionne.setHeaderText(null);
+					fenetreAucunAdherentSelectionne.showAndWait();
+				}
+				else {
+					lstAdherents.remove(adherentSelectionne);
+					intNbAdherent--;
+					
+					tableAdherent.getItems().clear();
+					
+			        for (Adherent adherent : lstAdherents) {
+			        	tableAdherent.getItems().add(adherent);
+			        }
+				}
+				
+			}});
+		
+		
 		Button btnPayerSolde = new Button("Payer un solde");
 		btnPayerSolde.setMaxWidth(Double.MAX_VALUE);
+		
+		btnSupprimerAdherent.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent e) {
+				Adherent adherentSelectionne = tableAdherent.getSelectionModel().getSelectedItem();
+				
+				if (adherentSelectionne == null) {
+					Alert fenetreAucunAdherentSelectionne = new Alert(AlertType.NONE, "default Dialog",ButtonType.OK);
+					
+					fenetreAucunAdherentSelectionne.setTitle("Erreur");
+					Stage stage = (Stage) fenetreAucunAdherentSelectionne.getDialogPane().getScene().getWindow();
+					stage.getIcons().add(new Image("icon-erreur.png"));
+					fenetreAucunAdherentSelectionne.setContentText("Veuillez sélectionner un adhérent pour qui un solde doit être payé.");
+					fenetreAucunAdherentSelectionne.setHeaderText(null);
+					fenetreAucunAdherentSelectionne.showAndWait();
+				}
+				else {
+					if (adherentSelectionne.getDblSoldeDu() == 0.00) {
+						Alert fenetreAucunSoldeAPayer = new Alert(AlertType.NONE, "default Dialog",ButtonType.OK);
+						
+						fenetreAucunSoldeAPayer.setTitle("Erreur");
+						Stage stage = (Stage) fenetreAucunSoldeAPayer.getDialogPane().getScene().getWindow();
+						stage.getIcons().add(new Image("icon-erreur.png"));
+						fenetreAucunSoldeAPayer.setContentText("Cet adhérent n'as aucun solde à payer .");
+						fenetreAucunSoldeAPayer.setHeaderText(null);
+						fenetreAucunSoldeAPayer.showAndWait();
+					}
+					else {
+						adherentSelectionne.setDblSoldeDu(0.00);
+						
+						tableAdherent.getItems().clear();
+						
+				        for (Adherent adherent : lstAdherents) {
+				        	tableAdherent.getItems().add(adherent);
+				        }
+					}
+				}
+				
+			}});
 		
 		vboxGestionAdherent.getChildren().addAll(btnAjouterAdherent,btnModifierAdherent,btnSupprimerAdherent,btnPayerSolde);
 		
@@ -531,8 +658,99 @@ public class InterfaceGraphique extends Application {
 		Button btnInscrirePret = new Button("Inscrire un prêt");
 		btnInscrirePret.setMaxWidth(Double.MAX_VALUE);
 		
+		btnInscrirePret.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent e) {
+				Document documentSelectionne;
+				if (rootPrepose.getSelectionModel().getSelectedItem() == tabCatalogue) {
+					documentSelectionne = tableDocuments.getSelectionModel().getSelectedItem();
+				}
+				else if (rootPrepose.getSelectionModel().getSelectedItem() == tabLivres) {
+					documentSelectionne = tableLivre.getSelectionModel().getSelectedItem();
+				}
+				else if (rootPrepose.getSelectionModel().getSelectedItem() == tabDVD) {
+					documentSelectionne = tableDVD.getSelectionModel().getSelectedItem();
+				}
+				else {
+					documentSelectionne = tablePeriodique.getSelectionModel().getSelectedItem();
+				}
+				
+				if (documentSelectionne == null) {
+					Alert fenetreAucunAdherentSelectionne = new Alert(AlertType.NONE, "default Dialog",ButtonType.OK);
+					
+					fenetreAucunAdherentSelectionne.setTitle("Erreur");
+					Stage stage = (Stage) fenetreAucunAdherentSelectionne.getDialogPane().getScene().getWindow();
+					stage.getIcons().add(new Image("icon-erreur.png"));
+					fenetreAucunAdherentSelectionne.setContentText("Veuillez sélectionner un document à prêter.");
+					fenetreAucunAdherentSelectionne.setHeaderText(null);
+					fenetreAucunAdherentSelectionne.showAndWait();
+				}
+				else {
+					
+					ButtonType btnconfirmer = new ButtonType("Confirmer", ButtonData.YES);
+					ButtonType btnannuler = new ButtonType("Annuler", ButtonData.CANCEL_CLOSE);
+					Alert fenetreSelectionnerAdherent = new Alert(AlertType.NONE, "default Dialog",btnconfirmer,btnannuler);
+					
+					fenetreSelectionnerAdherent.setTitle("Erreur");
+					Stage stage = (Stage) fenetreSelectionnerAdherent.getDialogPane().getScene().getWindow();
+					stage.getIcons().add(new Image("icon-erreur.png"));
+					fenetreSelectionnerAdherent.getDialogPane().setContent(tableAdherent);
+					fenetreSelectionnerAdherent.setHeaderText(null);
+					
+					effectuerPret(fenetreSelectionnerAdherent,btnconfirmer, documentSelectionne);
+					
+					fenetreSelectionnerAdherent.showAndWait();
+					
+				}
+				
+			}});
+		
 		Button btnInscrireRetour = new Button("Inscrire un retour");
 		btnInscrireRetour.setMaxWidth(Double.MAX_VALUE);
+		
+		btnInscrireRetour.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent e) {
+				Document documentSelectionne;
+				if (rootPrepose.getSelectionModel().getSelectedItem() == tabCatalogue) {
+					documentSelectionne = tableDocuments.getSelectionModel().getSelectedItem();
+				}
+				else if (rootPrepose.getSelectionModel().getSelectedItem() == tabLivres) {
+					documentSelectionne = tableLivre.getSelectionModel().getSelectedItem();
+				}
+				else if (rootPrepose.getSelectionModel().getSelectedItem() == tabDVD) {
+					documentSelectionne = tableDVD.getSelectionModel().getSelectedItem();
+				}
+				else {
+					documentSelectionne = tablePeriodique.getSelectionModel().getSelectedItem();
+				}
+				
+				if (documentSelectionne == null) {
+					Alert fenetreAucunAdherentSelectionne = new Alert(AlertType.NONE, "default Dialog",ButtonType.OK);
+					
+					fenetreAucunAdherentSelectionne.setTitle("Erreur");
+					Stage stage = (Stage) fenetreAucunAdherentSelectionne.getDialogPane().getScene().getWindow();
+					stage.getIcons().add(new Image("icon-erreur.png"));
+					fenetreAucunAdherentSelectionne.setContentText("Veuillez sélectionner un document à retourner.");
+					fenetreAucunAdherentSelectionne.setHeaderText(null);
+					fenetreAucunAdherentSelectionne.showAndWait();
+				}
+				else if (documentSelectionne.getDisponible().equals("Disponible")) {
+					Alert fenetreDocumentSelectionneDisponible = new Alert(AlertType.NONE, "default Dialog",ButtonType.OK);
+					
+					fenetreDocumentSelectionneDisponible.setTitle("Erreur");
+					Stage stage = (Stage) fenetreDocumentSelectionneDisponible.getDialogPane().getScene().getWindow();
+					stage.getIcons().add(new Image("icon-erreur.png"));
+					fenetreDocumentSelectionneDisponible.setContentText("Veuillez sélectionner un prêté.");
+					fenetreDocumentSelectionneDisponible.setHeaderText(null);
+					fenetreDocumentSelectionneDisponible.showAndWait();
+				}
+				else {
+					documentSelectionne.setDisponible("Disponible");
+					documentSelectionne.setStrEmprunteur("");
+				}
+				
+			}});
 		
 		vboxGestionPrets.getChildren().addAll(btnInscrirePret,btnInscrireRetour);
 		
@@ -545,7 +763,7 @@ public class InterfaceGraphique extends Application {
 			public void handle(Event event) {
 				vboxPrepose.getChildren().clear();
 				hboxRootPrepose.getChildren().remove(vboxOptionsPrepose);
-				
+				tableAdherent.getItems().clear();
 				
 				TableColumn<Adherent, String> ColonneNoAdherent = new TableColumn<Adherent, String>("Numéro de l'Adhérent");
 				ColonneNoAdherent.setCellValueFactory(new PropertyValueFactory<>("StrNoAdherent"));
@@ -564,8 +782,25 @@ public class InterfaceGraphique extends Application {
 		        ColonneTelephoneAdherent.setPrefWidth(120);
 		        TableColumn<Adherent, Integer> ColonneNbPretsActifs = new TableColumn<Adherent, Integer>("Prêts Actifs");
 		        ColonneNbPretsActifs.setCellValueFactory(new PropertyValueFactory<>("IntNbPretsActifs"));
-		        ColonneNbPretsActifs.setPrefWidth(120);
+		        ColonneNbPretsActifs.setPrefWidth(120);	        
 		        TableColumn<Adherent, Double> ColonneSoldeDu = new TableColumn<Adherent, Double>("Solde dû");
+		        
+		        NumberFormat Dollard = NumberFormat.getCurrencyInstance();
+		        
+		        ColonneSoldeDu.setCellFactory(tc -> new TableCell<Adherent, Double>() {
+
+		            @Override
+		            protected void updateItem(Double price, boolean empty) {
+		                super.updateItem(price, empty);
+		                if (empty) {
+		                    setText(null);
+		                } else {
+		                    setText(Dollard.format(price));
+		                }
+		            }
+		        });
+		        
+		        
 		        ColonneSoldeDu.setCellValueFactory(new PropertyValueFactory<>("DblSoldeDu"));
 		        ColonneSoldeDu.setPrefWidth(120);
 		        
@@ -776,7 +1011,6 @@ public class InterfaceGraphique extends Application {
 				gridpaneDVD.setHgap(5);
 				gridpanePeriodique.setHgap(5);
 				
-				//Button btConfirmer = (Button) fenetreAjouterDocument.getDialogPane().lookupButton(btnconfirmer);
 				Text TypeDoc = new Text("Type de document:");
 				
 				ComboBox<String> cbxTypeDoc = new ComboBox<String>();
@@ -1547,6 +1781,46 @@ public class InterfaceGraphique extends Application {
 			}
 			
 		});
+	}
+	
+	private void effectuerPret(Alert fenetreSelectionnerAdherent, ButtonType btnconfirmer, Document Document) {
+		Button btConfirmer = (Button) fenetreSelectionnerAdherent.getDialogPane().lookupButton(btnconfirmer);
+		
+		Adherent adherentSelectionne = tableAdherent.getSelectionModel().getSelectedItem();
+		
+		btConfirmer.addEventFilter(ActionEvent.ACTION, event->{
+			
+			if (adherentSelectionne == null) {
+				Alert fenetreErreurAdherent = new Alert(AlertType.NONE, "default Dialog",ButtonType.OK);
+				fenetreErreurAdherent.setTitle("Erreur");
+				
+				Stage stage1 = (Stage) fenetreErreurAdherent.getDialogPane().getScene().getWindow();
+				stage1.getIcons().add(new Image("icon-erreur.png"));
+				fenetreErreurAdherent.setContentText("Veuillez sélectionner un adhérent.");
+				fenetreErreurAdherent.setHeaderText(null);
+				fenetreErreurAdherent.showAndWait();
+				event.consume();
+			}
+			else if (adherentSelectionne.getDblSoldeDu() > 0.00) {
+				Alert fenetreAmendeImpayee = new Alert(AlertType.NONE, "default Dialog",ButtonType.OK);
+				fenetreAmendeImpayee.setTitle("Erreur");
+				
+				Stage stage1 = (Stage) fenetreAmendeImpayee.getDialogPane().getScene().getWindow();
+				stage1.getIcons().add(new Image("icon-erreur.png"));
+				fenetreAmendeImpayee.setContentText("Cette utilisateur ne peut pas emprunter un nouveau document car il a une amende impayée.");
+				fenetreAmendeImpayee.setHeaderText(null);
+				fenetreAmendeImpayee.showAndWait();
+				event.consume();
+			}
+			else {
+				Document.setDisponible("Non disponible");
+				Document.setIntNbPrets(Document.getIntNbPrets() +1);
+				Document.setStrEmprunteur(adherentSelectionne.getStrPrenomAdherent() + " " + adherentSelectionne.getStrNomAdherent());
+			}
+			
+			
+		});
+			
 	}
 
 	public static ArrayList<Prepose> getLstPrepose() {

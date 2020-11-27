@@ -57,4 +57,16 @@ public class Document implements Serializable {
 		return strEmprunteur;
 	}
 
+	public void setDisponible(String disponible) {
+		this.disponible = disponible;
+	}
+
+	public void setIntNbPrets(int intNbPrets) {
+		this.intNbPrets = intNbPrets;
+	}
+
+	public void setStrEmprunteur(String strEmprunteur) {
+		this.strEmprunteur = strEmprunteur;
+	}
+
 }

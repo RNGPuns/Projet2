@@ -56,4 +56,16 @@ public class Adherent implements Serializable {
 		return dblSoldeDu;
 	}
 
+	public void setStrAdresseAdherent(String strAdresseAdherent) {
+		this.strAdresseAdherent = strAdresseAdherent;
+	}
+
+	public void setStrTelephoneAdherent(String strTelephoneAdherent) {
+		this.strTelephoneAdherent = strTelephoneAdherent;
+	}
+
+	public void setDblSoldeDu(Double dblSoldeDu) {
+		this.dblSoldeDu = dblSoldeDu;
+	}
+
 }
