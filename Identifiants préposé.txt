@@ -11,34 +11,6 @@ Identifiant: EMP1
 Mot de passe: a
 
 Préposé
-Identifiant: EMP1
-Mot de passe: a
-
-Préposé
-Identifiant: EMP1
-Mot de passe: a
-
-Préposé
-Identifiant: EMP1
-Mot de passe: a
-
-Préposé
-Identifiant: EMP1
-Mot de passe: a
-
-Préposé
-Identifiant: EMP1
-Mot de passe: a
-
-Préposé
-Identifiant: EMP2
-Mot de passe: a
-
-Préposé
-Identifiant: EMP1
-Mot de passe: a
-
-Préposé
 Identifiant: EMP2
 Mot de passe: a
 

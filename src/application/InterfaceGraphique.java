@@ -77,6 +77,8 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
+//Jerome Labrosse et Andrew Aboujaoudé
+
 public class InterfaceGraphique extends Application {
 	private final static TableView<Document> tableDocuments = new TableView<Document>();
 	private final static TableView<Livre> tableLivre = new TableView<Livre>();
