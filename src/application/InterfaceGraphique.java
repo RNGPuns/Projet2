@@ -80,7 +80,8 @@ import javafx.stage.Stage;
 //Jerome Labrosse et Andrew Aboujaoudé
 
 public class InterfaceGraphique extends Application {
-	private final static TableView<Document> tableDocuments = new TableView<Document>();
+	//Table du catalogue
+	private final static TableView<Document> tableDocuments = new TableView<Document>(); 
 	private final static TableView<Livre> tableLivre = new TableView<Livre>();
 	private final static TableView<DVD> tableDVD = new TableView<DVD>();
 	private final static TableView<Periodique> tablePeriodique = new TableView<Periodique>();
@@ -128,7 +129,7 @@ public class InterfaceGraphique extends Application {
 			Scanner scFichierIdentifiant = new Scanner(new File("Identifiants préposé.txt")); //Début de la lecture du fichier
 			
 			while (scFichierIdentifiant.hasNextLine()) { //Lecture du fichier
-				String strTypeUtilisateur = scFichierIdentifiant.nextLine().substring(3); //Caractère bizzare pour aucune raison. substring pour les enlever.
+				String strTypeUtilisateur = scFichierIdentifiant.nextLine(); //Caractère bizzare pour aucune raison. substring pour les enlever.
 				String strLigneIdentifiant = scFichierIdentifiant.nextLine().replaceAll("\\s+","").split(":")[1];
 				String strLigneMotDePasse = scFichierIdentifiant.nextLine().replaceAll("\\s+","").split(":")[1];
 				scFichierIdentifiant.nextLine();
@@ -1416,108 +1417,44 @@ public class InterfaceGraphique extends Application {
 		
 	}
 	
-	//Ajout du nouveau preposé au fichier des identifiants et dans le TableView
-	private void ajouterPrepose(Prepose prepose, IdentifiantsPrepose identifiants) { 
+	public void supprimerPrepose(Prepose prepose, String strMotDePasse) {
+		tablePreposes.getItems().remove(prepose);
+		
+		for (Prepose prep : lstPrepose) {
+			if (prep.getStrNoEmploye().equals(prepose.getStrNoEmploye())) {
+				lstPrepose.remove(prepose);
+				break;
+			}
+		}
+		
 		try {
 			File file = new File("Identifiants préposé.txt");
-			BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file, true),"UTF-8"));
+			BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file, false),"UTF-8"));
 			
-			bw.write("Préposé");
+			bw.write("Administrateur");
 			bw.newLine();
-			bw.write("Identifiant: " + identifiants.getStrIdentifiant());
+			bw.write("Identifiant: admin");
 			bw.newLine();
-			bw.write("Mot de passe: " + identifiants.getStrMotDePasse());
+			bw.write("Mot de passe: 79251367");
 			bw.newLine();
 			bw.write("\r\n");
+			
+			for (int i =0; i<lstPrepose.size(); i++) {
+				bw.write("Préposé");
+				bw.newLine();
+				bw.write("Identifiant: " + lstPrepose.get(i).getIdentifiants().getStrIdentifiant());
+				bw.newLine();
+				bw.write("Mot de passe: " + lstPrepose.get(i).getIdentifiants().getStrMotDePasse());
+				bw.newLine();
+				bw.write("\r\n");
+			}
+
 			bw.close();
 			
-			lstPrepose.add(prepose);
-			tablePreposes.getItems().clear();
-
-			for (Prepose prep : lstPrepose) {
-				tablePreposes.getItems().add(prepose);
-			}
-			
 		} catch (IOException e) {
 			
 			e.printStackTrace();
 		}
-	}
-	
-	public void supprimerPrepose(Prepose prepose, String strMotDePasse) {
-		
-		tablePreposes.getItems().remove(prepose);
-		lstPrepose.remove(prepose);
-		
-		File inputFile = new File("Identifiants préposé.txt");
-		File tempFile = new File("préposéTemp.txt");
-		
-		try {
-			
-			FileInputStream fis = new FileInputStream(inputFile);
-		    InputStreamReader isr = new InputStreamReader(fis, StandardCharsets.UTF_8);
-		    BufferedReader br = new BufferedReader(isr);
-			BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(tempFile, false),"UTF-8"));
-			String strLigne = br.readLine();
-			
-			while (strLigne != null ) { //Copie chaque ligne du fichier dans un arraylist
-				lstLignes.add(strLigne);
-				strLigne = br.readLine();
-			}
-			
-			for (String ligne : lstLignes) {
-				writer.write(ligne + "\r\n");
-			}
-			
-			writer.close();
-			br.close();
-				
-		} catch (IOException e) {
-			
-			e.printStackTrace();
-		}
-		
-		
-		try {
-			FileInputStream fisTemp = new FileInputStream(tempFile);
-			InputStreamReader isrTemp = new InputStreamReader(fisTemp, StandardCharsets.UTF_8);
-		    BufferedReader brTemp = new BufferedReader(isrTemp);
-		    BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(tempFile, false),"UTF-8"));
-		    String strLigne = brTemp.readLine();
-		    
-		    
-		    while (strLigne != null ) { //Copie chaque ligne du fichier dans un arraylist
-				lstLignesTemp.add(strLigne);
-				strLigne = brTemp.readLine();
-			}
-		    
-		    for (int i=0; i<lstLignesTemp.size(); i++) {
-		    	if (lstLignesTemp.get(i).contains(prepose.getStrNoEmploye())) {
-		    		
-		    		System.out.println(prepose.getStrNoEmploye());
-		    		System.out.println(lstLignesTemp.get(i));
-//		    		lstLignesTemp.set(i, "");
-//		    		
-//		    		lstLignesTemp.set(i-1, "");
-//		    		lstLignesTemp.set(i-2, "");
-//		    		
-//		    		lstLignesTemp.set(i+1, "");
-//		    		lstLignesTemp.set(i+2, "");
-		    		break;
-		    	}
-		    }
-		    
-		    for (String ligne : lstLignesTemp) {
-				writer.write(ligne + "\r\n");
-			}
-		    writer.close();
-		    brTemp.close();
-		    
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	    
-		
 	}
 	
 	private void verifierEtAjouterAdherent(Alert fenetreAjouterAdherent, ButtonType btnconfirmer,TextField champsNom,TextField champsPrenom,TextField champsAdresse,TextField champsTelephone) {
@@ -1846,12 +1783,36 @@ public class InterfaceGraphique extends Application {
 				event.consume();
 			}
 			else {
-				Prepose prepose = new Prepose("EMP" + intNbEmploye, champsNom.getText(), champsPrenom.getText(), champsAdresse.getText(), champsTelephone.getText());
+				Prepose prepose = new Prepose("EMP" + intNbEmploye, champsNom.getText(), champsPrenom.getText(), champsAdresse.getText(), champsTelephone.getText(), new IdentifiantsPrepose("Préposé", "EMP"+intNbEmploye , champsMotDePasse.getText()));
 				intNbEmploye++;
 				IdentifiantsPrepose identifiants = new IdentifiantsPrepose("Préposé", prepose.getStrNoEmploye(), champsMotDePasse.getText());
 				lstIdentifiants.add(identifiants);
-				ajouterPrepose(prepose, identifiants);
 				
+				
+				try {
+					File file = new File("Identifiants préposé.txt");
+					BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file, true),"UTF-8"));
+					
+					bw.write("Préposé");
+					bw.newLine();
+					bw.write("Identifiant: " + prepose.getIdentifiants().getStrIdentifiant());
+					bw.newLine();
+					bw.write("Mot de passe: " + prepose.getIdentifiants().getStrMotDePasse());
+					bw.newLine();
+					bw.write("\r\n");
+					bw.close();
+					
+					lstPrepose.add(prepose);
+					tablePreposes.getItems().clear();
+
+					for (Prepose prep : lstPrepose) {
+						tablePreposes.getItems().add(prep);
+					}
+					
+				} catch (IOException e) {
+					
+					e.printStackTrace();
+				}
 			}
 			
 		});

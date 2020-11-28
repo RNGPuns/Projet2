@@ -12,14 +12,16 @@ public class Prepose implements Serializable {
 	String strPrenom;
 	String strAdresse;
 	String strTelephone;
-	
-	public Prepose(String strNoEmploye, String strNom, String strPrenom, String strAdresse, String strTelephone) {
+	IdentifiantsPrepose Identifiants;
+
+	public Prepose(String strNoEmploye, String strNom, String strPrenom, String strAdresse, String strTelephone, IdentifiantsPrepose Identifiants) {
 		super();
 		this.strNoEmploye = strNoEmploye;
 		this.strNom = strNom;
 		this.strPrenom = strPrenom;
 		this.strAdresse = strAdresse;
 		this.strTelephone = strTelephone;
+		this.Identifiants = Identifiants;
 	}
 
 
@@ -47,6 +49,9 @@ public class Prepose implements Serializable {
 		return strTelephone;
 	}
 
+	public IdentifiantsPrepose getIdentifiants() {
+		return Identifiants;
+	}
 
 	public void setStrNoEmploye(String strNoEmploye) {
 		this.strNoEmploye = strNoEmploye;

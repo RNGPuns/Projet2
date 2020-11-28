@@ -1,6 +1,12 @@
 package donnees;
 
-public class IdentifiantsPrepose {
+import java.io.Serializable;
+
+public class IdentifiantsPrepose implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	String strType;
 	String strIdentifiant;
 	String strMotDePasse;
