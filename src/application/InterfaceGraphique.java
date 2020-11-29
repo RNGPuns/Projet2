@@ -8,6 +8,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.text.NumberFormat;
+import java.time.Duration;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -269,7 +270,6 @@ public class InterfaceGraphique extends Application {
 		Text txtPreposeAdmin = new Text("Type d'utilisateur:");
 		ToggleGroup tglgrpPreposeAdmin = new ToggleGroup();
 		RadioButton rbPrepose = new RadioButton("Préposé");
-		rbPrepose.setSelected(true);
 		RadioButton rbAdmin = new RadioButton("Administrateur");
 		tglgrpPreposeAdmin.getToggles().addAll(rbPrepose,rbAdmin);
 		
@@ -404,16 +404,16 @@ public class InterfaceGraphique extends Application {
 		//Tableaux du catalogue
 		TableColumn<Document, String> ColonneNoDoc = new TableColumn<Document, String>("Numéro Document");
 		ColonneNoDoc.setCellValueFactory(new PropertyValueFactory<>("NoDoc"));
-        ColonneNoDoc.setPrefWidth(120);
+        ColonneNoDoc.setPrefWidth(190);
         TableColumn<Document, String> ColonneTitreDoc = new TableColumn<Document, String>("Titre du Document");
         ColonneTitreDoc.setCellValueFactory(new PropertyValueFactory<>("Titre"));
-        ColonneTitreDoc.setPrefWidth(400);
+        ColonneTitreDoc.setPrefWidth(250);
         TableColumn<Document, LocalDate> ColonneDateParutionDoc = new TableColumn<Document, LocalDate>("Date de parution");
         ColonneDateParutionDoc.setCellValueFactory(new PropertyValueFactory<>("DateParution"));
-        ColonneDateParutionDoc.setPrefWidth(120);
+        ColonneDateParutionDoc.setPrefWidth(170);
         TableColumn<Document, String> ColonneDocDispo = new TableColumn<Document, String>("Disponibilité");
         ColonneDocDispo.setCellValueFactory(new PropertyValueFactory<>("Disponible"));
-        ColonneDocDispo.setPrefWidth(120);
+        ColonneDocDispo.setPrefWidth(150);
 		
         tableDocuments.getColumns().addAll(ColonneNoDoc,ColonneTitreDoc,ColonneDateParutionDoc,ColonneDocDispo);
         
@@ -445,13 +445,13 @@ public class InterfaceGraphique extends Application {
         
         TableColumn<Livre, String> ColonneNoDocLivre = new TableColumn<Livre, String>("Numéro Document");
         ColonneNoDocLivre.setCellValueFactory(new PropertyValueFactory<>("NoDoc"));
-        ColonneNoDocLivre.setPrefWidth(120);
+        ColonneNoDocLivre.setPrefWidth(190);
         TableColumn<Livre, String> ColonneTitreLivre = new TableColumn<Livre, String>("Titre du livre");
         ColonneTitreLivre.setCellValueFactory(new PropertyValueFactory<>("Titre"));
-        ColonneTitreLivre.setPrefWidth(120);
+        ColonneTitreLivre.setPrefWidth(200);
         TableColumn<Livre, LocalDate> ColonneDateParutionLivre = new TableColumn<Livre, LocalDate>("Date de parution");
         ColonneDateParutionLivre.setCellValueFactory(new PropertyValueFactory<>("DateParution"));
-        ColonneDateParutionLivre.setPrefWidth(120);
+        ColonneDateParutionLivre.setPrefWidth(140);
         TableColumn<Livre, String> ColonneLivreDispo = new TableColumn<Livre, String>("Disponibilité");
         ColonneLivreDispo.setCellValueFactory(new PropertyValueFactory<>("Disponible"));
         ColonneLivreDispo.setPrefWidth(120);
@@ -496,19 +496,19 @@ public class InterfaceGraphique extends Application {
         
         TableColumn<DVD, String> ColonneNoDocDVD = new TableColumn<DVD, String>("Numéro Document");
         ColonneNoDocDVD.setCellValueFactory(new PropertyValueFactory<>("NoDoc"));
-        ColonneNoDocDVD.setPrefWidth(120);
+        ColonneNoDocDVD.setPrefWidth(150);
         TableColumn<DVD, String> ColonneTitreDVD = new TableColumn<DVD, String>("Titre du DVD");
         ColonneTitreDVD.setCellValueFactory(new PropertyValueFactory<>("Titre"));
         ColonneTitreDVD.setPrefWidth(120);
         TableColumn<DVD, LocalDate> ColonneDateParutionDVD = new TableColumn<DVD, LocalDate>("Date de parution");
         ColonneDateParutionDVD.setCellValueFactory(new PropertyValueFactory<>("DateParution"));
-        ColonneDateParutionDVD.setPrefWidth(120);
+        ColonneDateParutionDVD.setPrefWidth(130);
         TableColumn<DVD, String> ColonneDVDDispo = new TableColumn<DVD, String>("Disponibilité");
         ColonneDVDDispo.setCellValueFactory(new PropertyValueFactory<>("Disponible"));
         ColonneDVDDispo.setPrefWidth(120);
         TableColumn<DVD, Integer> ColonneNbDisques = new TableColumn<DVD, Integer>("Nombre de disques");
         ColonneNbDisques.setCellValueFactory(new PropertyValueFactory<>("NbDisques"));
-        ColonneNbDisques.setPrefWidth(120);
+        ColonneNbDisques.setPrefWidth(150);
         TableColumn<DVD, String> ColonneRealisateur = new TableColumn<DVD, String>("Auteur");
         ColonneRealisateur.setCellValueFactory(new PropertyValueFactory<>("StrRealisateur"));
         ColonneRealisateur.setPrefWidth(120);
@@ -550,22 +550,22 @@ public class InterfaceGraphique extends Application {
         
         TableColumn<Periodique, String> ColonneNoDocPeriodique = new TableColumn<Periodique, String>("Numéro Document");
         ColonneNoDocPeriodique.setCellValueFactory(new PropertyValueFactory<>("NoDoc"));
-        ColonneNoDocPeriodique.setPrefWidth(120);
+        ColonneNoDocPeriodique.setPrefWidth(160);
         TableColumn<Periodique, String> ColonneTitrePeriodique = new TableColumn<Periodique, String>("Titre du Périodique");
         ColonneTitrePeriodique.setCellValueFactory(new PropertyValueFactory<>("Titre"));
-        ColonneTitrePeriodique.setPrefWidth(120);
+        ColonneTitrePeriodique.setPrefWidth(150);
         TableColumn<Periodique, LocalDate> ColonneDateParutionPeriodique = new TableColumn<Periodique, LocalDate>("Date de parution");
         ColonneDateParutionPeriodique.setCellValueFactory(new PropertyValueFactory<>("DateParution"));
-        ColonneDateParutionPeriodique.setPrefWidth(120);
+        ColonneDateParutionPeriodique.setPrefWidth(130);
         TableColumn<Periodique, String> ColonnePeriodiqueDispo = new TableColumn<Periodique, String>("Disponibilité");
         ColonnePeriodiqueDispo.setCellValueFactory(new PropertyValueFactory<>("Disponible"));
         ColonnePeriodiqueDispo.setPrefWidth(120);
         TableColumn<Periodique, Integer> ColonneNoVolume = new TableColumn<Periodique, Integer>("Numéro Volume");
         ColonneNoVolume.setCellValueFactory(new PropertyValueFactory<>("NoVolume"));
-        ColonneNoVolume.setPrefWidth(120);
+        ColonneNoVolume.setPrefWidth(130);
         TableColumn<Periodique, String> ColonneNoPeriodique = new TableColumn<Periodique, String>("Numéro Périodique");
         ColonneNoPeriodique.setCellValueFactory(new PropertyValueFactory<>("NoPeriodique"));
-        ColonneNoPeriodique.setPrefWidth(120);
+        ColonneNoPeriodique.setPrefWidth(160);
         
         tablePeriodique.getColumns().addAll(ColonneNoDocPeriodique,ColonneTitrePeriodique,ColonneDateParutionPeriodique,ColonnePeriodiqueDispo,ColonneNoVolume,ColonneNoPeriodique);
         
@@ -830,7 +830,7 @@ public class InterfaceGraphique extends Application {
 						fenetreAucunSoldeAPayer.setTitle("Erreur");
 						Stage stage = (Stage) fenetreAucunSoldeAPayer.getDialogPane().getScene().getWindow();
 						stage.getIcons().add(new Image("icon-erreur.png"));
-						fenetreAucunSoldeAPayer.setContentText("Cet adhérent n'as aucun solde à payer .");
+						fenetreAucunSoldeAPayer.setContentText("Cet adhérent n'a aucun solde à payer.");
 						fenetreAucunSoldeAPayer.setHeaderText(null);
 						fenetreAucunSoldeAPayer.showAndWait();
 					}
@@ -875,14 +875,14 @@ public class InterfaceGraphique extends Application {
 				}
 				
 				if (documentSelectionne == null) {
-					Alert fenetreAucunAdherentSelectionne = new Alert(AlertType.NONE, "default Dialog",ButtonType.OK);
+					Alert fenetreAucunDocumentSelectionne = new Alert(AlertType.NONE, "default Dialog",ButtonType.OK);
 					
-					fenetreAucunAdherentSelectionne.setTitle("Erreur");
-					Stage stage = (Stage) fenetreAucunAdherentSelectionne.getDialogPane().getScene().getWindow();
+					fenetreAucunDocumentSelectionne.setTitle("Erreur");
+					Stage stage = (Stage) fenetreAucunDocumentSelectionne.getDialogPane().getScene().getWindow();
 					stage.getIcons().add(new Image("icon-erreur.png"));
-					fenetreAucunAdherentSelectionne.setContentText("Veuillez sélectionner un document à prêter.");
-					fenetreAucunAdherentSelectionne.setHeaderText(null);
-					fenetreAucunAdherentSelectionne.showAndWait();
+					fenetreAucunDocumentSelectionne.setContentText("Veuillez sélectionner un document à prêter.");
+					fenetreAucunDocumentSelectionne.setHeaderText(null);
+					fenetreAucunDocumentSelectionne.showAndWait();
 				}
 				else {
 					
@@ -926,14 +926,14 @@ public class InterfaceGraphique extends Application {
 				}
 				
 				if (documentSelectionne == null) {
-					Alert fenetreAucunAdherentSelectionne = new Alert(AlertType.NONE, "default Dialog",ButtonType.OK);
+					Alert fenetreAucunDocumentSelectionne = new Alert(AlertType.NONE, "default Dialog",ButtonType.OK);
 					
-					fenetreAucunAdherentSelectionne.setTitle("Erreur");
-					Stage stage = (Stage) fenetreAucunAdherentSelectionne.getDialogPane().getScene().getWindow();
+					fenetreAucunDocumentSelectionne.setTitle("Erreur");
+					Stage stage = (Stage) fenetreAucunDocumentSelectionne.getDialogPane().getScene().getWindow();
 					stage.getIcons().add(new Image("icon-erreur.png"));
-					fenetreAucunAdherentSelectionne.setContentText("Veuillez sélectionner un document à retourner.");
-					fenetreAucunAdherentSelectionne.setHeaderText(null);
-					fenetreAucunAdherentSelectionne.showAndWait();
+					fenetreAucunDocumentSelectionne.setContentText("Veuillez sélectionner un document à retourner.");
+					fenetreAucunDocumentSelectionne.setHeaderText(null);
+					fenetreAucunDocumentSelectionne.showAndWait();
 				}
 				else if (documentSelectionne.getDisponible().equals("Disponible")) {
 					Alert fenetreDocumentSelectionneDisponible = new Alert(AlertType.NONE, "default Dialog",ButtonType.OK);
@@ -941,11 +941,66 @@ public class InterfaceGraphique extends Application {
 					fenetreDocumentSelectionneDisponible.setTitle("Erreur");
 					Stage stage = (Stage) fenetreDocumentSelectionneDisponible.getDialogPane().getScene().getWindow();
 					stage.getIcons().add(new Image("icon-erreur.png"));
-					fenetreDocumentSelectionneDisponible.setContentText("Veuillez sélectionner un prêté.");
+					fenetreDocumentSelectionneDisponible.setContentText("Veuillez sélectionner un document prêté.");
 					fenetreDocumentSelectionneDisponible.setHeaderText(null);
 					fenetreDocumentSelectionneDisponible.showAndWait();
 				}
 				else {
+					
+					for (Adherent adherent: lstAdherents) {
+						if ((adherent.getStrPrenomAdherent() + " " + adherent.getStrNomAdherent()).equals(documentSelectionne.getStrEmprunteur())) {
+							adherent.getLstDoc().remove(documentSelectionne);
+							adherent.setIntNbPretsActifs(adherent.getIntNbPretsActifs()-1);
+							
+							for (Pret prets: adherent.getLstPrets()) {
+								if (documentSelectionne.getNoDoc().equals(prets.getStrNoDocPret())) {
+									prets.setDateRetourPret(LocalDate.now());
+									
+									if (prets.getDateRetourPret().isAfter(prets.getDateRetourPrevuPret())) {
+										
+										for (Livre livre : Catalogue.getLstLivres()) {
+											if (prets.getStrNoDocPret().equals(livre.getNoDoc())) {
+												
+												long lngNbJourRetard = Duration.between(prets.getDateRetourPret(), prets.getDateRetourPrevuPret()).toDays();
+												
+												if (lngNbJourRetard > 14) {
+													adherent.setDblSoldeDu(adherent.getDblSoldeDu() + (0.5*lngNbJourRetard));
+													prets.setAmende(0.5*lngNbJourRetard);
+												}
+												
+											}
+											
+										}
+										
+										for (DVD dvd : Catalogue.getLstDvd()) {
+											if (prets.getStrNoDocPret().equals(dvd.getNoDoc())) {
+												
+												long lngNbJourRetard = Duration.between(prets.getDateRetourPret(), prets.getDateRetourPrevuPret()).toDays();
+												
+												if (lngNbJourRetard > 7) {
+													adherent.setDblSoldeDu(adherent.getDblSoldeDu() + (0.5*lngNbJourRetard));
+													prets.setAmende(0.5*lngNbJourRetard);
+												}
+											}
+										} 
+										
+										for (Periodique periodique : Catalogue.getLstPeriodiques()) {
+											if (prets.getStrNoDocPret().equals(periodique.getNoDoc())) {
+												
+												long lngNbJourRetard = Duration.between(prets.getDateRetourPret(), prets.getDateRetourPrevuPret()).toDays();
+												
+												if (lngNbJourRetard > 3) {
+													adherent.setDblSoldeDu(adherent.getDblSoldeDu() + (0.5*lngNbJourRetard));
+													prets.setAmende(0.5*lngNbJourRetard);
+												}
+											}
+										} 
+									}
+								}
+							}
+						}							
+					}
+					
 					documentSelectionne.setDisponible("Disponible");
 					documentSelectionne.setStrEmprunteur("");
 				}
@@ -1080,17 +1135,17 @@ public class InterfaceGraphique extends Application {
 		hboxOptionsRecherchePrepose.getChildren().addAll(txtRecherchePrepose,rbTitrePrepose,rbAuteurRealisateurPrepose,rbMotsClesPrepose,txtfldRecherchePrepose,btnEffacerPrepose);
 		
 		TableColumn<Document, String> ColonneNoDocPrepose = new TableColumn<Document, String>("Numéro Document");
-		ColonneNoDocPrepose.setCellValueFactory(f -> new SimpleStringProperty(f.getValue().getNoDoc())); //Changer à comme les autres
-		ColonneNoDocPrepose.setPrefWidth(120);
+		ColonneNoDocPrepose.setCellValueFactory(new PropertyValueFactory<>("NoDoc")); //Changer à comme les autres
+		ColonneNoDocPrepose.setPrefWidth(190);
         TableColumn<Document, String> ColonneTitreDocPrepose = new TableColumn<Document, String>("Titre du Document");
         ColonneTitreDocPrepose.setCellValueFactory(new PropertyValueFactory<>("Titre"));
-        ColonneTitreDocPrepose.setPrefWidth(400);
+        ColonneTitreDocPrepose.setPrefWidth(250);
         TableColumn<Document, LocalDate> ColonneDateParutionDocPrepose = new TableColumn<Document, LocalDate>("Date de parution");
         ColonneDateParutionDocPrepose.setCellValueFactory(new PropertyValueFactory<>("DateParution"));
-        ColonneDateParutionDocPrepose.setPrefWidth(120);
+        ColonneDateParutionDocPrepose.setPrefWidth(170);
         TableColumn<Document, String> ColonneDocDispoPrepose = new TableColumn<Document, String>("Disponibilité");
         ColonneDocDispoPrepose.setCellValueFactory(new PropertyValueFactory<>("Disponible"));
-        ColonneDocDispoPrepose.setPrefWidth(120);
+        ColonneDocDispoPrepose.setPrefWidth(150);
         TableColumn<Document, Integer> ColonneNbPretsDoc = new TableColumn<Document, Integer>("Nombre de prêts");
         ColonneNbPretsDoc.setCellValueFactory(new PropertyValueFactory<>("IntNbPrets"));
         ColonneNbPretsDoc.setPrefWidth(120);
@@ -1129,13 +1184,13 @@ public class InterfaceGraphique extends Application {
 		
 		TableColumn<Livre, String> ColonneNoDocLivrePrepose = new TableColumn<Livre, String>("Numéro Document");
 		ColonneNoDocLivrePrepose.setCellValueFactory(new PropertyValueFactory<>("NoDoc"));
-		ColonneNoDocLivrePrepose.setPrefWidth(120);
+		ColonneNoDocLivrePrepose.setPrefWidth(190);
         TableColumn<Livre, String> ColonneTitreLivrePrepose = new TableColumn<Livre, String>("Titre du livre");
         ColonneTitreLivrePrepose.setCellValueFactory(new PropertyValueFactory<>("Titre"));
-        ColonneTitreLivrePrepose.setPrefWidth(120);
+        ColonneTitreLivrePrepose.setPrefWidth(200);
         TableColumn<Livre, LocalDate> ColonneDateParutionLivrePrepose = new TableColumn<Livre, LocalDate>("Date de parution");
         ColonneDateParutionLivrePrepose.setCellValueFactory(new PropertyValueFactory<>("DateParution"));
-        ColonneDateParutionLivrePrepose.setPrefWidth(120);
+        ColonneDateParutionLivrePrepose.setPrefWidth(140);
         TableColumn<Livre, String> ColonneLivreDispoPrepose = new TableColumn<Livre, String>("Disponibilité");
         ColonneLivreDispoPrepose.setCellValueFactory(new PropertyValueFactory<>("Disponible"));
         ColonneLivreDispoPrepose.setPrefWidth(120);
@@ -1186,16 +1241,16 @@ public class InterfaceGraphique extends Application {
 		
 		TableColumn<DVD, String> ColonneNoDocDVDPrepose = new TableColumn<DVD, String>("Numéro Document");
 		ColonneNoDocDVDPrepose.setCellValueFactory(new PropertyValueFactory<>("NoDoc"));
-		ColonneNoDocDVDPrepose.setPrefWidth(120);
+		ColonneNoDocDVDPrepose.setPrefWidth(150);
         TableColumn<DVD, String> ColonneTitreDVDPrepose = new TableColumn<DVD, String>("Titre du DVD");
         ColonneTitreDVDPrepose.setCellValueFactory(new PropertyValueFactory<>("Titre"));
         ColonneTitreDVDPrepose.setPrefWidth(120);
         TableColumn<DVD, LocalDate> ColonneDateParutionDVDPrepose = new TableColumn<DVD, LocalDate>("Date de parution");
         ColonneDateParutionDVDPrepose.setCellValueFactory(new PropertyValueFactory<>("DateParution"));
-        ColonneDateParutionDVDPrepose.setPrefWidth(120);
+        ColonneDateParutionDVDPrepose.setPrefWidth(130);
         TableColumn<DVD, String> ColonneDVDDispoPrepose = new TableColumn<DVD, String>("Disponibilité");
         ColonneDVDDispoPrepose.setCellValueFactory(new PropertyValueFactory<>("Disponible"));
-        ColonneDVDDispoPrepose.setPrefWidth(120);
+        ColonneDVDDispoPrepose.setPrefWidth(150);
         TableColumn<DVD, Integer> ColonneNbDisquesPrepose = new TableColumn<DVD, Integer>("Nombre de disques");
         ColonneNbDisquesPrepose.setCellValueFactory(new PropertyValueFactory<>("NbDisques"));
         ColonneNbDisquesPrepose.setPrefWidth(120);
@@ -1246,22 +1301,22 @@ public class InterfaceGraphique extends Application {
 		
 		TableColumn<Periodique, String> ColonneNoDocPeriodiquePrepose = new TableColumn<Periodique, String>("Numéro Document");
 		ColonneNoDocPeriodiquePrepose.setCellValueFactory(new PropertyValueFactory<>("NoDoc"));
-		ColonneNoDocPeriodiquePrepose.setPrefWidth(120);
+		ColonneNoDocPeriodiquePrepose.setPrefWidth(160);
         TableColumn<Periodique, String> ColonneTitrePeriodiquePrepose = new TableColumn<Periodique, String>("Titre du Périodique");
         ColonneTitrePeriodiquePrepose.setCellValueFactory(new PropertyValueFactory<>("Titre"));
-        ColonneTitrePeriodiquePrepose.setPrefWidth(120);
+        ColonneTitrePeriodiquePrepose.setPrefWidth(150);
         TableColumn<Periodique, LocalDate> ColonneDateParutionPeriodiquePrepose = new TableColumn<Periodique, LocalDate>("Date de parution");
         ColonneDateParutionPeriodiquePrepose.setCellValueFactory(new PropertyValueFactory<>("DateParution"));
-        ColonneDateParutionPeriodiquePrepose.setPrefWidth(120);
+        ColonneDateParutionPeriodiquePrepose.setPrefWidth(130);
         TableColumn<Periodique, String> ColonnePeriodiqueDispoPrepose = new TableColumn<Periodique, String>("Disponibilité");
         ColonnePeriodiqueDispoPrepose.setCellValueFactory(new PropertyValueFactory<>("Disponible"));
         ColonnePeriodiqueDispoPrepose.setPrefWidth(120);
         TableColumn<Periodique, Integer> ColonneNoVolumePrepose = new TableColumn<Periodique, Integer>("Numéro Volume");
         ColonneNoVolumePrepose.setCellValueFactory(new PropertyValueFactory<>("NoVolume"));
-        ColonneNoVolumePrepose.setPrefWidth(120);
+        ColonneNoVolumePrepose.setPrefWidth(130);
         TableColumn<Periodique, String> ColonneNoPeriodiquePrepose = new TableColumn<Periodique, String>("Numéro Périodique");
         ColonneNoPeriodiquePrepose.setCellValueFactory(new PropertyValueFactory<>("NoPeriodique"));
-        ColonneNoPeriodiquePrepose.setPrefWidth(120);
+        ColonneNoPeriodiquePrepose.setPrefWidth(160);
         TableColumn<Periodique, Integer> ColonneNbPretsPeriodique = new TableColumn<Periodique, Integer>("Nombre de prêts");
         ColonneNbPretsPeriodique.setCellValueFactory(new PropertyValueFactory<>("IntNbPrets"));
         ColonneNbPretsPeriodique.setPrefWidth(120);
@@ -1543,7 +1598,6 @@ public class InterfaceGraphique extends Application {
 							gridpaneLivre.add(champsMotsClesLivre, 1, 4);
 							
 							fenetreAjouterDocument.getDialogPane().setContent(gridpaneLivre);
-							
 							
 						}
 						else if (cbxTypeDoc.getValue() == "DVD" ) {
@@ -2020,7 +2074,7 @@ public class InterfaceGraphique extends Application {
 				event.consume();
 			}
 			else {
-				Adherent adherent = new Adherent("ADH"+intNbAdherent, champsNom.getText().trim(), champsPrenom.getText().trim(), champsAdresse.getText(), champsTelephone.getText().trim(), 0, 0.00, new ArrayList<Pret>(), new ArrayList<Document>());
+				Adherent adherent = new Adherent("ADH"+intNbAdherent, champsNom.getText().trim(), champsPrenom.getText().trim(), champsAdresse.getText(), champsTelephone.getText().trim(), 0, 0.00, new ArrayList<Pret>(), new ArrayList<Document>(),0,0,0);
 
 				lstAdherents.add(adherent);
 				tableAdherent.getItems().add(adherent);
@@ -2352,6 +2406,39 @@ public class InterfaceGraphique extends Application {
 				fenetreAmendeImpayee.showAndWait();
 				event.consume();
 			}
+			else if (adherentSelectionne.getIntNbLivreEmprunte() >= 3) {
+				Alert fenetreMaxLivreEmprunte = new Alert(AlertType.NONE, "default Dialog",ButtonType.OK);
+				fenetreMaxLivreEmprunte.setTitle("Erreur");
+				
+				Stage stage1 = (Stage) fenetreMaxLivreEmprunte.getDialogPane().getScene().getWindow();
+				stage1.getIcons().add(new Image("icon-erreur.png"));
+				fenetreMaxLivreEmprunte.setContentText("Cette utilisateur à atteint le nombre maximal de livres à emprunter.");
+				fenetreMaxLivreEmprunte.setHeaderText(null);
+				fenetreMaxLivreEmprunte.showAndWait();
+				event.consume();
+			}
+			else if (adherentSelectionne.getIntNbDvdEmprunte() >= 2) {
+				Alert fenetreMaxDvdEmprunte = new Alert(AlertType.NONE, "default Dialog",ButtonType.OK);
+				fenetreMaxDvdEmprunte.setTitle("Erreur");
+				
+				Stage stage1 = (Stage) fenetreMaxDvdEmprunte.getDialogPane().getScene().getWindow();
+				stage1.getIcons().add(new Image("icon-erreur.png"));
+				fenetreMaxDvdEmprunte.setContentText("Cette utilisateur à atteint le nombre maximal de DVD à emprunter.");
+				fenetreMaxDvdEmprunte.setHeaderText(null);
+				fenetreMaxDvdEmprunte.showAndWait();
+				event.consume();
+			}
+			else if (adherentSelectionne.getIntNbPeriodiqueEmprunte() >= 1) {
+				Alert fenetreMaxPeriodiqueEmprunte = new Alert(AlertType.NONE, "default Dialog",ButtonType.OK);
+				fenetreMaxPeriodiqueEmprunte.setTitle("Erreur");
+				
+				Stage stage1 = (Stage) fenetreMaxPeriodiqueEmprunte.getDialogPane().getScene().getWindow();
+				stage1.getIcons().add(new Image("icon-erreur.png"));
+				fenetreMaxPeriodiqueEmprunte.setContentText("Cette utilisateur à atteint le nombre maximal de périodiques à emprunter.");
+				fenetreMaxPeriodiqueEmprunte.setHeaderText(null);
+				fenetreMaxPeriodiqueEmprunte.showAndWait();
+				event.consume();
+			}
 			else {
 				Document.setDisponible("Non disponible");
 				Document.setIntNbPrets(Document.getIntNbPrets() +1);
@@ -2365,24 +2452,27 @@ public class InterfaceGraphique extends Application {
 						for (Livre livre : Catalogue.getLstLivres()) {
 							if (livre.getNoDoc().equals(Document.getNoDoc())) {
 								intNbPrets++;
-								Pret pret = new Pret(intNbPrets, LocalDate.now(), LocalDate.now().plusDays(14), null, 0.00);
+								Pret pret = new Pret(intNbPrets, LocalDate.now(), LocalDate.now().plusDays(14), null, 0.00, Document.getNoDoc());
 								adherent.getLstPrets().add(pret);
+								adherent.setIntNbLivreEmprunte(adherent.getIntNbLivreEmprunte()+1);
 							}
 						}
 						
 						for (DVD dvd: Catalogue.getLstDvd()) {
 							if (dvd.getNoDoc().equals(Document.getNoDoc())) {
 								intNbPrets++;
-								Pret pret = new Pret(intNbPrets, LocalDate.now(), LocalDate.now().plusDays(3), null, 0.00);
+								Pret pret = new Pret(intNbPrets, LocalDate.now(), LocalDate.now().plusDays(3), null, 0.00, Document.getNoDoc());
 								adherent.getLstPrets().add(pret);
+								adherent.setIntNbDvdEmprunte(adherent.getIntNbDvdEmprunte()+1);
 							}
 						}
 						
 						for (Periodique periodique : Catalogue.getLstPeriodiques()) {
 							if (periodique.getNoDoc().equals(Document.getNoDoc())) {
 								intNbPrets++;
-								Pret pret = new Pret(intNbPrets, LocalDate.now(), LocalDate.now().plusDays(7), null, 0.00);
+								Pret pret = new Pret(intNbPrets, LocalDate.now(), LocalDate.now().plusDays(7), null, 0.00, Document.getNoDoc());
 								adherent.getLstPrets().add(pret);
+								adherent.setIntNbPeriodiqueEmprunte(adherent.getIntNbPeriodiqueEmprunte()+1);
 							}
 						}	
 					}
@@ -2437,6 +2527,4 @@ public class InterfaceGraphique extends Application {
 		InterfaceGraphique.intNbAdherent = intNbAdherent;
 	}
 
-	
-	
 }

@@ -14,13 +14,18 @@ public class Adherent implements Serializable {
 	String strPrenomAdherent;
 	String strAdresseAdherent;
 	String strTelephoneAdherent;
+	int intNbLivreEmprunte;
+	int intNbDvdEmprunte;
+	int intNbPeriodiqueEmprunte;
 	int intNbPretsActifs;
 	double dblSoldeDu;
 	ArrayList<Pret> lstPrets;
 	ArrayList<Document> lstDoc;
 	
 	public Adherent(String strNoAdherent, String strNomAdherent, String strPrenomAdherent, String strAdresseAdherent,
-			String strTelephoneAdherent, int intNbPretsActifs, double dblSoldeDu ,ArrayList<Pret> lstPrets, ArrayList<Document> lstDoc) {
+			String strTelephoneAdherent, int intNbPretsActifs, double dblSoldeDu ,
+			ArrayList<Pret> lstPrets, ArrayList<Document> lstDoc, 
+			int intNbLivreEmprunte, int intNbDvdEmprunte, int intNbPeriodiqueEmprunte ) {
 			
 			this.strNoAdherent = strNoAdherent;
 			this.strNomAdherent = strNomAdherent;
@@ -33,6 +38,18 @@ public class Adherent implements Serializable {
 			this.lstDoc = lstDoc;
 		}
 	
+	public int getIntNbLivreEmprunte() {
+		return intNbLivreEmprunte;
+	}
+
+	public int getIntNbDvdEmprunte() {
+		return intNbDvdEmprunte;
+	}
+
+	public int getIntNbPeriodiqueEmprunte() {
+		return intNbPeriodiqueEmprunte;
+	}
+
 	public ArrayList<Document> getLstDoc() {
 		return lstDoc;
 	}
@@ -82,6 +99,22 @@ public class Adherent implements Serializable {
 
 	public void setLstPrets(ArrayList<Pret> lstPrets) {
 		this.lstPrets = lstPrets;
+	}
+
+	public void setIntNbPretsActifs(int intNbPretsActifs) {
+		this.intNbPretsActifs = intNbPretsActifs;
+	}
+
+	public void setIntNbLivreEmprunte(int intNbLivreEmprunte) {
+		this.intNbLivreEmprunte = intNbLivreEmprunte;
+	}
+
+	public void setIntNbDvdEmprunte(int intNbDvdEmprunte) {
+		this.intNbDvdEmprunte = intNbDvdEmprunte;
+	}
+
+	public void setIntNbPeriodiqueEmprunte(int intNbPeriodiqueEmprunte) {
+		this.intNbPeriodiqueEmprunte = intNbPeriodiqueEmprunte;
 	}
 	
 
