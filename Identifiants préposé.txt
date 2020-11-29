@@ -2,3 +2,7 @@ Administrateur
 Identifiant: admin
 Mot de passe: 79251367
 
+Préposé
+Identifiant: EMP1
+Mot de passe: a
+

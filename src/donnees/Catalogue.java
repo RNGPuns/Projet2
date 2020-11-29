@@ -36,7 +36,7 @@ public final class Catalogue implements Serializable {
 			
 			while (scFichier1.hasNextLine()) { //Lecture du fichier
 				strLigne1 = scFichier1.nextLine();
-				Periodique periodique = new Periodique(strLigne1.split(",")[0], strLigne1.split(",")[1], LocalDate.parse(strLigne1.split(",")[2].replaceAll("\\s+",""),df), "Disponible", Integer.parseInt(strLigne1.split(",")[3].replaceAll("\\s+","")), Integer.parseInt(strLigne1.split(",")[4].replaceAll("\\s+","")), 0, "");
+				Periodique periodique = new Periodique(strLigne1.split(",")[0], strLigne1.split(",")[1], LocalDate.parse(strLigne1.split(",")[2].replaceAll("\\s+",""),df), "Disponible", Integer.parseInt(strLigne1.split(",")[3].replaceAll("\\s+","")), Integer.parseInt(strLigne1.split(",")[4].replaceAll("\\s+","")), 0, "","");
 				lstPeriodiques.add(periodique);
 				lstDocuments.add(periodique);
 			}
@@ -54,7 +54,7 @@ public final class Catalogue implements Serializable {
 			
 			while (scFichier2.hasNextLine()) { //Lecture du fichier
 				strLigne2 = scFichier2.nextLine();
-				Livre livre = new Livre(strLigne2.split(",")[0], strLigne2.split(",")[1], LocalDate.parse(strLigne2.split(",")[2].replaceAll("\\s+",""),df), "Disponible", "", strLigne2.split(",")[3],0, "");
+				Livre livre = new Livre(strLigne2.split(",")[0], strLigne2.split(",")[1], LocalDate.parse(strLigne2.split(",")[2].replaceAll("\\s+",""),df), "Disponible", "", strLigne2.split(",")[3],0, "","");
 				lstLivres.add(livre);
 				lstDocuments.add(livre);
 			}
@@ -73,7 +73,7 @@ public final class Catalogue implements Serializable {
 			
 			while (scFichier3.hasNextLine()) { //Lecture du fichier
 				strLigne3 = scFichier3.nextLine();
-				DVD dvd = new DVD(strLigne3.split(",")[0], strLigne3.split(",")[1], LocalDate.parse(strLigne3.split(",")[2].replaceAll("\\s+",""),df), "Disponible", Integer.parseInt(strLigne3.split(",")[3]), strLigne3.split(",")[4], 0, "");
+				DVD dvd = new DVD(strLigne3.split(",")[0], strLigne3.split(",")[1], LocalDate.parse(strLigne3.split(",")[2].replaceAll("\\s+",""),df), "Disponible", Integer.parseInt(strLigne3.split(",")[3]), strLigne3.split(",")[4], 0, "","");
 				lstDvd.add(dvd);
 				lstDocuments.add(dvd);
 			}
@@ -109,6 +109,8 @@ public final class Catalogue implements Serializable {
 		return instance;
 	}
 
+	//Getter et setter
+	
 	public static File getSerLivres() {
 		return serLivres;
 	}

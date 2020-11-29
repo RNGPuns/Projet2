@@ -1,6 +1,7 @@
 package donnees;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 public class Adherent implements Serializable {
 	
@@ -14,10 +15,12 @@ public class Adherent implements Serializable {
 	String strAdresseAdherent;
 	String strTelephoneAdherent;
 	int intNbPretsActifs;
-	Double dblSoldeDu;
+	double dblSoldeDu;
+	ArrayList<Pret> lstPrets;
+	ArrayList<Document> lstDoc;
 	
 	public Adherent(String strNoAdherent, String strNomAdherent, String strPrenomAdherent, String strAdresseAdherent,
-			String strTelephoneAdherent, int intNbPretsActifs, Double dblSoldeDu) {
+			String strTelephoneAdherent, int intNbPretsActifs, double dblSoldeDu ,ArrayList<Pret> lstPrets, ArrayList<Document> lstDoc) {
 			
 			this.strNoAdherent = strNoAdherent;
 			this.strNomAdherent = strNomAdherent;
@@ -26,7 +29,16 @@ public class Adherent implements Serializable {
 			this.strTelephoneAdherent = strTelephoneAdherent;
 			this.intNbPretsActifs = intNbPretsActifs;
 			this.dblSoldeDu = dblSoldeDu;
+			this.lstPrets = lstPrets;
+			this.lstDoc = lstDoc;
 		}
+	
+	public ArrayList<Document> getLstDoc() {
+		return lstDoc;
+	}
+	public ArrayList<Pret> getLstPrets() {
+		return lstPrets;
+	}
 
 	public String getStrNoAdherent() {
 		return strNoAdherent;
@@ -52,7 +64,7 @@ public class Adherent implements Serializable {
 		return intNbPretsActifs;
 	}
 
-	public Double getDblSoldeDu() {
+	public double getDblSoldeDu() {
 		return dblSoldeDu;
 	}
 
@@ -67,5 +79,11 @@ public class Adherent implements Serializable {
 	public void setDblSoldeDu(Double dblSoldeDu) {
 		this.dblSoldeDu = dblSoldeDu;
 	}
+
+	public void setLstPrets(ArrayList<Pret> lstPrets) {
+		this.lstPrets = lstPrets;
+	}
+	
+
 
 }
